@@ -1,42 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-<head>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Laravel') }}</title>
-		<meta charset="utf-8" />
-		<meta name="description" content="DITS - Project Management Software" />
-		<meta name="keywords" content="DITS - Project Management Software" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta property="og:locale" content="en_US" />
-		<meta property="og:type" content="article" />
-		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
-		<link rel="stylesheet" href="https://fonts.googleapi/css?family=Inter:300,400,500,600,700" />
-		<link href="assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+	<html class="no-js" lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>:: {{ config('app.name', 'WorkBot') }}:: Admin Dashboard</title>
+		<link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+		<!-- project css file  -->
+		<link rel="stylesheet" href="assets/css/style.css">
 	</head>
-	<body data-kt-name="metronic" id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
-		<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
-			<!--begin::Page-->
-			<div class="app-page flex-column flex-column-fluid" id="kt_app_page">
-				@include('layouts.header')
-				<!--begin::Wrapper-->
-				<div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
-					@include('layouts.sidebar')
-        			@yield('content')
-				</div>
-				<!--end::Wrapper-->
-			</div>
-			<!--end::Page-->
+	<body>
+
+	<div id="mytask-layout" class="theme-indigo">
+    		@include('layouts.sidebar')
+		<div class="main px-lg-4 px-md-4">
+			@include('layouts.header')
+			@yield('content')
 		</div>
-		<!--end::App-->
+	</div>
 
-		<!--begin::Global Javascript Bundle(used by all pages)-->
-		<script src="assets/plugins/global/plugins.bundle.js"></script>
-		<script src="assets/js/scripts.bundle.js"></script>
-		<!--end::Global Javascript Bundle-->
 
+		<!-- Jquery Core Js -->
+		<script src="assets/bundles/libscripts.bundle.js"></script>
+		<!-- Plugin Js-->
+		<script src="assets/bundles/apexcharts.bundle.js"></script>
+		<!-- Jquery Page Js -->
+		<script src="assets/js/template.js"></script>
+		<script src="assets/js/page/hr.js"></script>
 	</body>
-</html>
+	</html> 
