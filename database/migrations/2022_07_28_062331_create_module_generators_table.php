@@ -20,7 +20,7 @@ class CreateModuleGeneratorsTable extends Migration
             $table->string('controller_name');
             $table->string('database_table_name');
             $table->string('grid_table_type');
-            $table->string('configuration');
+            $table->longText('configuration');
             $table->integer('status')->default(1);
             $table->timestamps();
         });

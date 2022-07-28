@@ -11,5 +11,7 @@
 
 
     Route::resource('/module',App\Http\Controllers\ModuleGeneratorController::class);
+    Route::post('/build-module',[App\Http\Controllers\ModuleGeneratorController::class],'buildModule');
+    
 
 ?>

@@ -23,3 +23,6 @@ Route::group(['prefix' => 'core','middleware' => 'auth'], function () {
 Auth::routes();
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 Route::get('/project-dashboard', [App\Http\Controllers\DashboardController::class, 'projectDashboard'])->name('project.dashboard');
+
+//Activity Log
+Route::get('/activity-log', [App\Http\Controllers\LogController::class, 'getLog'] )->name('activity.log');

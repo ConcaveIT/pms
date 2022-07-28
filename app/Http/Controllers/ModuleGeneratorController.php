@@ -15,7 +15,7 @@ class ModuleGeneratorController extends Controller
     public function index()
     {
         $data = ModuleGenerator::all();
-        return view('core.module-list',compact('data'));
+        return view('core.module.list',compact('data'));
     }
 
     /**
@@ -26,7 +26,7 @@ class ModuleGeneratorController extends Controller
     public function create()
     {
         $tables = \DB::select('SHOW TABLES');
-        return view('core.module-create',compact('tables')); 
+        return view('core.module.create',compact('tables')); 
     }
 
     /**
@@ -86,7 +86,7 @@ class ModuleGeneratorController extends Controller
 
         $moduleData = $moduleGenerator::find($id);
         $columns = $moduleGenerator->getTableColumns($moduleData->database_table_name);
-        return view('core.module-update',compact('moduleData','columns')); 
+        return view('core.module.update',compact('moduleData','columns')); 
     }
 
     /**
@@ -96,11 +96,24 @@ class ModuleGeneratorController extends Controller
      * @param  \App\Models\ModuleGenerator  $moduleGenerator
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ModuleGenerator $moduleGenerator)
+    public function update(Request $request, ModuleGenerator $moduleGenerator,$id)
     {
-        //
+        
+        $validated = $request->validate([
+            'module_title' => 'required',
+            'configuration' => 'required',
+        ]);
 
-        echo 'update';
+        $model = $moduleGenerator->find($id);
+        $model->module_title = $request->module_title;
+        $model->module_description = $request->module_description;
+        $model->configuration = json_encode($request->configuration);
+        $update = $model->save();
+
+        if($update) session()->flash('success','Module has been updated!');
+        else session()->flash('error','Something went wrong!');
+        return back();
+    
     }
 
     /**
@@ -113,4 +126,17 @@ class ModuleGeneratorController extends Controller
     {
         //
     }
+
+     /**
+     * buildModule the specified resource from storage.
+     *
+     * @param  \App\Models\ModuleGenerator  $moduleGenerator
+     * @return \Illuminate\Http\Response
+     */
+    public function buildModule(ModuleGenerator $moduleGenerator)
+    {
+        //
+    }
+
+    
 }

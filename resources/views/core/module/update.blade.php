@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<form action="{{route('module.update',$moduleData->id)}}">
+<form method="post" action="{{route('module.update',$moduleData->id)}}">
     @csrf
     @method('put')
     <div class="card mb-3">
@@ -15,9 +15,10 @@
 
 
             <ul class="nav nav-pills mb-3" role="tablist">
-                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-details" role="tab">Details</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-table" role="tab">Table</a></li>
-                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-form" role="tab">Form</a></li>
+                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-details" role="tab">Module Information</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-table" role="tab">Table Settings</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-form" role="tab">Form Settings</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-builder" role="tab">Build Codes</a></li>
             </ul>
             
             <div class="tab-content">
@@ -25,21 +26,58 @@
                     
                     <div class="row g-3 align-items-center">
                         <div class="col-md-6">
-                            <p><b>Module Title : </b> {{$moduleData->module_title}} </p>
-                            <p><b>Controller Name : </b> {{$moduleData->controller_name}} </p>
-                            <p><b>Database Table Name : </b> {{$moduleData->database_table_name}} </p>
-                            <p><b>Grid / Table Type : </b> {{$moduleData->grid_table_type}} </p>
-                            <p><b>Status : </b> {{  ($moduleData->status == 1) ? 'Enabled' : 'Disabled' }} </p>
+
+                        <div class="form-group row  mb-1">
+                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Module Title <span class="text-danger">*</span> </label>
+                            <div class="col-sm-9">
+                                <input type="text" name="module_title" class="form-control" value="{{$moduleData->module_title}}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row  mb-1">
+                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Controller</label>
+                            <div class="col-sm-9">
+                                <input type="text"  class="form-control" value="{{$moduleData->controller_name}}" disabled>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row  mb-1">
+                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Database Table</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" value="{{$moduleData->database_table_name}}" disabled>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row  mb-1">
+                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Grid / Table Type</label>
+                            <div class="col-sm-9">
+                                <input type="text"  class="form-control" value="{{$moduleData->grid_table_type}}" disabled>
+                            </div>
+                        </div>
+
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label"><b>Module Description</b></label>
+                          
+                            <div class="form-group row mb-1">
+                                <label for="ModuleTitle" class="col-sm-3 col-form-label">Description</label>
+                                <div class="col-sm-9">
                                 <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror" rows="5" cols="30" required>{{$moduleData->module_description}}</textarea>
-                                @error('module_description')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                    @error('module_description')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group row  mb-1">
+                                <label for="ModuleTitle" class="col-sm-3 col-form-label">Status</label>
+                                <div class="col-sm-9">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ $moduleData->status == 1 ? 'checked' : '' }}>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -60,8 +98,8 @@
                         <tbody>
                             @foreach($columns as $item)
                             <tr>
-                                <td>{{$item}}</td>
-                                <td>{{$item}}</td>
+                                <td>{{$loop->iteration}}</td>
+                                <td>{{$item}} <a href="javascript:void(0)"><i class="fa fa-link float-end" aria-hidden="true"></i></a></td>
                                 <td>{{$item}}</td>
                                 <td>{{$item}}</td>
                                 <td>{{$item}}</td>
@@ -92,19 +130,21 @@
                                 
                                 <td>
                                     <div class="form-group">
-                                        <input type="text" name="module_title" class="form-control" value="{{ Helper::sanitizeField($item )}}">
+                                        <input type="text" name="configuration[{{$item}}][field_name]" class="form-control" value="{{ Helper::sanitizeField($item )}}">
                                     </div>
                                 </td>
 
                                 <td>
                                     @php 
                                         $types = [
+                                            'hidden' => 'Hidden',
                                             'select' => 'Select Option',
                                             'file' => 'File',
                                             'image' => 'Image',
                                             'radio' => 'Radio',
                                             'checkbox' => 'Checkbox',
                                             'radio' => 'Radio',
+                                            'text'  => 'Text',
                                             'textarea' => 'Textarea',
                                             'textareawitheditor' => 'Textarea With Editor',
                                             'datetime' => 'Date Time',
@@ -112,7 +152,7 @@
 
                                     @endphp
 
-                                    <select name="database_table_name" class="form-control">
+                                    <select name="configuration[{{$item}}][type]" class="form-control">
                                         <option value="-1" disabled selected>-- Select Type --</option>
                                         @foreach($types as $key=>$val)
                                             <option value="{{$key}}">{{$val}}</option>
@@ -123,22 +163,25 @@
 
                                 <td>
                                     <div class="form-group">
-                                        <input type="text" name="validation" class="form-control" placeholder="required | unique:posts">
+                                        <input type="text" name="configuration[{{$item}}][validation]"  class="form-control" placeholder="required | unique:posts">
                                     </div>
                                 </td>
 
                                 <td>
                                     <div class="form-group">
                                         <label class="fancy-radio">
-                                            <input type="radio" name="status" value="1" checked >
-                                            <span><i></i>YES</span>
+                                            <input type="checkbox" name="configuration[{{$item}}][searchable]" checked >
+                                            <span><i></i>Searchable</span>
                                         </label>
-                                        <label class="fancy-radio">
-                                            <input type="radio" name="status" value="0">
-                                            <span><i></i>NO</span>
-                                        </label>
-                                        <p id="error-radio"></p>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="fancy-radio">
+                                            <input type="checkbox"name="configuration[{{$item}}][filterable]" checked >
+                                            <span><i></i>Filterable</span>
+                                        </label>
+                                    </div>
+
                                 </td>
 
                             </tr>
@@ -146,6 +189,14 @@
                         </tbody>
                     </table>
                 </div>
+
+
+                <div class="tab-pane fade" id="nav-builder" role="tabpanel">
+                    <p class="text-left"><a href="javascript:void(0)" class="btn btn-danger text-white"> <i class="fa fa-cogs"></i> Build All Codes</a></p>
+                </div>
+
+
+
             </div>
 
 

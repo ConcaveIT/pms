@@ -17364,13 +17364,18 @@
      background-color: var(--color-200);
      color: var(--text-color);
  }
- .form-switch .form-check-input {
-     margin-left: -2em;
+ .swal2-container{
+    z-index: 99999 !important;
  }
+
  .form-switch .form-check-input:checked {
      background-color: var(--primary-color);
      border-color: var(--border-color);
  }
+ input#flexSwitchCheckDefault {
+        margin-top: 12px;
+  }
+
  .big-search {
      color: var(--color-fff);
  }
