@@ -28,6 +28,7 @@ class CreateProjectsTable extends Migration
             $table->integer('department_id');
             $table->integer('is_deleted')->default(0);
             $table->integer('status')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

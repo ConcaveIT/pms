@@ -87,6 +87,9 @@
                         
                     </ul>
                 </li>
+
+                <li class="collapsed"><a class="m-link"  href="/core/module"><i class="icofont-users-alt-5"></i> <span>Modules</span></a></li>
+
             </ul>
 
             <!-- Menu: menu collepce btn -->

@@ -455,3 +455,6 @@
         </div> 
 
 @endsection
+@push('script')
+    <script src="{{asset('assets/js/page/hr.js')}}"></script>
+@endpush

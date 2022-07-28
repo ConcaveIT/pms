@@ -19,12 +19,13 @@ class CreateClientsTable extends Migration
             $table->string('name');
             $table->string('company_name');
             $table->string('designation');
-            $table->string('description');
+            $table->mediumText('description')->nullable();
             $table->string('phone');
-            $table->string('email');
-            $table->string('dob');
+            $table->string('email')->nullable();
+            $table->string('dob')->nullable();
             $table->mediumText('address');
             $table->integer('status')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

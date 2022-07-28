@@ -15,6 +15,11 @@ class CreateExpensesTable extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->mediumText('description')->nullable();
+            $table->integer('amount');
+            $table->integer('status');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

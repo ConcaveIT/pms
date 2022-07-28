@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTaskReportsTable extends Migration
+class CreateModuleGeneratorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateTaskReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('task_reports', function (Blueprint $table) {
+        Schema::create('module_generators', function (Blueprint $table) {
             $table->id();
-            $table->integer('task_id');
-            $table->integer('total_hour');
-            $table->integer('user_id');
-            $table->mediumText('description');
+            $table->string('module_title');
+            $table->string('module_description')->nullable();
+            $table->string('controller_name');
+            $table->string('database_table_name');
+            $table->string('grid_table_type');
+            $table->string('configuration');
             $table->integer('status')->default(1);
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateTaskReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('task_reports');
+        Schema::dropIfExists('module_generators');
     }
 }

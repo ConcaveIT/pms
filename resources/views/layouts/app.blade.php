@@ -7,25 +7,36 @@
 		<title>:: {{ config('app.name', 'WorkBot') }}:: Admin Dashboard</title>
 		<link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 		<!-- project css file  -->
-		<link rel="stylesheet" href="assets/css/style.css">
+		<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
+		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	</head>
 	<body>
-
-	<div id="mytask-layout" class="theme-indigo">
-    		@include('layouts.sidebar')
-		<div class="main px-lg-4 px-md-4">
-			@include('layouts.header')
-			@yield('content')
+		<div id="mytask-layout" class="theme-indigo">
+				@include('layouts.sidebar')
+			<div class="main px-lg-4 px-md-4">
+				@include('layouts.header')
+				@yield('content')
+			</div>
 		</div>
-	</div>
+		<script src="{{asset('assets/bundles/libscripts.bundle.js')}}"></script>
+		<script src="{{asset('assets/bundles/apexcharts.bundle.js')}}"></script>
+		<script src="{{asset('assets/bundles/dataTables.bundle.js')}}"></script>
+		<script src="{{asset('assets/js/template.js')}}"></script>
+		@stack('script')
 
+		<script>
+			@if (session()->has('success'))
+				Toast.fire({
+					icon: 'success',
+					title: "{{ session()->get('success') }}"
+				});
+			@elseif(session()->has('error'))
+				Toast.fire({
+					icon: 'error',
+					title: "{{ session()->get('error') }}"
+				});
+			@endif
+		</script>
 
-		<!-- Jquery Core Js -->
-		<script src="assets/bundles/libscripts.bundle.js"></script>
-		<!-- Plugin Js-->
-		<script src="assets/bundles/apexcharts.bundle.js"></script>
-		<!-- Jquery Page Js -->
-		<script src="assets/js/template.js"></script>
-		<script src="assets/js/page/hr.js"></script>
 	</body>
 	</html> 
