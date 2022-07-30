@@ -1,29 +1,47 @@
 <?php namespace App\Http\Controllers;
 
-use App\Models\Project;
+use App\Models\MicroPackagesf;
 use Illuminate\Http\Request;
-use Validator, Input, Redirect, Auth; 
+use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Validator, Input, Redirect ; 
 
 
-class ProjectController extends Controller {
-	public $module = 'project';
-	public $per_page	= '20';
+class MicroPackagesfController extends Controller {
 
-	public function __construct(){
-        $this->middleware(function($request,$next){
-            $this->user = Auth::user();
-            return $next($request);
-        });
-    }
+	protected $layout = "layouts.main";
+	protected $data = array();	
+	public $module = 'MicroPackagesf';
+	static $per_page	= '10';
 
-	public function index( Request $request ){
-		if(is_null($this->user) || !$this->user->can('project.view')){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
-        }
-		$tableGrid = \Helper::getTableHeader('Project');
-		$results = Project::all();
-		return view( $this->module.'.index',compact('results','tableGrid'));
+	public function __construct()
+	{		
+		parent::__construct();
+		$this->model = new MicroPackagesf();	
+		{masterdetailmodel}
+		$this->info = $this->model->makeInfo( $this->module);	
+		$this->data = array(
+			'pageTitle'	=> 	$this->info['title'],
+			'pageNote'	=>  $this->info['note'],
+			'pageModule'=> 'MicroPackagesf',
+			'return'	=> self::returnUrl()
+			
+		);
+		{masterdetailinfo}
 	}
+
+	public function index( Request $request )
+	{
+		// Make Sure users Logged 
+		if(!\Auth::check()) 
+			return redirect('user/login')->with('status', 'error')->with('message','You are not login');
+
+		
+		$this->grab( $request) ;
+		if($this->access['is_view'] ==0) 
+			return redirect('dashboard')->with('message', __('core.note_restric'))->with('status','error');				
+		// Render into template
+		return view( $this->module.'.index',$this->data);
+	}	
 
 	function create( Request $request , $id =0 ) 
 	{
@@ -32,6 +50,7 @@ class ProjectController extends Controller {
 			return redirect('dashboard')->with('message', __('core.note_restric'))->with('status','error');
 
 		$this->data['row'] = $this->model->getColumnTable( $this->info['table']); 
+		{masterdetailsubform}
 		$this->data['id'] = '';
 		return view($this->module.'.form',$this->data);
 	}
@@ -43,6 +62,7 @@ class ProjectController extends Controller {
 		if($this->access['is_edit'] ==0 )
 			return redirect('dashboard')->with('message',__('core.note_restric'))->with('status','error');
 		$this->data['row'] = (array) $this->data['row'];
+		{masterdetailsubform}
 		$this->data['id'] = $id;
 		return view($this->module.'.form',$this->data);
 	}	
@@ -91,6 +111,7 @@ class ProjectController extends Controller {
 				{
 					$data = $this->validatePost( $request );
 					$id = $this->model->insertRow($data , $request->input( $this->info['key']));
+					{masterdetailsave}
 					/* Insert logs */
 					$this->model->logs($request , $id);
 					if($request->has('apply'))
@@ -146,6 +167,7 @@ class ProjectController extends Controller {
 		if(is_array($request->input('ids')))
 		{
 			$this->model->destroy($request->input('ids'));
+			{masterdetaildelete}
 			\SiteHelpers::auditTrail( $request , "ID : ".implode(",",$request->input('ids'))."  , Has Been Removed Successfull");
 			// redirect
         	return ['message'=>__('core.note_success_delete'),'status'=>'success'];	
@@ -159,8 +181,8 @@ class ProjectController extends Controller {
 	public static function display(  )
 	{
 		$mode  = isset($_GET['view']) ? 'view' : 'default' ;
-		$model  = new Project();
-		$info = $model::makeInfo('project');
+		$model  = new MicroPackagesf();
+		$info = $model::makeInfo('MicroPackagesf');
 		$data = array(
 			'pageTitle'	=> 	$info['title'],
 			'pageNote'	=>  $info['note']			
@@ -174,7 +196,7 @@ class ProjectController extends Controller {
 				$data['row'] =  $row;
 				$data['fields'] 		=  \SiteHelpers::fieldLang($info['config']['grid']);
 				$data['id'] = $id;
-				return view('project.public.view',$data);			
+				return view('MicroPackagesf.public.view',$data);			
 			}			
 		} 
 		else {
@@ -198,7 +220,7 @@ class ProjectController extends Controller {
 			$pagination->setPath('');
 			$data['i']			= ($page * $params['limit'])- $params['limit']; 
 			$data['pagination'] = $pagination;
-			return view('project.public.index',$data);	
+			return view('MicroPackagesf.public.index',$data);	
 		}
 
 	}

@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Models\Project;
+use App\Models\{controller};
 use Illuminate\Http\Request;
 use Validator, Input, Redirect, Auth; 
 
 
-class ProjectController extends Controller {
-	public $module = 'project';
+class {controller}Controller extends Controller {
+	public $module = '{class}';
 	public $per_page	= '20';
 
 	public function __construct(){
@@ -17,11 +17,11 @@ class ProjectController extends Controller {
     }
 
 	public function index( Request $request ){
-		if(is_null($this->user) || !$this->user->can('project.view')){
+		if(is_null($this->user) || !$this->user->can('{class}.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
-		$tableGrid = \Helper::getTableHeader('Project');
-		$results = Project::all();
+		$tableGrid = \Helper::getTableHeader('{controller}');
+		$results = {controller}::all();
 		return view( $this->module.'.index',compact('results','tableGrid'));
 	}
 
@@ -159,8 +159,8 @@ class ProjectController extends Controller {
 	public static function display(  )
 	{
 		$mode  = isset($_GET['view']) ? 'view' : 'default' ;
-		$model  = new Project();
-		$info = $model::makeInfo('project');
+		$model  = new {controller}();
+		$info = $model::makeInfo('{class}');
 		$data = array(
 			'pageTitle'	=> 	$info['title'],
 			'pageNote'	=>  $info['note']			
@@ -174,7 +174,7 @@ class ProjectController extends Controller {
 				$data['row'] =  $row;
 				$data['fields'] 		=  \SiteHelpers::fieldLang($info['config']['grid']);
 				$data['id'] = $id;
-				return view('project.public.view',$data);			
+				return view('{class}.public.view',$data);			
 			}			
 		} 
 		else {
@@ -198,7 +198,7 @@ class ProjectController extends Controller {
 			$pagination->setPath('');
 			$data['i']			= ($page * $params['limit'])- $params['limit']; 
 			$data['pagination'] = $pagination;
-			return view('project.public.index',$data);	
+			return view('{class}.public.index',$data);	
 		}
 
 	}

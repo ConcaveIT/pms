@@ -3,8 +3,8 @@
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 
-class project extends Model  {
+class {class} extends Model  {
 	
-	protected $table = 'projects';
+	protected $table = '{table}';
 
 }

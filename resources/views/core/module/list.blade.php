@@ -12,7 +12,7 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- Row end  -->
+        </div>
         <div class="row clearfix g-3">
           <div class="col-sm-12">
                 <div class="card mb-3">

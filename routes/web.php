@@ -18,6 +18,10 @@ use App\Http\Controllers\ModuleGeneratorController;
 Route::group(['prefix' => 'core','middleware' => 'auth'], function () {
 	include('core.php');
 });
+
+Route::group(['prefix' => 'module','middleware' => 'auth'], function () {
+	include('module.php');
+});
  
 
 Auth::routes();

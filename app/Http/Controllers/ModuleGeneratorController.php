@@ -86,6 +86,7 @@ class ModuleGeneratorController extends Controller
 
         $moduleData = $moduleGenerator::find($id);
         $columns = $moduleGenerator->getTableColumns($moduleData->database_table_name);
+        
         return view('core.module.update',compact('moduleData','columns')); 
     }
 
@@ -101,13 +102,19 @@ class ModuleGeneratorController extends Controller
         
         $validated = $request->validate([
             'module_title' => 'required',
-            'configuration' => 'required',
+            'form_configuration' => 'required',
+            'table_configuration' => 'required',
         ]);
 
         $model = $moduleGenerator->find($id);
         $model->module_title = $request->module_title;
         $model->module_description = $request->module_description;
-        $model->configuration = json_encode($request->configuration);
+       
+        $model->configuration =  json_encode([
+            'table_configuration' => $request->table_configuration,
+            'form_configuration' => $request->form_configuration
+        ]);
+
         $update = $model->save();
 
         if($update) session()->flash('success','Module has been updated!');
@@ -133,10 +140,90 @@ class ModuleGeneratorController extends Controller
      * @param  \App\Models\ModuleGenerator  $moduleGenerator
      * @return \Illuminate\Http\Response
      */
-    public function buildModule(ModuleGenerator $moduleGenerator)
-    {
-        //
+    public function buildModule(Request $request, ModuleGenerator $moduleGenerator,$id){
+        $module = $moduleGenerator::find($id);
+        $class =  strtolower($module->controller_name);
+        $dir = base_path().'/resources/views/'.$class; 
+        $dirC = app_path().'/Http/Controllers/';
+        $dirApi = app_path().'/Http/Controllers/Api/';
+        $dirM = app_path().'/Models/';
+        $ctr = ucwords($module->controller_name);
+
+        if(!is_dir($dir)) mkdir( $dir,0777 );  
+
+        $f = '';
+        $req = '';
+
+
+        $codes = [
+            'controller'       => ucwords($class),
+            'class'            => $class,
+            'fields'           => $f,
+            'required'         => $req,
+            'table'            => $module->database_table_name ,
+            'title'            => $module->module_title ,
+            'note'             => $module->module_description
+        ];
+        $mType = ( $module->grid_table_type == 'native' ? 'native' :  $row->grid_table_type);
+
+            if(is_dir( base_path().'/resources/views/core/template/'.$mType )){
+                 
+                 require_once( base_path().'/resources/views/core/template/'.$mType.'/config/config.php');
+            } else {
+                if($request->ajax() == true && \Auth::check() == true){
+                    return response()->json(array('status'=>'success','message'=>'Template is Not Exists')); 
+                } else {
+                    return redirect('concave/module')->with('message','Template is Not Exists')->with('status','success');   
+                }  
+            } 
+
+           self::createRouters($module->id);
+    
+        if($request->ajax() == true && \Auth::check() == true)
+        {
+            return response()->json(array('status'=>'success','message'=>'Code Script has been replaced successfull')); 
+        } else {
+
+            return session()->flash('success','Code Script has been replaced successfull');
+    
+        } 
+        
     }
+
+    /**
+     * createRouters the specified resource from function.
+     *
+     * @param  \App\Models\ModuleGenerator  $moduleGenerator
+     * @return \Illuminate\Http\Response
+     */
+
+
+    function createRouters($id){
+        $modules = ModuleGenerator::all();
+        $val  =    "<?php";
+        $val_api  = "<?php"; 
+    
+        foreach($modules as $module){
+            $route =  strtolower($module->controller_name);
+            $controller = ucwords($module->controller_name).'Controller';
+            $mType = ( $module->grid_table_type == 'native' ? 'native' :  $module->grid_table_type);
+            include(base_path().'/resources/views/core/template/'.$mType.'/config/route.php' );
+            include(base_path().'/resources/views/core/template/'.$mType.'/config/route_api.php' ); 
+        }
+
+        $val .=     "?>";
+        $val_api .=     "?>";
+
+        $filename = base_path().'/routes/module.php';
+        $fp=fopen($filename,"w+"); 
+        fwrite($fp,$val); 
+        fclose($fp);    
+        file_put_contents( base_path()."/routes/services.php" , $val_api) ;
+        return true;
+    }
+
+
+
 
     
 }
