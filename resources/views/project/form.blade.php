@@ -93,6 +93,10 @@
 						</div>
 					</div>
 			</div><input type="hidden" name="is_deleted"  value="{{$data->is_deleted ?? "" }}" ><input type="hidden" name="deleted_at"  value="{{$data->deleted_at ?? "" }}" ><input type="hidden" name="created_at"  value="{{$data->created_at ?? "" }}" ><input type="hidden" name="updated_at"  value="{{$data->updated_at ?? "" }}" >
+
+				<div class="form-group mb-4 text-right">
+					<p class="text-end"><button type="submit" class="btn btn-primary">Save</button></p>
+				 </div>
 			</form>
 		</div>
 	</div>
