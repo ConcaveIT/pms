@@ -86,8 +86,8 @@ class ModuleGeneratorController extends Controller
 
         $moduleData = $moduleGenerator::find($id);
         $columns = $moduleGenerator->getTableColumns($moduleData->database_table_name);
-        
-        return view('core.module.update',compact('moduleData','columns')); 
+        $tables = \DB::select('SHOW TABLES');
+        return view('core.module.update',compact('moduleData','columns','tables')); 
     }
 
     /**
@@ -99,7 +99,6 @@ class ModuleGeneratorController extends Controller
      */
     public function update(Request $request, ModuleGenerator $moduleGenerator,$id)
     {
-        
         $validated = $request->validate([
             'module_title' => 'required',
             'form_configuration' => 'required',
@@ -109,7 +108,7 @@ class ModuleGeneratorController extends Controller
         $model = $moduleGenerator->find($id);
         $model->module_title = $request->module_title;
         $model->module_description = $request->module_description;
-       
+
         $model->configuration =  json_encode([
             'table_configuration' => $request->table_configuration,
             'form_configuration' => $request->form_configuration
@@ -158,12 +157,13 @@ class ModuleGeneratorController extends Controller
         $codes = [
             'controller'       => ucwords($class),
             'class'            => $class,
-            'fields'           => $f,
-            'required'         => $req,
             'table'            => $module->database_table_name ,
             'title'            => $module->module_title ,
             'note'             => $module->module_description
         ];
+
+        $codes['form_html'] = \Helper::generateForm($module->configuration);
+
         $mType = ( $module->grid_table_type == 'native' ? 'native' :  $row->grid_table_type);
 
             if(is_dir( base_path().'/resources/views/core/template/'.$mType )){
@@ -198,7 +198,7 @@ class ModuleGeneratorController extends Controller
      */
 
 
-    function createRouters($id){
+    public function createRouters($id){
         $modules = ModuleGenerator::all();
         $val  =    "<?php";
         $val_api  = "<?php"; 
@@ -220,6 +220,14 @@ class ModuleGeneratorController extends Controller
         fclose($fp);    
         file_put_contents( base_path()."/routes/services.php" , $val_api) ;
         return true;
+    }
+
+    public function getDatabaseColumns(ModuleGenerator  $moduleGenerator,$databasename){
+        $html = '';
+        foreach($moduleGenerator->getTableColumns($databasename) as $column){
+            $html .= '<option value="'.$column.'">'.$column.'</option>';
+        }
+        return $html;
     }
 
 

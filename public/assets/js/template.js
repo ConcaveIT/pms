@@ -16,6 +16,28 @@ const Toast = Swal.mixin({
 });
 
 
+jQuery(document).on('click','.delete_btn',function(event){
+    event.preventDefault();
+    var actionUrl = jQuery(this).attr('href');
+    jQuery('#delete-form').attr('action',actionUrl);
+
+    Swal.fire({
+    title: 'Are you sure?',
+    text: "You won't be able to revert this!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            jQuery('#delete-form').submit();
+        }
+    })
+
+});
+
+
 
 $(function() {
     "use strict";

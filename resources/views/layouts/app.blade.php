@@ -9,15 +9,19 @@
 		<!-- project css file  -->
 		<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script src="{{ asset('assets/vendors/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+
 	</head>
 	<body>
 		<div id="mytask-layout" class="theme-indigo">
-				@include('layouts.sidebar')
+				{{-- @include('layouts.sidebar') --}}
 			<div class="main px-lg-4 px-md-4">
-				@include('layouts.header')
+				{{-- @include('layouts.header') --}}
 				@yield('content')
 			</div>
+			<form id="delete-form" action="#" method="POST" class="d-none">@csrf @method('delete')</form>
 		</div>
+
 		<script src="{{asset('assets/bundles/libscripts.bundle.js')}}"></script>
 		<script src="{{asset('assets/bundles/apexcharts.bundle.js')}}"></script>
 		<script src="{{asset('assets/bundles/dataTables.bundle.js')}}"></script>
@@ -36,6 +40,17 @@
 					title: "{{ session()->get('error') }}"
 				});
 			@endif
+
+
+			tinymce.init({
+				selector: '.textEditor',
+				height: 300,
+				theme: 'modern',
+				plugins: 'print preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern code help',
+				toolbar1: 'fontselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent  | removeformat | code toc',
+				image_advtab: true,
+				font_formats: 'Arial Black=arial black,avant garde;Indie Flower=indie flower, cursive;Times New Roman=times new roman,times;Roboto=roboto'
+			});
 		</script>
 
 	</body>

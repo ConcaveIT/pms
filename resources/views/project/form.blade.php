@@ -1,64 +1,100 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="page-titles">
-  <h2> {{ $pageTitle }} <small> {{ $pageNote }} </small></h2>
-</div>
-<div class="card">
-	<div class="card-body">
 
-
-	{!! Form::open(array('url'=>'project?return='.$return, 'class'=>'form-{form_display}  validated concave-form','files' => true ,'id'=> 'FormTable' )) !!}
-	<div class="toolbar-nav">
-		<div class="row">
-			<div class="col-md-6 " >
-				 <a href="{{ url($pageModule.'?return='.$return) }}" class="tips btn btn-danger  btn-sm "  title="{{ __('core.btn_back') }}" ><i class="fa  fa-times"></i></a>
-			</div>
-			<div class="col-md-6  text-right " >
-				<div class="btn-group">
-					
-						<button name="apply" class="tips btn btn-sm btn-info  "  title="{{ __('core.btn_back') }}" > {{ __('core.sb_apply') }} </button>
-						<button name="save" class="tips btn btn-sm btn-primary "  id="saved-button" title="{{ __('core.btn_back') }}" > {{ __('core.sb_save') }} </button> 
-						
-					
-				</div>		
-			</div>
-			
+	<div class="card">
+		<div class="card-body">
+			<form action="{{route('project.store')}}" method="post">
+				@csrf
+				<input type="hidden" name="id"  value="{{$data->id ?? "" }}" ><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Product Title<span class="text-danger">*</span>  </label>
+							<div class="col-sm-9">
+								<input type="text" name="title"  class="form-control @error("title") is-invalid @enderror" value="{{$data->title ?? "" }}" required>
+							</div>
+							@error("title")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Total hour  </label>
+							<div class="col-sm-9">
+								<input type="text" name="total_hour"  class="form-control @error("total_hour") is-invalid @enderror" value="{{$data->total_hour ?? "" }}" >
+							</div>
+							@error("total_hour")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Deadline  </label>
+							<div class="col-sm-9">
+								<input type="datetime-local" name="deadline"  class="form-control @error("deadline") is-invalid @enderror" value="{{$data->deadline ?? "" }}" >
+							</div>
+							@error("deadline")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Total worth  </label>
+							<div class="col-sm-9">
+								<input type="number" name="total_worth"  class="form-control @error("total_worth") is-invalid @enderror" value="{{$data->total_worth ?? "" }}" >
+							</div>
+							@error("total_worth")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Description  </label>
+							<div class="col-sm-9">
+								<textarea name="description"  class="form-control @error("description") is-invalid @enderror" 
+								 >{{$data->description ?? "" }}</textarea>
+							</div>
+							@error("description")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Related documents  </label>
+							<div class="col-sm-9">
+								<textarea  name="related_documents"  class="textEditor form-control @error("related_documents") is-invalid @enderror" 
+								 >{{$data->related_documents ?? "" }}</textarea>
+							</div>
+							@error("related_documents")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div><input type="hidden" name="is_deleted"  value="{{$data->is_deleted ?? "" }}" ><input type="hidden" name="deleted_at"  value="{{$data->deleted_at ?? "" }}" ><input type="hidden" name="created_at"  value="{{$data->created_at ?? "" }}" ><input type="hidden" name="updated_at"  value="{{$data->updated_at ?? "" }}" >
+			</form>
 		</div>
-	</div>	
-
-
-	
-	<ul class="parsley-error-list">
-		@foreach($errors->all() as $error)
-			<li>{{ $error }}</li>
-		@endforeach
-	</ul>		
-	<div class="">
-		{form_entry}
-
 	</div>
-	{masterdetailform}
-	<input type="hidden" name="action_task" value="save" />
-	{!! Form::close() !!}
-	</div>
-</div>
 		 
-   <script type="text/javascript">
-	$(document).ready(function() { 
-		
-		{masterdetailjs}
-		{form_javascript} 	
-		{form_wizard} 	 
-
-		$('.removeMultiFiles').on('click',function(){
-			var removeUrl = '{{ url("project/removefiles?file=")}}'+$(this).attr('url');
-			$(this).parent().remove();
-			$.get(removeUrl,function(response){});
-			$(this).parent('div').empty();	
-			return false;
-		});		
-		
-	});
-	</script>		 
-@stop
+@endsection

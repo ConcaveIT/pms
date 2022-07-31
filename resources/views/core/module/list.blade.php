@@ -34,8 +34,8 @@
                                 <tr>
                                     <td><a href="#" class="fw-bold text-secondary">#WRB-{{$item->id}}</a></td>
                                     <td>{{$item->module_title}}</td>
-                                    <td>{{$item->controller_name}}</td>
-                                    <td>{{$item->database_name}}</td>
+                                    <td>{{$item->controller_name}}Controller</td>
+                                    <td>{{$item->database_table_name}}</td>
                                     <td>{{$item->created_at}}</td>
                                     <td>
                                         @if($item->status == 1)
@@ -44,13 +44,13 @@
                                         <span class="badge bg-danger">Disabled</span>
                                         @endif
                                     </td>
-                                   <td>
+                                
+                                    <td>
                                         <div class="btn-group" role="group" aria-label="Basic outlined example">
                                             <a href="{{route('module.edit',$item->id)}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
                                             <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
                                         </div>
                                     </td>
-
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -65,7 +65,6 @@
 @endsection
 
 @push('script')
-
 <script>
     // project data table
     $(document).ready(function() {

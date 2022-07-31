@@ -12,6 +12,7 @@
 
     Route::resource('/module',App\Http\Controllers\ModuleGeneratorController::class);
     Route::get('/build-module/{id}',[App\Http\Controllers\ModuleGeneratorController::class,'buildModule'])->name('module.build');
+    Route::get('/database-columns/{databasename}',[App\Http\Controllers\ModuleGeneratorController::class,'getDatabaseColumns'])->name('database.columns');
     
 
 ?>
