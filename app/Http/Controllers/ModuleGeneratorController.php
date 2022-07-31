@@ -57,6 +57,7 @@ class ModuleGeneratorController extends Controller
         $model->configuration = '';
         $model->status = $request->status;
         $create = $model->save();
+        $this->createRouters();
 
         if($create) session()->flash('success','Module has been created!');
         else session()->flash('error','Something went wrong!');
@@ -184,7 +185,8 @@ class ModuleGeneratorController extends Controller
             return response()->json(array('status'=>'success','message'=>'Code Script has been replaced successfull')); 
         } else {
 
-            return session()->flash('success','Code Script has been replaced successfull');
+            session()->flash('success','Code Script has been successfully replaced!');
+            return back();
     
         } 
         
@@ -198,7 +200,7 @@ class ModuleGeneratorController extends Controller
      */
 
 
-    public function createRouters($id){
+    public function createRouters(){
         $modules = ModuleGenerator::all();
         $val  =    "<?php";
         $val_api  = "<?php"; 

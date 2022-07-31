@@ -4,9 +4,9 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class leaverequest extends Model  {
+class settings extends Model  {
 	use SoftDeletes;
-	protected $table = 'leave_requests';
+	protected $table = 'settings';
 	protected $softDelete = true;
 
 }

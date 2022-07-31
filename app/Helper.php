@@ -69,10 +69,12 @@ class Helper{
 
 	
 	public static function generateForm($config){
-		$form_configuration = json_decode($config)->form_configuration;
 		$html = '';
-		foreach($form_configuration as $conf){
-			$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name);
+		$form_configuration = isset(json_decode($config)->form_configuration) ? json_decode($config)->form_configuration : [];
+		if($form_configuration){
+			foreach($form_configuration as $conf){
+				$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name);
+			}
 		}
 		return $html;
 	}
@@ -175,6 +177,74 @@ class Helper{
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
 								<input type="datetime-local" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+							</div>
+							@error("'.$configFieldKey.'")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div>';
+		}
+
+		if($configType == 'date') {
+			$html .= '<div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
+							<div class="col-sm-9">
+								<input type="date" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+							</div>
+							@error("'.$configFieldKey.'")
+								<span class="invalid-feedback" role="alert">
+									<strong>{{ $message }}</strong>
+								</span>
+							@enderror
+						</div>
+					</div>
+			</div>';
+		}
+
+		if($configType == 'image' || $configType == 'multipleimages' ) {
+			$previewImageHtml = '';
+			if($configType == 'image'){
+				$inputType = 'single';
+				$btnText = 'Select Image';
+
+				$previewImageHtml = '@if(isset($data->'.$configFieldKey.'))
+					<p class="selected_images_gallery">
+						<span>
+						<input type="hidden" value="{{$data->'.$configFieldKey.'}}" name="'.$configFieldKey.'">
+						<img src="{{"/".$data->'.$configFieldKey.'}}"> 
+						<b data-file-url="{{$data->'.$configFieldKey.'}}" class="selected_image_remove"><i class="fa fa-trash"></i></b>
+						</span>
+					</p>
+				@endif';
+
+
+			}else{
+				$inputType = 'multiple';
+				$btnText = 'Select Images';
+				$previewImageHtml = '@if(isset($data->'.$configFieldKey.'))
+					@foreach(explode(",",$data->'.$configFieldKey.') as $img)
+						@if($img)
+						<span>
+							<input type="hidden" value="{{$img}}" name="'.$configFieldKey.'[]">
+							<img src="{{"/".$img}}"> <b data-file-url="{{$img}}" class="selected_image_remove">X</b>
+						</span>
+						@endif
+					@endforeach
+				@endif';
+			}
+
+			$html .= '<div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
+						    <div class="col-sm-9">
+						  		<button type="button" data-image-width="800" data-image-height="800" data-input-name="'.$configFieldKey.'" data-input-type="'.$inputType .'" class="btn btn-success text-white initConcaveMedia" >'.$btnText.'</button>
+						  		'.$previewImageHtml.'
 							</div>
 							@error("'.$configFieldKey.'")
 								<span class="invalid-feedback" role="alert">

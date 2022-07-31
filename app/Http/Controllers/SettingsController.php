@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Models\Leaverequest;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Validator, Input, Redirect, Auth; 
 
 
-class LeaverequestController extends Controller {
-	public $module = 'leaverequest';
+class SettingsController extends Controller {
+	public $module = 'settings';
 	public $per_page	= '20';
 
 	public function __construct(){
@@ -17,15 +17,15 @@ class LeaverequestController extends Controller {
     }
 
 	public function index( Request $request ){
-		if(is_null($this->user) || !$this->user->can('leaverequest.view')){
+		if(is_null($this->user) || !$this->user->can('settings.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
-		$tableGrid = \Helper::getTableHeader('Leaverequest');
-		$results = Leaverequest::all();
+		$tableGrid = \Helper::getTableHeader('Settings');
+		$results = Settings::all();
 		
 		$info = [
 			'module_name' => ucwords($this->module),
-			'create_button' => 'Leaverequest',
+			'create_button' => 'Settings',
 			'module_route' => $this->module
 		];
 
@@ -34,13 +34,13 @@ class LeaverequestController extends Controller {
 	
 
 	function create() {
-		if(is_null($this->user) || !$this->user->can('leaverequest.view')){
+		if(is_null($this->user) || !$this->user->can('settings.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
 		$info = [
 			'module_name' => ucwords($this->module),
-			'create_button' => 'Leaverequest',
+			'create_button' => 'Settings',
 			'module_route' => $this->module
 		];
 
@@ -145,11 +145,11 @@ class LeaverequestController extends Controller {
 	}	
 
 	public function destroy($id){
-		if(is_null($this->user) || !$this->user->can('leaverequest.delete')){
+		if(is_null($this->user) || !$this->user->can('settings.delete')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$result = Leaverequest::find($id);
+		$result = Settings::find($id);
 		$update = $result->delete();
 		if($update){
 			return back()->with('success', 'Record has been successfully deleted!');

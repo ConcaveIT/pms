@@ -244,9 +244,12 @@
                                             'number'    => 'Number',
                                             'select' => 'Select Option',
                                             'file' => 'File',
+                                            'multiplefiles' => 'Multiple Files',
                                             'image' => 'Image',
+                                            'multipleimages' => 'Multiple Images',
                                             'radio' => 'Radio',
                                             'checkbox' => 'Checkbox',
+                                            'date' => 'Date',
                                             'datetime' => 'Date Time',
                                             'hidden' => 'Hidden',
                                         ];
@@ -398,7 +401,7 @@
 
                 <div class="tab-pane fade" id="nav-builder" role="tabpanel">
                     <p class="text-center p-5">
-                        <a  class="btn btn-danger text-white" href="#"  onclick="event.preventDefault(); document.getElementById('build-form').submit();"><i class="fa fa-cogs"></i> Build All Codes</a>
+                        <a  class="btn btn-danger text-white" onclick="event.preventDefault(); document.getElementById('build-form').submit();"><i class="fa fa-cogs"></i> Build All Codes</a>
                     </p>
                 </div>
 
