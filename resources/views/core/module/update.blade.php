@@ -32,7 +32,6 @@
     @method('put')
     <div class="card mb-3">
         <div class="card-body">
-
             <ul class="nav nav-pills mb-3" role="tablist">
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-details" role="tab">Module Information</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-table" role="tab">Table Settings</a></li>
@@ -137,7 +136,7 @@
                         @endphp
 
 
-                        <tbody>
+                        <tbody class="sortable">
                             @foreach($columns as $item)
                             <?php 
                                 $fieldName = isset($table_configuration->{$item}->field_name)  ? $table_configuration->{$item}->field_name : '';
@@ -211,20 +210,22 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="sortable">
                             @foreach($columns as $item)
 
                             @php 
-                                $formFieldName = isset($form_configuration->{$item}->field_name)  ? $form_configuration->{$item}->field_name : Helper::sanitizeField($item);
-                                $formFieldType = isset($form_configuration->{$item}->type)  ? $form_configuration->{$item}->type : '';
-                                $formFieldValidation = isset($form_configuration->{$item}->validation)  ? $form_configuration->{$item}->validation : '';
-                                $formFieldSearchable = isset($form_configuration->{$item}->searchable)  ? 'checked' : '';
-                                $formFieldFilterable = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
-
-                                $formFieldDataType = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
-
-                                $formFieldCustomData =  isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : []; 
-
+                                $formFieldName                      = isset($form_configuration->{$item}->field_name)  ? $form_configuration->{$item}->field_name : Helper::sanitizeField($item);
+                                $formFieldType                      = isset($form_configuration->{$item}->type)  ? $form_configuration->{$item}->type : '';
+                                $formFieldValidation                = isset($form_configuration->{$item}->validation)  ? $form_configuration->{$item}->validation : '';
+                                $formFieldSearchable                = isset($form_configuration->{$item}->searchable)  ? 'checked' : '';
+                                $formFieldFilterable                = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
+                                $formFieldDataType                  = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
+                                $formFieldCustomData                =  isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : [];
+                                $formFieldRelationDatabase          = isset($form_configuration->{$item}->relation_database)  ? $form_configuration->{$item}->relation_database : '';
+                                $formFieldRelationDatabaseKey       = isset($form_configuration->{$item}->relation_database_key)  ? $form_configuration->{$item}->relation_database_key : '';
+                                $formFieldRelationDatabaseDisplay1  = isset($form_configuration->{$item}->relation_database_display1)  ? $form_configuration->{$item}->relation_database_display1 : '';
+                                $formFieldRelationDatabaseDisplay2  = isset($form_configuration->{$item}->relation_database_display2)  ? $form_configuration->{$item}->relation_database_display2 : '';
+                                $formFieldRelationDatabaseDisplay3  = isset($form_configuration->{$item}->relation_database_display3)  ? $form_configuration->{$item}->relation_database_display3 : '';
                             @endphp
 
 
@@ -273,7 +274,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Choose Options</h5>
+                                                    <h5 class="modal-title " id="exampleModalLabel">Choose option for <b class="text-primary">{{ucwords($item)}}</b></h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -297,40 +298,36 @@
 
                                                         <div class="section_custom_data form-group row  mb-1">
                                                             <div class="col-sm-10">
-                                                                
-                                                                
-                                                                <div class="row parent_clone_section">
-                                                                    @if($formFieldCustomData)
-                                                                        <label class="col-sm-3 col-form-label">Options</label>
-                                                                        <div class="col-sm-9 col-form-label">
-                                                                            <label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">
-                                                                                <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Name" class="form-control">
-                                                                            </label>
-                                                                            <label class="fancy-radio" style="width:48%;float: left;">
-                                                                                <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Value" class="form-control">
-                                                                            </label>
+                                                            @php $itemKeyArray = [0]; @endphp
+                                                                @if($formFieldCustomData)
+                                                                    @foreach($formFieldCustomData as $key=>$cData)
+                                                                        <div class="row cloned_item">
+                                                                            <div class="col-sm-3 col-form-label">
+                                                                                <p class="text-end"><i class=" delete_item text-danger fa fa-trash"></i></p>
+                                                                            </div>
+                                                                            <div class="col-sm-9 col-form-label">
+                                                                                <label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">
+                                                                                    <input type="text" name="form_configuration[{{$item}}][{{$key}}][custom_data]" value="{{$cData->name}}" placeholder="Name"  class="form-control">
+                                                                                </label>
+                                                                                <label class="fancy-radio" style="width:48%;float: left;">
+                                                                                    <input type="text" name="form_configuration[{{$item}}][{{$key}}][custom_data]" value="{{$cData->value}}" placeholder="Value" class="form-control">
+                                                                                </label>
+                                                                            </div> 
                                                                         </div>
-                                                                    @else
-                                                                    
-                                                                    <label class="col-sm-3 col-form-label">Options</label>
-                                                                    <div class="col-sm-9 col-form-label">
-                                                                        <label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">
-                                                                            <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Name" class="form-control">
-                                                                        </label>
-                                                                        <label class="fancy-radio" style="width:48%;float: left;">
-                                                                            <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Value" class="form-control">
-                                                                        </label>
-                                                                    </div>
-                                                                    
-                                                                    @endif
-
-                                                                </div>
-
+                                                                        @php $itemKeyArray[] = $key;  @endphp
+                                                                    @endforeach
+                                                                @endif
+                                                                <span class="parent_clone_section"></span>
 
                                                             </div>
+
+                                                            @php 
+                                                            $maxItem = max($itemKeyArray);
+                                                            $maxItem = ($maxItem > 0) ? $maxItem+1 : $maxItem; 
+                                                            @endphp
                                 
                                                             <div class="col-sm-2 col-form-label">
-                                                                <a href="javascript:void(0)" data-modal-id="{{'optionModal_'.$item}}"  class="btn btn-primary btn-sm clone_button"> <i class="fa fa-plus"></i></a>
+                                                                <a href="javascript:void(0)" data-modal-id="{{'optionModal_'.$item}}" data-item-name="{{$item}}" data-count-number="{{$maxItem}}"  class="btn btn-primary btn-sm clone_button"> <i class="fa fa-plus"></i></a>
                                                             </div>
                                                         </div>
 
@@ -339,11 +336,11 @@
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Database</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="form_configuration[{{$item}}][relation_database]" class="form-control database_table_trigger">
+                                                                    <select name="form_configuration[{{$item}}][relation_database]"  class="form-control database_table_trigger">
                                                                         <option value="-1" disabled selected>--Select Table --</option>
                                                                         @foreach($tables as $table)
                                                                             @foreach ($table as $key => $value)
-                                                                                <option value="{{$value}}">{{$value}}</option>
+                                                                                <option value="{{$value}}" @if($formFieldRelationDatabase == $value) selected @endif >{{$value}}</option>
                                                                             @endforeach
                                                                         @endforeach
                                                                     </select>
@@ -355,28 +352,28 @@
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Relation Key</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="form_configuration[{{$item}}][relation_database_key]" class="form-control relationKey"></select>
+                                                                    <select data-selected-value="{{$formFieldRelationDatabaseKey}}" name="form_configuration[{{$item}}][relation_database_key]" class="form-control relationKey"></select>
                                                                 </div>
                                                             </div> 
-
+ 
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Display 1</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="form_configuration[{{$item}}][relation_database_display1]" class="form-control relationKey"></select>
+                                                                    <select data-selected-value="{{$formFieldRelationDatabaseDisplay1 }}" name="form_configuration[{{$item}}][relation_database_display1]" class="form-control display1"></select>
                                                                 </div>
                                                             </div> 
 
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Display 2</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="form_configuration[{{$item}}][relation_database_display2]" class="form-control relationKey"></select>
+                                                                    <select data-selected-value="{{$formFieldRelationDatabaseDisplay2 }}" name="form_configuration[{{$item}}][relation_database_display2]" class="form-control display2"></select>
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Display 3</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="form_configuration[{{$item}}][relation_database_display3]" class="form-control relationKey"></select>
+                                                                    <select data-selected-value="{{$formFieldRelationDatabaseDisplay3 }}" name="form_configuration[{{$item}}][relation_database_display3]" class="form-control display3"></select>
                                                                 </div>
                                                             </div>
 
@@ -474,26 +471,31 @@
 
     jQuery(document).on('click','.trigger_data_type',function(){
         if(jQuery(this).val() == 'database'){
-            jQuery('.section_database_data').show();
-            jQuery('.section_custom_data ').hide();
+            jQuery(this).closest('.dynamicHtml').find('.section_database_data').show();
+            jQuery(this).closest('.dynamicHtml').find('.section_custom_data').hide();
         }else{
-            jQuery('.section_database_data').hide();
-            jQuery('.section_custom_data ').show();
+            jQuery(this).closest('.dynamicHtml').find('.section_database_data').hide();
+            jQuery(this).closest('.dynamicHtml').find('.section_custom_data').show();
         }
 
     });
 
     jQuery(document).on('click','.clone_button',function(){
+        var item = jQuery(this).attr('data-item-name');
+        var count = jQuery(this).attr('data-count-number');
         var html = '<div class="row cloned_item"><div class="col-sm-3 col-form-label"><p class="text-end"><i class=" delete_item text-danger fa fa-trash"></i></p></div><div class="col-sm-9 col-form-label">'+
             '<label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">'+
-                '<input type="text" name="customData[data_type][]" placeholder="Name" class="form-control">'+
+                '<input type="text" name="form_configuration['+item+'][custom_data]['+count+'][name]" placeholder="Name" class="form-control">'+
             '</label>'+
             '<label class="fancy-radio" style="width:48%;float: left;">'+
-                '<input type="text" name="customData[data_value][]" placeholder="Value" class="form-control">'+
+                '<input type="text" name="form_configuration['+item+'][custom_data]['+count+'][value]" placeholder="Value" class="form-control">'+
             '</label>'+
         '</div> </div>';
         var modalId = jQuery(this).attr('data-modal-id');
-        jQuery('#'+modalId+' .parent_clone_section').after(html);
+        jQuery('#'+modalId+' .parent_clone_section').append(html);
+        
+        count = Number(count)+1;
+        jQuery(this).attr('data-count-number',count)
     })
 
     jQuery(document).on('click','.delete_item',function(){
@@ -506,9 +508,57 @@
             cache: false,
             success: function(response){
                 $(".relationKey").html(response);
+                $(".display1").html(response);
+                $(".display2").html(response);
+                $(".display3").html(response);
             }
         });
     });
+
+
+    jQuery(document).ready(function(){
+
+        jQuery('.dynamicHtml').each(function(key,val){
+            if(jQuery(this).find('.trigger_data_type:checked').val() == 'database'){
+                jQuery(this).find('.section_database_data').show();
+                jQuery(this).find('.section_custom_data').hide();
+            }else{
+                jQuery(this).find('.section_database_data').hide();
+                jQuery(this).find('.section_custom_data').show();
+            }
+        });
+
+
+        jQuery('.database_table_trigger').each(function(key,val){
+            var dbName =jQuery(this).find('option:selected').val();
+            var that = jQuery(this);
+            jQuery.ajax({
+                url: "/core/database-columns/"+dbName,
+                cache: false,
+                success: function(response){
+                    that.closest('.section_database_data').find(".relationKey").html(response);
+                    that.closest('.section_database_data').find(".display1").html(response);
+                    that.closest('.section_database_data').find(".display2").html(response);
+                    that.closest('.section_database_data').find(".display3").html(response);
+
+                    var selectedrelationKey = that.closest('.section_database_data').find(".relationKey").attr('data-selected-value');
+                    that.closest('.section_database_data').find('.relationKey option[value="'+selectedrelationKey+'"]').prop('selected', true);
+
+                    var selectedDisplay1 = that.closest('.section_database_data').find(".display1").attr('data-selected-value');
+                    that.closest('.section_database_data').find('.display1 option[value="'+selectedDisplay1+'"]').prop('selected', true);
+
+                    var selectedDisplay2 = that.closest('.section_database_data').find(".display2").attr('data-selected-value');
+                    that.closest('.section_database_data').find('.display2 option[value="'+selectedDisplay2+'"]').prop('selected', true);
+
+                    var selectedDisplay3 = that.closest('.section_database_data').find(".display3").attr('data-selected-value');
+                    that.closest('.section_database_data').find('.display3 option[value="'+selectedDisplay3+'"]').prop('selected', true);
+                }
+            });
+        })
+    });
+
+
+    
 
 
 </script>

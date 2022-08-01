@@ -226,8 +226,10 @@ class ModuleGeneratorController extends Controller
 
     public function getDatabaseColumns(ModuleGenerator  $moduleGenerator,$databasename){
         $html = '<option value="">-- Select Field -- </option>';
-        foreach($moduleGenerator->getTableColumns($databasename) as $column){
-            $html .= '<option value="'.$column.'">'.$column.'</option>';
+        if($databasename != -1 ){
+            foreach($moduleGenerator->getTableColumns($databasename) as $column){
+                $html .= '<option value="'.$column.'">'.$column.'</option>';
+            }
         }
         return $html;
     }
