@@ -110,7 +110,8 @@
                                 <th>Field</th>
                                 <th>Title / Caption</th>
                                 <th>Format Type</th>
-                                <th>Format Value <span 
+                                <th>Format Value 
+                                    <span 
                                         type="button" 
                                         data-bs-toggle="popover" 
                                         title="Function Formats" 
@@ -219,6 +220,11 @@
                                 $formFieldValidation = isset($form_configuration->{$item}->validation)  ? $form_configuration->{$item}->validation : '';
                                 $formFieldSearchable = isset($form_configuration->{$item}->searchable)  ? 'checked' : '';
                                 $formFieldFilterable = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
+
+                                $formFieldDataType = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
+
+                                $formFieldCustomData =  isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : []; 
+
                             @endphp
 
 
@@ -277,13 +283,13 @@
                                                             <label class="col-sm-4 col-form-label">Data Type<span class="text-danger">*</span> </label>
                                                             <div class="col-sm-4 col-form-label">
                                                                 <label class="fancy-radio">
-                                                                    <input type="radio" name="data_type" value="custom" class="trigger_data_type" checked>
+                                                                    <input type="radio" name="form_configuration[{{$item}}][data_type]" value="custom" class="trigger_data_type" @if($formFieldDataType == 'custom') checked @endif>
                                                                     <span><i></i>Custom</span>
                                                                 </label>
                                                             </div>
                                                             <div class="col-sm-4 col-form-label type_database">
                                                                 <label class="fancy-radio">
-                                                                    <input type="radio" name="data_type" value="database" class="trigger_data_type">
+                                                                    <input type="radio" name="form_configuration[{{$item}}][data_type]" value="database" class="trigger_data_type" @if($formFieldDataType == 'database') checked @endif >
                                                                     <span><i></i>Database</span>
                                                                 </label>
                                                             </div>
@@ -291,17 +297,36 @@
 
                                                         <div class="section_custom_data form-group row  mb-1">
                                                             <div class="col-sm-10">
+                                                                
+                                                                
                                                                 <div class="row parent_clone_section">
+                                                                    @if($formFieldCustomData)
+                                                                        <label class="col-sm-3 col-form-label">Options</label>
+                                                                        <div class="col-sm-9 col-form-label">
+                                                                            <label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">
+                                                                                <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Name" class="form-control">
+                                                                            </label>
+                                                                            <label class="fancy-radio" style="width:48%;float: left;">
+                                                                                <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Value" class="form-control">
+                                                                            </label>
+                                                                        </div>
+                                                                    @else
+                                                                    
                                                                     <label class="col-sm-3 col-form-label">Options</label>
                                                                     <div class="col-sm-9 col-form-label">
                                                                         <label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">
-                                                                            <input type="text" name="customData[data_type][]" placeholder="Name" class="form-control">
+                                                                            <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Name" class="form-control">
                                                                         </label>
                                                                         <label class="fancy-radio" style="width:48%;float: left;">
-                                                                            <input type="text" name="customData[data_value][]" placeholder="Value" class="form-control">
+                                                                            <input type="text" name="form_configuration[{{$item}}][custom_data][]" placeholder="Value" class="form-control">
                                                                         </label>
                                                                     </div>
+                                                                    
+                                                                    @endif
+
                                                                 </div>
+
+
                                                             </div>
                                 
                                                             <div class="col-sm-2 col-form-label">
@@ -314,7 +339,7 @@
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Database</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="" class="form-control database_table_trigger">
+                                                                    <select name="form_configuration[{{$item}}][relation_database]" class="form-control database_table_trigger">
                                                                         <option value="-1" disabled selected>--Select Table --</option>
                                                                         @foreach($tables as $table)
                                                                             @foreach ($table as $key => $value)
@@ -330,33 +355,32 @@
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Relation Key</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="" class="form-control relationKey"></select>
+                                                                    <select name="form_configuration[{{$item}}][relation_database_key]" class="form-control relationKey"></select>
                                                                 </div>
                                                             </div> 
 
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Display 1</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="" class="form-control relationKey"></select>
+                                                                    <select name="form_configuration[{{$item}}][relation_database_display1]" class="form-control relationKey"></select>
                                                                 </div>
                                                             </div> 
 
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Display 2</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="" class="form-control relationKey"></select>
+                                                                    <select name="form_configuration[{{$item}}][relation_database_display2]" class="form-control relationKey"></select>
                                                                 </div>
                                                             </div>
 
                                                             <div class="form-group row mb-1">
                                                                 <div class="col-sm-3 col-form-label">Display 3</div>
                                                                 <div class="col-sm-9 col-form-label">
-                                                                    <select name="" class="form-control relationKey"></select>
+                                                                    <select name="form_configuration[{{$item}}][relation_database_display3]" class="form-control relationKey"></select>
                                                                 </div>
                                                             </div>
 
                                                         </div>
-
 
                                                     </div>
                                                 </div>
@@ -367,6 +391,7 @@
                                             </div>
                                         </div>
                                     </div>
+
 
                                 </td>
 

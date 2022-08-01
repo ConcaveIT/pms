@@ -1,9 +1,5 @@
 <?php
-// Start Routes for Settings 
-Route::resource('settings',App\Http\Controllers\SettingsController::class);
-// End Routes for Settings
-
-// Start Routes for Leave Request 
-Route::resource('leaverequest',App\Http\Controllers\LeaveRequestController::class);
-// End Routes for Leave Request
+// Start Routes for Status 
+Route::resource('status',App\Http\Controllers\StatusController::class);
+// End Routes for Status
 ?>
