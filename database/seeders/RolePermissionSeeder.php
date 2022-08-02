@@ -30,56 +30,32 @@ class RolePermissionSeeder extends Seeder
             //dashboard Permission
             'dashboard.view',
             'dashboard.create',
-            'dashboard.edit',
+            'dashboard.update',
             'dashboard.delete',
 			
 			//project dashboard Permission
             'projectdashboard.view',
             'projectdashboard.create',
-            'projectdashboard.edit',
+            'projectdashboard.update',
             'projectdashboard.delete',
-
-            //Customer Account Permission
-            'member.view',
-            'member.create',
-            'member.edit',
-            'member.delete',
-			
-			//Client Permission
-            'client.view',
-            'client.create',
-            'client.edit',
-            'client.delete',
-			
-		    //Department Permission
-            'department.view',
-            'department.create',
-            'department.edit',
-            'department.delete',
-			
-			//Task Permission
-            'task.view',
-            'task.create',
-            'task.edit',
-            'task.delete',
-			
-			//Project Permission
-            'project.view',
-            'project.create',
-            'project.edit',
-            'project.delete',
 
             //Role Permission
             'role.view',
             'role.create',
-            'role.edit',
+            'role.update',
             'role.delete',
 
             //Settings
             'settings.view',
             'settings.create',
-            'settings.edit',
+            'settings.update',
             'settings.delete',
+
+            //Role Permission
+            'module.view',
+            'module.create',
+            'module.update',
+            'module.delete',
 
             //Clean Cache
             'cache.view',

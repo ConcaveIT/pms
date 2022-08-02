@@ -4,9 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ModuleGenerator;
+use Illuminate\Support\Facades\File;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Auth;
 
 class ModuleGeneratorController extends Controller
 {
+
+    public function __construct(){
+        $this->middleware(function($request,$next){
+            $this->user = Auth::user();
+            return $next($request);
+        });
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -40,9 +53,9 @@ class ModuleGeneratorController extends Controller
 
         $validated = $request->validate([
             'module_title' => 'required',
-            'module_description' => 'required',
             'controller_name' => 'required | unique:module_generators',
             'database_table_name' => 'required',
+            'permission_title' => 'required | unique:module_generators',
             'grid_table_type' => 'required',
         ]);
 
@@ -51,17 +64,40 @@ class ModuleGeneratorController extends Controller
 
         $model->module_title = $request->module_title;
         $model->module_description = $request->module_description;
-        $model->controller_name = $request->controller_name;
+        $model->controller_name = trim($request->controller_name);
         $model->database_table_name = $request->database_table_name;
         $model->grid_table_type = $request->grid_table_type;
+        $model->permission_title = trim($request->permission_title);
         $model->configuration = '';
         $model->status = $request->status;
-        $create = $model->save();
-        $this->createRouters();
+        $update = $model->save();
 
-        if($create) session()->flash('success','Module has been created!');
-        else session()->flash('error','Something went wrong!');
-        return back();
+        //Create Permissions
+        $permissions = [
+            $model->permission_title.'.view',
+            $model->permission_title.'.create',
+            $model->permission_title.'.update',
+            $model->permission_title.'.delete',
+            $model->permission_title.'.export',
+            $model->permission_title.'.import',
+        ];
+
+        $RoleSuperAdmin = Role::findOrCreate('superadmin','web');
+
+        foreach($permissions as $permission){
+            $permission = Permission::findOrCreate($permission,'web');
+            $RoleSuperAdmin->givePermissionTo($permission);
+            $permission->assignRole($RoleSuperAdmin);
+        }
+
+        if($update) {
+            $this->createRouters();
+            return redirect()->route('module.edit',$model->id)->with('success', 'Module has been created. Please configure table and form settings and build the module!');
+        }else {
+            session()->flash('error','Something went wrong!');
+            return back();
+        }
+        
 
     }
 
@@ -117,6 +153,28 @@ class ModuleGeneratorController extends Controller
 
         $update = $model->save();
 
+        //Update Permissions
+        $allPermissions = $request->permission;
+
+        foreach($allPermissions as $role => $permissions ){
+            if($role != 'superadmin'){
+                $role = Role::findOrCreate($role,'web');
+                foreach($permissions as $permission => $val){
+                    if($val == 1){
+                        //Create or update permissions
+                        $permission = Permission::findOrCreate($permission,'web');
+                        $role->givePermissionTo($permission);
+                        $permission->assignRole($role);
+                    }else{
+                        //Revoke permission
+                        $role->revokePermissionTo($permission);
+                    }
+                }
+            }
+
+        }
+
+
         if($update) session()->flash('success','Module has been updated!');
         else session()->flash('error','Something went wrong!');
         return back();
@@ -129,9 +187,36 @@ class ModuleGeneratorController extends Controller
      * @param  \App\Models\ModuleGenerator  $moduleGenerator
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ModuleGenerator $moduleGenerator)
+    public function destroy($id)
     {
-        //
+        if(is_null($this->user) || !$this->user->can('module.delete')){
+            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+        }
+
+		$module = ModuleGenerator::find($id);
+        $viewDirName = strtolower($module->controller_name);
+        $controllerName = $module->controller_name;
+        $modelName = $module->controller_name;
+		
+        $dirView = base_path().'/resources/views/'.$viewDirName;
+        File::deleteDirectory($dirView);
+
+        $controllerFile = app_path().'/Http/Controllers/'.$controllerName.'Controller.php';
+        File::delete($controllerFile);
+
+        $apiControllerFile = app_path().'/Http/Controllers/Api/'.$controllerName.'Controller.php';
+        File::delete($apiControllerFile);
+
+        $modelFile = app_path().'/Models/'.$modelName.'.php';
+        File::delete($modelFile);
+
+        $update = $module->delete();
+
+		if($update){
+			return back()->with('success', 'Record has been successfully deleted!');
+		}else{
+			return back()->with('error', 'Unable to delete this record!');
+		}
     }
 
      /**
@@ -160,7 +245,8 @@ class ModuleGeneratorController extends Controller
             'class'            => $class,
             'table'            => $module->database_table_name ,
             'title'            => $module->module_title ,
-            'note'             => $module->module_description
+            'note'             => $module->module_description,
+            'permission_title' => $module->permission_title,
         ];
 
         $codes['form_html'] = \Helper::generateForm($module->configuration);

@@ -48,7 +48,7 @@
                                     <td>
                                         <div class="btn-group" role="group" aria-label="Basic outlined example">
                                             <a href="{{route('module.edit',$item->id)}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                            <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                            <a href="{{route('module.destroy',$item->id )}}" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>
                                         </div>
                                     </td>
                                 </tr>

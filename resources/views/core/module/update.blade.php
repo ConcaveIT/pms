@@ -36,6 +36,7 @@
                 <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-details" role="tab">Module Information</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-table" role="tab">Table Settings</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-form" role="tab">Form Settings</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-permission" role="tab">Permissions</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#nav-builder" role="tab">Build Codes</a></li>
             </ul>
             
@@ -81,7 +82,7 @@
                             <div class="form-group row mb-1">
                                 <label for="ModuleTitle" class="col-sm-3 col-form-label">Description</label>
                                 <div class="col-sm-9">
-                                <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror" rows="5" cols="30" required>{{$moduleData->module_description}}</textarea>
+                                <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror" rows="5" cols="30">{{$moduleData->module_description}}</textarea>
                                     @error('module_description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -92,9 +93,7 @@
                             <div class="form-group row  mb-1">
                                 <label for="ModuleTitle" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" {{ $moduleData->status == 1 ? 'checked' : '' }}>
-                                    </div>
+                                    <input  type="checkbox" id="flexSwitchCheckDefault" {{ $moduleData->status == 1 ? 'checked' : '' }}>
                                 </div>
                             </div>
                         </div>
@@ -419,6 +418,93 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+
+                <div class="tab-pane fade" id="nav-permission" role="tabpanel">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <td>SL</td>
+                                    <td>User Group</td>
+                                    <td>View</td>
+                                    <td>Create</td>
+                                    <td>Update</td>
+                                    <td>Delete</td>
+                                    <td>Import</td>
+                                    <td>Export</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                             
+                                @foreach(Spatie\Permission\Models\Role::all() as $role)
+                                    <tr>
+                                        <td>1</td>
+                                        <td class="text-uppercase">{{$role->name}}</td>
+                                        <td>
+                                            <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.view'}}]" value="0">
+                                            <input type="checkbox" 
+                                                name="permission[{{$role->name}}][{{$moduleData->permission_title.'.view'}}]"
+                                                value="1"
+                                                @if($role->hasPermissionTo($moduleData->permission_title.'.view')) checked @endif
+                                                @if($role->name == 'superadmin') disabled @endif
+                                            >
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.create'}}]" value="0">
+                                            <input type="checkbox" 
+                                                name="permission[{{$role->name}}][{{$moduleData->permission_title.'.create'}}]"
+                                                value="1"
+                                                @if($role->hasPermissionTo($moduleData->permission_title.'.create')) checked @endif
+                                                @if($role->name == 'superadmin') disabled @endif
+                                            >
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.update'}}]" value="0">
+                                            <input type="checkbox" 
+                                                name="permission[{{$role->name}}][{{$moduleData->permission_title.'.update'}}]"
+                                                value="1"
+                                                @if($role->hasPermissionTo($moduleData->permission_title.'.update')) checked @endif
+                                                @if($role->name == 'superadmin') disabled @endif
+                                            >
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.delete'}}]" value="0">
+                                            <input type="checkbox" 
+                                                name="permission[{{$role->name}}][{{$moduleData->permission_title.'.delete'}}]"
+                                                value="1"
+                                                @if($role->hasPermissionTo($moduleData->permission_title.'.delete')) checked @endif
+                                                @if($role->name == 'superadmin') disabled @endif
+                                            >
+                                        </td>
+
+                                        <td>
+                                            <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.import'}}]" value="0">
+                                            <input type="checkbox" 
+                                                name="permission[{{$role->name}}][{{$moduleData->permission_title.'.import'}}]"
+                                                value="1"
+                                                @if($role->hasPermissionTo($moduleData->permission_title.'.import')) checked @endif
+                                                @if($role->name == 'superadmin') disabled @endif
+                                            >
+                                        </td>
+
+                                        <td>
+                                            <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.export'}}]" value="0">
+                                            <input type="checkbox" 
+                                                name="permission[{{$role->name}}][{{$moduleData->permission_title.'.export'}}]"
+                                                value="1"
+                                                @if($role->hasPermissionTo($moduleData->permission_title.'.export')) checked @endif
+                                                @if($role->name == 'superadmin') disabled @endif
+                                            >
+                                        </td>
+                                    </tr>
+                                @endforeach
+
+
+                            </tbody>
+                        
+                        </table>
+                    </div>
                 </div>
 
                 <div class="tab-pane fade" id="nav-builder" role="tabpanel">

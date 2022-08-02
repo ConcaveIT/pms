@@ -1,29 +1,29 @@
 <?php namespace App\Http\Controllers\Services;
 
 use App\Http\Controllers\Controller;
-use App\Models\Settings;
+use App\Models\Status1;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Validator, Input, Redirect ; 
 
 
-class SettingsController extends Controller {
+class Status1Controller extends Controller {
 
 	protected $layout = "layouts.main";
 	protected $data = array();	
-	public $module = 'settings';
+	public $module = 'status1';
 	static $per_page	= '50';
 
 	public function __construct()
 	{		
 		parent::__construct();
-		$this->model = new Settings();	
+		$this->model = new Status1();	
 		{masterdetailmodel}
 		$this->info = $this->model->makeInfo( $this->module);	
 		$this->data = array(
 			'pageTitle'	=> 	$this->info['title'],
 			'pageNote'	=>  $this->info['note'],
-			'pageModule'=> 'settings',
+			'pageModule'=> 'status1',
 			'return'	=> self::returnUrl()
 			
 		);

@@ -70,17 +70,28 @@ class Helper{
 	
 	public static function generateForm($config){
 		$html = '';
+		$selectOptionData = [];
 		$form_configuration = isset(json_decode($config)->form_configuration) ? json_decode($config)->form_configuration : [];
 		if($form_configuration){
+
+			// var_dump($form_configuration);
+			// exit;
 			foreach($form_configuration as $conf){
-				$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name);
+				$selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
+				$selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
+				$selectOptionData['relation_database_key'] = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
+				$selectOptionData['relation_database_display1'] = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
+				$selectOptionData['relation_database_display2'] = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
+				$selectOptionData['relation_database_display3'] = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
+				$selectOptionData['custom_data'] = isset($conf->custom_data) ? $conf->custom_data : null ;
+				$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name,$selectOptionData);
 			}
 		}
 		return $html;
 	}
 
 
-	public static  function buildInputs($configType,$configFieldKey,$configValidation,$configFieldName){
+	public static  function buildInputs($configType,$configFieldKey,$configValidation,$configFieldName,$selectOptionData){
 		$html = '';
 		$requiredHtml = '';
 		$required = '';
@@ -100,12 +111,12 @@ class Helper{
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
 								<input type="text" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
 						</div>
 					</div>
 			</div>';
@@ -119,12 +130,12 @@ class Helper{
 							<div class="col-sm-9">
 								<textarea name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" 
 								 '.$required.'>{{$data->'.$configFieldKey.' ?? "" }}</textarea>
+								 @error("'.$configFieldKey.'")
+								 <span class="invalid-feedback" role="alert">
+									 <strong>{{ $message }}</strong>
+								 </span>
+							 	@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
 						</div>
 					</div>
 			</div>';
@@ -139,12 +150,13 @@ class Helper{
 							<div class="col-sm-9">
 								<textarea  name="'.$configFieldKey.'"  class="textEditor form-control @error("'.$configFieldKey.'") is-invalid @enderror" 
 								 '.$required.'>{{$data->'.$configFieldKey.' ?? "" }}</textarea>
+								 @error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
+							
 						</div>
 					</div>
 			</div>';
@@ -158,12 +170,13 @@ class Helper{
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
 								<input type="number" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
+							
 						</div>
 					</div>
 			</div>';
@@ -177,12 +190,13 @@ class Helper{
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
 								<input type="datetime-local" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
+							
 						</div>
 					</div>
 			</div>';
@@ -195,12 +209,13 @@ class Helper{
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
 								<input type="date" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
+							
 						</div>
 					</div>
 			</div>';
@@ -245,12 +260,73 @@ class Helper{
 						    <div class="col-sm-9">
 						  		<button type="button" data-image-width="800" data-image-height="800" data-input-name="'.$configFieldKey.'" data-input-type="'.$inputType .'" class="btn btn-success text-white initConcaveMedia" >'.$btnText.'</button>
 						  		'.$previewImageHtml.'
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
 							</div>
-							@error("'.$configFieldKey.'")
-								<span class="invalid-feedback" role="alert">
-									<strong>{{ $message }}</strong>
-								</span>
-							@enderror
+						</div>
+					</div>
+			</div>';
+		}
+
+
+		// $selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
+
+		// $selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
+		// $selectOptionData['relation_database_key'] = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
+		// $selectOptionData['relation_database_display1'] = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
+		// $selectOptionData['relation_database_display2'] = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
+		// $selectOptionData['relation_database_display3'] = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
+		// $selectOptionData['custom_data'] = isset($conf->custom_data) ? $conf->custom_data : null ;
+
+		if($configType == 'select') {
+
+			$optionHtml = '';
+
+			if($selectOptionData['data_type'] && $selectOptionData['data_type'] = 'database'){
+				
+					if($selectOptionData['relation_database'] && $selectOptionData['relation_database_key']){
+						$relationDataBaseName = $selectOptionData['relation_database'];
+						$relationDataBaseKey = $selectOptionData['relation_database_key'];
+						$databaseValues = \DB::table($relationDataBaseName)->get();
+						
+						$display = '';
+
+						foreach($databaseValues as $opVal){
+							if($selectOptionData['relation_database_display1']){
+								$display = $opVal->{$selectOptionData['relation_database_display1']};
+							}
+	
+							if($selectOptionData['relation_database_display2']){
+								$display .= '::'.$opVal->{$selectOptionData['relation_database_display2']};
+							}
+	
+							if($selectOptionData['relation_database_display3']){
+								$display .= '::'.$opVal->{$selectOptionData['relation_database_display3']};
+							}
+							$optionHtml .= '<option value="xxx">'.$display.'</option>';
+						}
+					}
+				}
+		
+			$html .= '<div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
+							<div class="col-sm-9">
+								<select class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.' >
+									'.$optionHtml.'
+								</select>
+								
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+							
 						</div>
 					</div>
 			</div>';

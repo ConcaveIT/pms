@@ -1,14 +1,14 @@
 <?php namespace App\Http\Controllers;
 
-use App\Models\{controller};
+use App\Models\Projects;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
 use Validator, Input, Redirect, Auth; 
 
 
-class {controller}Controller extends Controller {
-	public $module = '{class}';
+class ProjectsController extends Controller {
+	public $module = 'projects';
 	public $per_page	= '20';
 
 	public function __construct(){
@@ -21,16 +21,16 @@ class {controller}Controller extends Controller {
 
 	public function index( Request $request ){
 	
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.view')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('project.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$tableGrid = \Helper::getTableHeader('{controller}');
-		$results = {controller}::all();
+		$tableGrid = \Helper::getTableHeader('Projects');
+		$results = Projects::all();
 		
 		$info = [
 			'module_name' => ucwords($this->module),
-			'create_button' => '{controller}',
+			'create_button' => 'Projects',
 			'module_route' => $this->module
 		];
 
@@ -39,13 +39,13 @@ class {controller}Controller extends Controller {
 	
 
 	function create() {
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.create')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('project.create')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
 		$info = [
 			'module_name' => ucwords($this->module),
-			'create_button' => '{controller}',
+			'create_button' => 'Projects',
 			'module_route' => $this->module
 		];
 
@@ -55,22 +55,22 @@ class {controller}Controller extends Controller {
 
 	function edit( Request $request , $id ){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.update')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('project.update')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
-		$data =  {controller}::find($id);
+		$data =  Projects::find($id);
 		return view($this->module.'.form',compact('data'));
 	}
 
 	function show( Request $request , $id ) {
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.view')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('project.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 	}
 	function store(Request $request){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.create')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('project.create')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
@@ -98,7 +98,7 @@ class {controller}Controller extends Controller {
 		$request->validate($validationArray);
 
 		
-		$model = new {controller}();
+		$model = new Projects();
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
@@ -119,11 +119,11 @@ class {controller}Controller extends Controller {
 
 	public function destroy($id){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.delete')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('project.delete')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$result = {controller}::find($id);
+		$result = Projects::find($id);
 		$update = $result->delete();
 		if($update){
 			return back()->with('success', 'Record has been successfully deleted!');

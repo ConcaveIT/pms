@@ -42,7 +42,7 @@
 					
 											<td>
 												<div class="btn-group" role="group" aria-label="Basic outlined example">
-													<a href="#" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+													<a href="{{route($info['module_route'].'.edit',$result->id )}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
 													<a href="{{route($info['module_route'].'.destroy',$result->id )}}" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>
 												</div>
 											</td>
