@@ -75,13 +75,14 @@ class Helper{
 		if($form_configuration){
 
 			foreach($form_configuration as $conf){
-				$selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
-				$selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
-				$selectOptionData['relation_database_key'] = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
-				$selectOptionData['relation_database_display1'] = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
-				$selectOptionData['relation_database_display2'] = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
-				$selectOptionData['relation_database_display3'] = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
-				$selectOptionData['custom_data'] = isset($conf->custom_data) ? $conf->custom_data : null ;
+				// $selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
+				// $selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
+				// $selectOptionData['relation_database_key'] = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
+				// $selectOptionData['relation_database_display1'] = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
+				// $selectOptionData['relation_database_display2'] = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
+				// $selectOptionData['relation_database_display3'] = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
+				// $selectOptionData['custom_data'] = isset($conf->custom_data) ? $conf->custom_data : null ;
+				$selectOptionData['allow_multiple'] = isset($conf->allow_multiple) ? true : false ;
 				$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name,$selectOptionData);
 			}
 		}
@@ -109,7 +110,18 @@ class Helper{
 								success: function(response){
 									jQuery("#select_'.$conf->field_key.'").html(response);
 									var selectedVal = jQuery("#select_'.$conf->field_key.'").attr("data-selected-value");
-									jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
+
+									if(jQuery("#select_'.$conf->field_key.'").attr("data-select-type") == "multiple"){
+										var str_array = selectedVal.split(",");
+										for(var i = 0; i < str_array.length; i++) {
+										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+											jQuery("#select_'.$conf->field_key.'").find("option[value="+str_array[i]+"]").prop("selected", true);
+										}
+									}else{
+										jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
+									}
+
+									
 								}
 
 							});
@@ -331,12 +343,19 @@ class Helper{
 
 		if($configType == 'select') {
 
+			$multiple = '';
+			$multipleString = '';
+			if($selectOptionData['allow_multiple']) {
+				$multiple = 'multiple';
+				$multipleString = '[]';
+			}
+
 			$html .= '<div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
-								<select data-selected-value="{{$data->'.$configFieldKey.' ?? "" }}" id="select_'.$configFieldKey.'"  data-live-search="true"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.'></select>
+								<select '.$multiple.' data-selected-value="{{$data->'.$configFieldKey.' ?? "" }}" id="select_'.$configFieldKey.'"  data-live-search="true" data-select-type="'.$multiple.'"  class="form-control select2 @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.$multipleString.'" '.$required.'></select>
 								
 								@error("'.$configFieldKey.'")
 									<span class="invalid-feedback" role="alert">

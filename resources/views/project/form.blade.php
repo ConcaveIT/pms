@@ -30,7 +30,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Client ids  </label>
 							<div class="col-sm-9">
-								<select data-selected-value="{{$data->client_ids ?? "" }}" id="select_client_ids"  data-live-search="true"  class="form-control @error("client_ids") is-invalid @enderror" name="client_ids" ></select>
+								<select multiple data-selected-value="{{$data->client_ids ?? "" }}" id="select_client_ids"  data-live-search="true" data-select-type="multiple"  class="form-control select2 @error("client_ids") is-invalid @enderror" name="client_ids[]" ></select>
 								
 								@error("client_ids")
 									<span class="invalid-feedback" role="alert">
@@ -46,7 +46,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Member ids  </label>
 							<div class="col-sm-9">
-								<select data-selected-value="{{$data->member_ids ?? "" }}" id="select_member_ids"  data-live-search="true"  class="form-control @error("member_ids") is-invalid @enderror" name="member_ids" ></select>
+								<select  data-selected-value="{{$data->member_ids ?? "" }}" id="select_member_ids"  data-live-search="true" data-select-type=""  class="form-control select2 @error("member_ids") is-invalid @enderror" name="member_ids" ></select>
 								
 								@error("member_ids")
 									<span class="invalid-feedback" role="alert">
@@ -62,7 +62,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Project manager id  </label>
 							<div class="col-sm-9">
-								<select data-selected-value="{{$data->project_manager_id ?? "" }}" id="select_project_manager_id"  data-live-search="true"  class="form-control @error("project_manager_id") is-invalid @enderror" name="project_manager_id" ></select>
+								<select  data-selected-value="{{$data->project_manager_id ?? "" }}" id="select_project_manager_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("project_manager_id") is-invalid @enderror" name="project_manager_id" ></select>
 								
 								@error("project_manager_id")
 									<span class="invalid-feedback" role="alert">
@@ -162,7 +162,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Department  </label>
 							<div class="col-sm-9">
-								<select data-selected-value="{{$data->department_id ?? "" }}" id="select_department_id"  data-live-search="true"  class="form-control @error("department_id") is-invalid @enderror" name="department_id" ></select>
+								<select  data-selected-value="{{$data->department_id ?? "" }}" id="select_department_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("department_id") is-invalid @enderror" name="department_id" ></select>
 								
 								@error("department_id")
 									<span class="invalid-feedback" role="alert">
@@ -178,7 +178,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Status  </label>
 							<div class="col-sm-9">
-								<select data-selected-value="{{$data->status ?? "" }}" id="select_status"  data-live-search="true"  class="form-control @error("status") is-invalid @enderror" name="status" ></select>
+								<select  data-selected-value="{{$data->status ?? "" }}" id="select_status"  data-live-search="true" data-select-type=""  class="form-control select2 @error("status") is-invalid @enderror" name="status" ></select>
 								
 								@error("status")
 									<span class="invalid-feedback" role="alert">
@@ -207,7 +207,18 @@
 								success: function(response){
 									jQuery("#select_client_ids").html(response);
 									var selectedVal = jQuery("#select_client_ids").attr("data-selected-value");
-									jQuery("#select_client_ids").find("option[value="+selectedVal+"]").prop("selected", true);
+
+									if(jQuery("#select_client_ids").attr("data-select-type") == "multiple"){
+										var str_array = selectedVal.split(",");
+										for(var i = 0; i < str_array.length; i++) {
+										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+											jQuery("#select_client_ids").find("option[value="+str_array[i]+"]").prop("selected", true);
+										}
+									}else{
+										jQuery("#select_client_ids").find("option[value="+selectedVal+"]").prop("selected", true);
+									}
+
+									
 								}
 
 							});
@@ -220,7 +231,18 @@
 								success: function(response){
 									jQuery("#select_member_ids").html(response);
 									var selectedVal = jQuery("#select_member_ids").attr("data-selected-value");
-									jQuery("#select_member_ids").find("option[value="+selectedVal+"]").prop("selected", true);
+
+									if(jQuery("#select_member_ids").attr("data-select-type") == "multiple"){
+										var str_array = selectedVal.split(",");
+										for(var i = 0; i < str_array.length; i++) {
+										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+											jQuery("#select_member_ids").find("option[value="+str_array[i]+"]").prop("selected", true);
+										}
+									}else{
+										jQuery("#select_member_ids").find("option[value="+selectedVal+"]").prop("selected", true);
+									}
+
+									
 								}
 
 							});
@@ -233,7 +255,18 @@
 								success: function(response){
 									jQuery("#select_project_manager_id").html(response);
 									var selectedVal = jQuery("#select_project_manager_id").attr("data-selected-value");
-									jQuery("#select_project_manager_id").find("option[value="+selectedVal+"]").prop("selected", true);
+
+									if(jQuery("#select_project_manager_id").attr("data-select-type") == "multiple"){
+										var str_array = selectedVal.split(",");
+										for(var i = 0; i < str_array.length; i++) {
+										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+											jQuery("#select_project_manager_id").find("option[value="+str_array[i]+"]").prop("selected", true);
+										}
+									}else{
+										jQuery("#select_project_manager_id").find("option[value="+selectedVal+"]").prop("selected", true);
+									}
+
+									
 								}
 
 							});
@@ -246,7 +279,18 @@
 								success: function(response){
 									jQuery("#select_department_id").html(response);
 									var selectedVal = jQuery("#select_department_id").attr("data-selected-value");
-									jQuery("#select_department_id").find("option[value="+selectedVal+"]").prop("selected", true);
+
+									if(jQuery("#select_department_id").attr("data-select-type") == "multiple"){
+										var str_array = selectedVal.split(",");
+										for(var i = 0; i < str_array.length; i++) {
+										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+											jQuery("#select_department_id").find("option[value="+str_array[i]+"]").prop("selected", true);
+										}
+									}else{
+										jQuery("#select_department_id").find("option[value="+selectedVal+"]").prop("selected", true);
+									}
+
+									
 								}
 
 							});
@@ -259,7 +303,18 @@
 								success: function(response){
 									jQuery("#select_status").html(response);
 									var selectedVal = jQuery("#select_status").attr("data-selected-value");
-									jQuery("#select_status").find("option[value="+selectedVal+"]").prop("selected", true);
+
+									if(jQuery("#select_status").attr("data-select-type") == "multiple"){
+										var str_array = selectedVal.split(",");
+										for(var i = 0; i < str_array.length; i++) {
+										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+											jQuery("#select_status").find("option[value="+str_array[i]+"]").prop("selected", true);
+										}
+									}else{
+										jQuery("#select_status").find("option[value="+selectedVal+"]").prop("selected", true);
+									}
+
+									
 								}
 
 							});

@@ -118,7 +118,8 @@
                                             Date Time - <code>d M, h:ia</code> <br>
                                             Image - <code>/uploads/images</code> <br>
                                             File - <code>/uploads/file</code> <br>
-                                            Link - <code>https://example.com</code>
+                                            Link - <code>https://example.com  </code><br>
+                                            Function - <code> function_name:param1:param2:param:3 </code>
                                         ">
                                         <i class="fa fa-info-circle text-info"></i>
                                     </span>
@@ -164,7 +165,8 @@
                                                     'image' => 'Image',
                                                     'link' => 'Link',
                                                     'file'  => 'File',
-                                                    'datetime' => 'Date Time'
+                                                    'datetime' => 'Date Time',
+                                                    'function' => 'Custom Function',
                                                 ];
                                             @endphp
 
@@ -209,7 +211,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody class="sortable">
+                        <tbody>
                             @foreach($columns as $item)
 
                             @php 
@@ -218,6 +220,7 @@
                                 $formFieldValidation                = isset($form_configuration->{$item}->validation)  ? $form_configuration->{$item}->validation : '';
                                 $formFieldSearchable                = isset($form_configuration->{$item}->searchable)  ? 'checked' : '';
                                 $formFieldFilterable                = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
+                                $formFieldAllowMultiple               = isset($form_configuration->{$item}->allow_multiple)  ? 'checked' : '';
                                 $formFieldDataType                  = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
                                 $formFieldCustomData                =  isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : [];
                                 $formFieldRelationDatabase          = isset($form_configuration->{$item}->relation_database)  ? $form_configuration->{$item}->relation_database : '';
@@ -377,6 +380,15 @@
                                                                 </div>
                                                             </div>
 
+                                                        </div>
+
+                                                        <div class="form-group row  mb-1">
+                                                            <label class="col-sm-4 col-form-label">Allow Multiple ? </label>
+                                                            <div class="col-sm-4 col-form-label">
+                                                                <label class="fancy-radio">
+                                                                    <input type="checkbox" name="form_configuration[{{$item}}][allow_multiple]" {{$formFieldAllowMultiple}} > YES
+                                                                </label>
+                                                            </div>
                                                         </div>
 
                                                     </div>

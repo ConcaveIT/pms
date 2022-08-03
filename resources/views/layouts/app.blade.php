@@ -9,6 +9,7 @@
 		<!-- project css file  -->
 		<link rel="stylesheet" href="{{asset('assets/css/style.css')}}">
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 		<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<script src="{{ asset('assets/vendors/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
 
@@ -27,6 +28,7 @@
 		<script src="{{asset('assets/bundles/apexcharts.bundle.js')}}"></script>
 		<script src="{{asset('assets/bundles/dataTables.bundle.js')}}"></script>
 		<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 		<script src="{{asset('assets/js/template.js')}}"></script>
 		@stack('script')
 
@@ -95,6 +97,10 @@
 			});
 
 			jQuery( function() { jQuery( ".sortable").sortable();});
+
+			jQuery(document).ready(function() {
+				$('.select2').select2();
+			});
 			
 		</script>
 	</body>

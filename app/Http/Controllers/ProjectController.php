@@ -105,6 +105,7 @@ class ProjectController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}
 
@@ -157,6 +158,9 @@ class ProjectController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				if(is_array($fieldVal)) {
+					$fieldVal = implode(',',$fieldVal);
+				}
 				$model->$fieldKey = $fieldVal;
 			}
 
