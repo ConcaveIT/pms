@@ -13,6 +13,7 @@
     Route::resource('/module',App\Http\Controllers\ModuleGeneratorController::class);
     Route::post('/build-module/{id}',[App\Http\Controllers\ModuleGeneratorController::class,'buildModule'])->name('module.build');
     Route::get('/database-columns/{databasename}',[App\Http\Controllers\ModuleGeneratorController::class,'getDatabaseColumns'])->name('database.columns');
+    Route::get('/database-relation-options',[App\Http\Controllers\ModuleGeneratorController::class,'getDatabaseRelationOptions'])->name('database.relation.options');
     
 
 ?>

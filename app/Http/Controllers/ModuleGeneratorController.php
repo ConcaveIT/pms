@@ -250,6 +250,7 @@ class ModuleGeneratorController extends Controller
         ];
 
         $codes['form_html'] = \Helper::generateForm($module->configuration);
+        $codes['script_html'] = \Helper::generateScript($module->configuration);
 
         $mType = ( $module->grid_table_type == 'native' ? 'native' :  $row->grid_table_type);
 
@@ -318,6 +319,11 @@ class ModuleGeneratorController extends Controller
             }
         }
         return $html;
+    }
+
+
+    public function getDatabaseRelationOptions(){
+        
     }
 
 

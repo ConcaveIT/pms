@@ -74,8 +74,6 @@ class Helper{
 		$form_configuration = isset(json_decode($config)->form_configuration) ? json_decode($config)->form_configuration : [];
 		if($form_configuration){
 
-			// var_dump($form_configuration);
-			// exit;
 			foreach($form_configuration as $conf){
 				$selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
 				$selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
@@ -88,6 +86,10 @@ class Helper{
 			}
 		}
 		return $html;
+	}
+
+	public static function generateScript($config){
+
 	}
 
 
@@ -271,54 +273,14 @@ class Helper{
 			</div>';
 		}
 
-
-		// $selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
-
-		// $selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
-		// $selectOptionData['relation_database_key'] = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
-		// $selectOptionData['relation_database_display1'] = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
-		// $selectOptionData['relation_database_display2'] = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
-		// $selectOptionData['relation_database_display3'] = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
-		// $selectOptionData['custom_data'] = isset($conf->custom_data) ? $conf->custom_data : null ;
-
 		if($configType == 'select') {
 
-			$optionHtml = '';
-
-			if($selectOptionData['data_type'] && $selectOptionData['data_type'] = 'database'){
-				
-					if($selectOptionData['relation_database'] && $selectOptionData['relation_database_key']){
-						$relationDataBaseName = $selectOptionData['relation_database'];
-						$relationDataBaseKey = $selectOptionData['relation_database_key'];
-						$databaseValues = \DB::table($relationDataBaseName)->get();
-						
-						$display = '';
-
-						foreach($databaseValues as $opVal){
-							if($selectOptionData['relation_database_display1']){
-								$display = $opVal->{$selectOptionData['relation_database_display1']};
-							}
-	
-							if($selectOptionData['relation_database_display2']){
-								$display .= '::'.$opVal->{$selectOptionData['relation_database_display2']};
-							}
-	
-							if($selectOptionData['relation_database_display3']){
-								$display .= '::'.$opVal->{$selectOptionData['relation_database_display3']};
-							}
-							$optionHtml .= '<option value="xxx">'.$display.'</option>';
-						}
-					}
-				}
-		
 			$html .= '<div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
-								<select class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.' >
-									'.$optionHtml.'
-								</select>
+								<select class="form-control selectpicker @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.'></select>
 								
 								@error("'.$configFieldKey.'")
 									<span class="invalid-feedback" role="alert">
@@ -334,6 +296,31 @@ class Helper{
 
 
 		return $html;
+	}
+
+
+	
+
+	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$disply2=null,$display3=null){
+		$optionHtml = '';
+		$databaseValues = \DB::table($relationDataBaseName)->get();
+		$display = '';
+
+		foreach($databaseValues as $opVal){
+			if($display1){
+				$display = $opVal->{$display1};
+			}
+
+			if($disply2){
+				$display .= '--'.$opVal->{$disply2};
+			}
+
+			if($disply3){
+				$display .= '--'.$opVal->{$disply3};
+			}
+			$optionHtml .= '<option value="'.$display.'">'.$display.'</option>';
+		}
+		return $optionHtml;
 	}
 
 

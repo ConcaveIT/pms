@@ -15,3 +15,7 @@
 	</div>
 		 
 @endsection
+
+@push('script')
+{script_html}
+@endpush
