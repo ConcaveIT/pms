@@ -258,6 +258,7 @@
                                             'date' => 'Date',
                                             'datetime' => 'Date Time',
                                             'hidden' => 'Hidden',
+                                            'primary' => 'Primary',
                                         ];
 
                                     @endphp

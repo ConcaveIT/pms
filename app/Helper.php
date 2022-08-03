@@ -89,31 +89,45 @@ class Helper{
 	}
 
 	public static function generateScript($config){
-		$html = '';
+		$scripts = '';
 		$selectOptionData = [];
 		$form_configuration = isset(json_decode($config)->form_configuration) ? json_decode($config)->form_configuration : [];
 		if($form_configuration){
 
 			foreach($form_configuration as $conf){
-				
+
 				$relationDataBaseName = isset($conf->relation_database) ? $conf->relation_database : null ; 
 				$relationDataBaseKey = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
 				$display1 = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
-				$disply2 = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
+				$display2 = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
 				$display3 = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
-				//$html .= \Helper::getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$disply2,$display3);
+				if($relationDataBaseName && $relationDataBaseKey){
+					$scripts .= '<script>
+						jQuery(document).ready(function(){
+							jQuery.ajax({
+								url: "{{route("database.relation.options")}}?db='.$relationDataBaseName.'&key='.$relationDataBaseKey.'&display1='.$display1.'&display2='.$display2.'&display3='.$display3.'",
+								success: function(response){
+									jQuery("#select_'.$conf->field_key.'").html(response);
+									var selectedVal = jQuery("#select_'.$conf->field_key.'").attr("data-selected-value");
+									jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
+								}
 
-				$html .= '<script>
-					jQuery('')
+							});
+						});
+					
+					</script>';
+				}
 				
-				</script>';
 			}
 		}
-		return $html;
+
+
+		//var_dump($scripts); exit;
+		return $scripts;
 	}
 
 
-	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$disply2=null,$display3=null){
+	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$display2=null,$display3=null){
 		$optionHtml = '';
 		$databaseValues = \DB::table($relationDataBaseName)->get();
 		$display = '';
@@ -122,15 +136,14 @@ class Helper{
 			if($display1){
 				$display = $opVal->{$display1};
 			}
-
-			if($disply2){
-				$display .= '--'.$opVal->{$disply2};
+			if($display2){
+				$display .= '--'.$opVal->{$display2};
 			}
 
-			if($disply3){
-				$display .= '--'.$opVal->{$disply3};
+			if($display3){
+				$display .= '--'.$opVal->{$display3};
 			}
-			$optionHtml .= '<option value="'.$display.'">'.$display.'</option>';
+			$optionHtml .= '<option value="'.$opVal->id.'">'.$display.'</option>';
 		}
 		return $optionHtml;
 	}
@@ -323,7 +336,7 @@ class Helper{
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
-								<select id="select_'.$configFieldKey.'" class="form-control selectpicker @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.'></select>
+								<select data-selected-value="{{$data->'.$configFieldKey.' ?? "" }}" id="select_'.$configFieldKey.'"  data-live-search="true"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.'></select>
 								
 								@error("'.$configFieldKey.'")
 									<span class="invalid-feedback" role="alert">

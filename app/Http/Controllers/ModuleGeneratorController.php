@@ -59,7 +59,7 @@ class ModuleGeneratorController extends Controller
             'grid_table_type' => 'required',
         ]);
 
-
+       
         $model = new ModuleGenerator();
 
         $model->module_title = $request->module_title;
@@ -67,7 +67,7 @@ class ModuleGeneratorController extends Controller
         $model->controller_name = trim($request->controller_name);
         $model->database_table_name = $request->database_table_name;
         $model->grid_table_type = $request->grid_table_type;
-        $model->permission_title = trim($request->permission_title);
+        $model->permission_title = strtolower(trim($request->permission_title));
         $model->configuration = '';
         $model->status = $request->status;
         $update = $model->save();
@@ -94,8 +94,7 @@ class ModuleGeneratorController extends Controller
             $this->createRouters();
             return redirect()->route('module.edit',$model->id)->with('success', 'Module has been created. Please configure table and form settings and build the module!');
         }else {
-            session()->flash('error','Something went wrong!');
-            return back();
+            return back()->with('error','Something went wrong!');
         }
         
 
@@ -322,12 +321,8 @@ class ModuleGeneratorController extends Controller
     }
 
 
-    public function getDatabaseRelationOptions(){
-        
+    public function getDatabaseRelationOptions(Request $request){
+        return \Helper::getSlelectDatabaseValues($request->db,$request->key,$request->display1,$request->display2,$request->display3);
     }
 
-
-
-
-    
 }

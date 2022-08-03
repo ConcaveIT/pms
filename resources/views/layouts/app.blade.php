@@ -95,9 +95,7 @@
 			});
 
 			jQuery( function() { jQuery( ".sortable").sortable();});
+			
 		</script>
-
-
-
 	</body>
 	</html> 
