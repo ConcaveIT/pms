@@ -89,7 +89,50 @@ class Helper{
 	}
 
 	public static function generateScript($config){
+		$html = '';
+		$selectOptionData = [];
+		$form_configuration = isset(json_decode($config)->form_configuration) ? json_decode($config)->form_configuration : [];
+		if($form_configuration){
 
+			foreach($form_configuration as $conf){
+				
+				$relationDataBaseName = isset($conf->relation_database) ? $conf->relation_database : null ; 
+				$relationDataBaseKey = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
+				$display1 = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
+				$disply2 = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
+				$display3 = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
+				//$html .= \Helper::getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$disply2,$display3);
+
+				$html .= '<script>
+					jQuery('')
+				
+				</script>';
+			}
+		}
+		return $html;
+	}
+
+
+	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$disply2=null,$display3=null){
+		$optionHtml = '';
+		$databaseValues = \DB::table($relationDataBaseName)->get();
+		$display = '';
+
+		foreach($databaseValues as $opVal){
+			if($display1){
+				$display = $opVal->{$display1};
+			}
+
+			if($disply2){
+				$display .= '--'.$opVal->{$disply2};
+			}
+
+			if($disply3){
+				$display .= '--'.$opVal->{$disply3};
+			}
+			$optionHtml .= '<option value="'.$display.'">'.$display.'</option>';
+		}
+		return $optionHtml;
 	}
 
 
@@ -280,7 +323,7 @@ class Helper{
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
 							<div class="col-sm-9">
-								<select class="form-control selectpicker @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.'></select>
+								<select id="select_'.$configFieldKey.'" class="form-control selectpicker @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.'" '.$required.'></select>
 								
 								@error("'.$configFieldKey.'")
 									<span class="invalid-feedback" role="alert">
@@ -297,36 +340,6 @@ class Helper{
 
 		return $html;
 	}
-
-
-	
-
-	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$disply2=null,$display3=null){
-		$optionHtml = '';
-		$databaseValues = \DB::table($relationDataBaseName)->get();
-		$display = '';
-
-		foreach($databaseValues as $opVal){
-			if($display1){
-				$display = $opVal->{$display1};
-			}
-
-			if($disply2){
-				$display .= '--'.$opVal->{$disply2};
-			}
-
-			if($disply3){
-				$display .= '--'.$opVal->{$disply3};
-			}
-			$optionHtml .= '<option value="'.$display.'">'.$display.'</option>';
-		}
-		return $optionHtml;
-	}
-
-
-
-
-
 
 
     
