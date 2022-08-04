@@ -105,6 +105,16 @@
                         <p id="error-radio"></p>
                     </div>
 
+                    <div class="form-group mb-2">
+                        <label class="form-label">Soft Delete Available?<span class="text-danger">*</span></label>
+                        <br />
+                        <label class="fancy-radio mr_15">
+                            <input type="radio" name="softdelete" checked  required>
+                            <span><i></i>YES</span>
+                        </label>
+                    </div>
+
+
                 </div>
 
 

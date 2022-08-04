@@ -57,6 +57,7 @@ class ModuleGeneratorController extends Controller
             'database_table_name' => 'required',
             'permission_title' => 'required | unique:module_generators',
             'grid_table_type' => 'required',
+            'softdelete' => 'required',
         ]);
 
        
@@ -70,6 +71,7 @@ class ModuleGeneratorController extends Controller
         $model->permission_title = strtolower(trim($request->permission_title));
         $model->configuration = '';
         $model->status = $request->status;
+        $model->softdelete = ($request->softdelete) ? 1 : 0;
         $update = $model->save();
 
         //Create Permissions

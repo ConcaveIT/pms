@@ -22,6 +22,7 @@ class CreateModuleGeneratorsTable extends Migration
             $table->string('grid_table_type');
             $table->longText('configuration');
             $table->string('permission_title');
+            $table->integer('softdelete')->default(1);
             $table->integer('status')->default(1);
             $table->timestamps();
         });
