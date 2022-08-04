@@ -1,86 +1,26 @@
-@if($setting['form-method'] =='native')
-<div class="card">
-	<div class="card-body">
-@endif
-		<div class="form-ajax-box">
-		{!! Form::open(array('url'=>'{class}?return='.$return, 'class'=>'form-{form_display}  concave-form validated','files' => true , 'parsley-validate'=>'','novalidate'=>' ','id'=> '{class}FormAjax')) !!}
+@extends('layouts.app')
 
-			<div class="toolbar-nav">	
-				<div class="row">	
-					
-					<div class="col-md-6">
-						<a href="javascript://ajax" onclick="ajaxViewClose('#{{ $pageModule }}')" class="tips btn btn-sm btn-danger  " title="{{ __('core.btn_back') }}" ><i class="fa  fa-times"></i></a>
-					</div>
-					<div class="col-sm-6 text-right">	
-						<div class="btn-group">
-							<button type="submit" class="btn btn-sm  btn-primary " name="apply"> {{ Lang::get('core.sb_apply') }} </button>
-							<button type="submit" class="btn btn-sm btn-success" name="save">  {{ Lang::get('core.sb_save') }} </button>
-						</div>	
-					</div>	
-							
-				</div>
-			</div>	
-				<div class="row">
+@section('content')
 
-			
-			{form_entry}									
-			{masterdetailform}	
-			<input type="hidden" name="action_task" value="save" />				
-						
-
-
-			
-
-			
-		{!! Form::close() !!}
+	<div class="card">
+		<div class="card-body">
+		@if(isset($data))
+			<form action="{{route('{class}.update',$data->id)}}" method="post">
+			@method('put')
+		@else
+			<form action="{{route('{class}.store')}}" method="post">
+		@endif
+			@csrf
+				{form_html}
+				<div class="form-group mb-4 mt-4 text-right">
+					<p class="text-end"><button type="submit" class="btn btn-primary">Save Information</button></p>
+				 </div>
+			</form>
 		</div>
-
-@if($setting['form-method'] =='native')
-
 	</div>
-</div>
-@endif
+		 
+@endsection
 
-@include('concave.module.template.ajax.formjavascript')
-
-<script type="text/javascript">
-$(document).ready(function() { 
-	{form_javascript} 
-	{masterdetailjs}
-	{form_wizard} 
-				
-	var form = $('#{class}FormAjax'); 
-	form.parsley();
-	form.submit(function(){
-		
-		if(form.parsley().isValid()){			
-			var options = { 
-				dataType:      'json', 
-				beforeSubmit :  function(){
-				},
-				success: function(data) {
-					if(data.status == 'success')
-					{
-						ajaxViewClose('#{{ $pageModule }}');
-						var table = $('#{class}Table').DataTable();
-						table.ajax.reload();
-						notyMessage(data.message);	
-						$('#concave-modal').modal('hide');	
-					} else {
-						notyMessageError(data.message);	
-						return false;
-					}
-				}  
-			}  
-			$(this).ajaxSubmit(options); 
-			return false;
-						
-		} else {
-			return false;
-		}		
-	
-	});
-
-});
-
-</script>		 
+@push('script')
+{script_html}
+@endpush

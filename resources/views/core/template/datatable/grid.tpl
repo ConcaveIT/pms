@@ -1,131 +1,72 @@
 @extends('layouts.app')
-
 @section('content')
-<?php usort($tableGrid, "SiteHelpers::_sort"); ?>
-<div class="page-titles">
-  <h2> {{ $pageTitle }} <small> {{ $pageNote }} </small></h2>
-</div>
 
+<div class="body d-flex py-lg-3 py-md-2">
+    <div class="container-xxl">
 
-	<div id="{class}View"></div>	
-	<div id="{class}Grid">
-		<div class="card">
-			<div class="card-body">
-			@include( $pageModule.'/toolbar')
-		
-		
-			<div class="table-responsive">			
-				<table id="{class}Table" class="display table  table-striped table-hover" cellspacing="0" width="100%">
-			        <thead>
-			            <tr>
-			            	<th>ID</th>	
-			            	
-			            @if($setting['view-method'] =='expand')<th></th>@endif
-			           
+		<div class="row align-items-center">
+			<div class="border-0 mb-4">
+				<div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
+					<h3 class="fw-bold mb-0">{{$info['module_name']}}</h3>
+					<div class="col-auto d-flex w-sm-100">
+						<a href="{{route($info['module_route'].'.create')}}" class="btn btn-dark btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i>Add {{$info['create_button']}}</a>
+					</div>
+				</div>
+			</div>
+		</div>
 
-			            
-		            <?php foreach ($tableGrid as $t) :
-						if($t['view'] =='1'):
-							$limited = isset($t['limited']) ? $t['limited'] :'';
-							if(SiteHelpers::filterColumn($limited ))
-							{
-								echo '<th align="'.$t['align'].'" width="'.$t['width'].'">'.\SiteHelpers::activeLang($t['label'],(isset($t['language'])? $t['language'] : array())).'</th>';				
-							} 
-						endif;
-					endforeach; ?>
-							 <th width="30" class="text-right" > Action </th>
-						</tr>
+		<div class="row clearfix g-3">
+			<div class="col-sm-12">
 
-					</thead>	
-			               
-			    </table>
-			</div>	 
-		</div>			
-	</div>	
+				<div class="card">
+					<div class="card-body">
+							<div class="table-responsive">
+							<table class="table  table-hover table-striped  " id="projectTable">
+								<thead>
+									<tr>
+										<td> SL </td>
+										@foreach ($tableGrid as $tableItem)
+											<td>{{$tableItem['field_name']}}</td>
+										@endforeach
+										<td>Action</td>
+									</tr>
+								</thead>
+
+								<tbody>
+									@foreach($results as $result)
+										<tr>
+											<td>{{$loop->iteration}}</td>
+											@foreach ($tableGrid as $tableItem)
+												<td>{!! Helper::formatTableItem(
+													$result->id,
+													$tableItem['field_format'],
+													$tableItem['field_format_value'],
+													$result->{$tableItem['field_key']},
+													$tableItem['database_relation']
+												) !!}</td>
+											@endforeach
+					
+											<td>
+												<div class="btn-group" role="group" aria-label="Basic outlined example">
+													<a href="{{route($info['module_route'].'.edit',$result->id )}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+													<a href="{{route($info['module_route'].'.destroy',$result->id )}}" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>
+												</div>
+											</td>
+										
+										</tr>
+									@endforeach        						
+								</tbody>
+							
+							</table>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>	
+					
+		</div>
 	</div>
-	
 </div>
-
-<script type="text/javascript">
-
-	$(document).ready(function() {
-		$('.tips').tooltip();
-		$('.dataselect').select2();
-		var rows_selected = []; 			
-	   	var table = $('#{class}Table').DataTable( {
-	        "processing": true,
-	       
-	        "serverSide": true,
-	        // "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-	        "ajax": {
-	            "url": "{!! url('{class}')!!}",
-	            "type": "POST"
-	             
-        	},
-        	"columnDefs": [{ 
-        		"targets": [0],
-                "visible": false,
-                orderable: false,
-            	className: 'select-checkbox'
-        	}],
-        	"columns": [<?php echo $column;?>],
-        	'order': [[1, 'asc']],
-        	<?php if($access['is_excel'] ==1 ) { ?>
-        	dom: 'Bfltip',
-        	buttons: [
-            	'copy', 'csv', 'excel', 'pdf', 'print'
-        	]
-        	<?php } ?>
-        	
-	    });
-
-	   	<?php if($setting['view-method'] =='expand'): ?>
-		$('#{class}Table tbody').on('click', 'td.details-control', function () {
-	        var tr = $(this).closest('tr');
-	        var row = table.row( tr );
-	        var id = row.data().rowId;
-
-	        if ( row.child.isShown() ) {
-	        	 row.child.hide();
-            	tr.removeClass('shown');
-	        }
-	        else {
-	            // Open this row
-	            row.child.show();	            
-	            row.child( expand_child(id) ).show();
-	            tr.addClass('shown');
-	            $.get('{{ url("{class}/")}}/'+id , function(callback){
-	            	$('#'+id).html(callback);
-	            	$('#'+id).addClass('data');
-	            })
-		        
-	            
-	        }
-    	});
-    	<?php endif; ?>
-		$('.dosearch').keyup(function( e ){
-			if (e.keyCode === 13) {
-				val = $(this).val();
-				table.search(val ).draw();
-			}
-		})  
-
-	    $('#{class}Table').Sdtable({
-	    	tableId : '#{class}',
-	    	table   : table,
-	    	action  : '{{ url("{class}")}}' 
-	    });
-
-	   
-	});
-
-
-    function expand_child( id )
-    {
-    	return '<div id="'+ id+'"><p class="text-center"> Loading Content .. Please wait</p></div>';	
-    }
-
-</script>
-
-
 @endsection
+
