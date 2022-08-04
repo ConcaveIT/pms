@@ -76,6 +76,14 @@
                             </div>
                         </div>
 
+                        <div class="form-group row  mb-1">
+                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Soft Delete</label>
+                            <div class="col-sm-9">
+                             <input type="text"  class="form-control" value="@if($moduleData->softdelete) Available @else Not Available @endif" disabled>
+                               
+                            </div>
+                        </div>
+
                         </div>
                         <div class="col-md-6">
                           

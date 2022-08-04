@@ -82,7 +82,7 @@
                    
                     <div class="form-group mb-2">
                         <label class="form-label">Module Description</label>
-                        <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror " rows="5" cols="30" required></textarea>
+                        <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror " rows="4" cols="30" required></textarea>
                         @error('module_description')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -92,8 +92,8 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <label class="form-label">Status<span class="text-danger">*</span></label>
-                        <br />
+                        <label class="form-label mr-2">Status<span class="text-danger">*</span></label>
+                        
                         <label class="fancy-radio mr_15">
                             <input type="radio" name="status" value="1" checked data-parsley-errors-container="#error-radio" required>
                             <span><i></i>Enable</span>
@@ -106,10 +106,10 @@
                     </div>
 
                     <div class="form-group mb-2">
-                        <label class="form-label">Soft Delete Available?<span class="text-danger">*</span></label>
-                        <br />
+                        <label class="form-label mr-2">Soft Delete Available?<span class="text-danger">*</span></label>
+                        
                         <label class="fancy-radio mr_15">
-                            <input type="radio" name="softdelete" checked  required>
+                            <input type="checkbox" name="softdelete" checked required>
                             <span><i></i>YES</span>
                         </label>
                     </div>

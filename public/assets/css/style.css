@@ -19064,4 +19064,29 @@
 .mr_15 {
     margin-right: 15px;
 }
- 
+
+.dataTables_length select{
+    display: inline-block;
+    width: 30%;
+}
+
+.dataTables_filter input {
+    display: inline-block;
+    width: 60%;
+    margin-left: 8px;
+}
+
+.dataTables_filter{
+    text-align: right;
+}
+
+.dataTables_paginate {
+    margin-top: 21px;
+}
+
+.mr-2 {
+    margin-right: 2rem;
+}
+.fa-1x {
+    font-size: 20px;
+}

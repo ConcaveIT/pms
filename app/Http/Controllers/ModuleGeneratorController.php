@@ -57,7 +57,6 @@ class ModuleGeneratorController extends Controller
             'database_table_name' => 'required',
             'permission_title' => 'required | unique:module_generators',
             'grid_table_type' => 'required',
-            'softdelete' => 'required',
         ]);
 
        
@@ -248,6 +247,7 @@ class ModuleGeneratorController extends Controller
             'title'            => $module->module_title ,
             'note'             => $module->module_description,
             'permission_title' => $module->permission_title,
+            'softdelete'       => ($module->softdelete) ? 'use SoftDeletes; protected $softDelete = true;' : '',
         ];
 
         $codes['form_html'] = \Helper::generateForm($module->configuration);
@@ -326,5 +326,15 @@ class ModuleGeneratorController extends Controller
     public function getDatabaseRelationOptions(Request $request){
         return \Helper::getSlelectDatabaseValues($request->db,$request->key,$request->display1,$request->display2,$request->display3);
     }
+
+    public function createMigration(){
+        return view('core.module.create-migration'); 
+    }
+
+    public function generateMigration(Request $request){
+        var_dump($request->all());
+    }
+
+
 
 }

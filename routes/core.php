@@ -15,5 +15,9 @@
     Route::get('/database-columns/{databasename}',[App\Http\Controllers\ModuleGeneratorController::class,'getDatabaseColumns'])->name('database.columns');
     Route::get('/database-relation-options',[App\Http\Controllers\ModuleGeneratorController::class,'getDatabaseRelationOptions'])->name('database.relation.options');
     
+    Route::get('/create-migration',[App\Http\Controllers\ModuleGeneratorController::class,'createMigration'])->name('module.create.migration');
+    Route::post('/generate-migration',[App\Http\Controllers\ModuleGeneratorController::class,'generateMigration'])->name('module.generate.migration');
+    
+    
 
 ?>

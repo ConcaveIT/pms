@@ -165,35 +165,66 @@ class Helper{
 
 			foreach($form_configuration as $conf){
 
+				$relationDataDataType = isset($conf->data_type) ? $conf->data_type : null ;
+				$relationDataCustomData = isset($conf->custom_data) ? $conf->custom_data : [] ;
 				$relationDataBaseName = isset($conf->relation_database) ? $conf->relation_database : null ; 
 				$relationDataBaseKey = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
 				$display1 = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
 				$display2 = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
 				$display3 = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
-				if($relationDataBaseName && $relationDataBaseKey){
-					$scripts .= '<script>
-						jQuery(document).ready(function(){
-							jQuery.ajax({
-								url: "{{route("database.relation.options")}}?db='.$relationDataBaseName.'&key='.$relationDataBaseKey.'&display1='.$display1.'&display2='.$display2.'&display3='.$display3.'",
-								success: function(response){
-									jQuery("#select_'.$conf->field_key.'").html(response);
-									var selectedVal = jQuery("#select_'.$conf->field_key.'").attr("data-selected-value");
 
-									if(jQuery("#select_'.$conf->field_key.'").attr("data-select-type") == "multiple"){
-										var str_array = selectedVal.split(",");
-										for(var i = 0; i < str_array.length; i++) {
-										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-											jQuery("#select_'.$conf->field_key.'").find("option[value="+str_array[i]+"]").prop("selected", true);
-										}
-									}else{
-										jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
+				if($relationDataDataType == 'custom'){
+
+					$response = '';
+					foreach($relationDataCustomData  as $cData){
+						$response .= '<option value=\''.$cData->value.'\'>'.$cData->name.'</option>';
+					}
+
+						$scripts .= '<script>
+							jQuery(document).ready(function(){
+								jQuery("#select_'.$conf->field_key.'").html("'.$response.'");
+								var selectedVal = jQuery("#select_'.$conf->field_key.'").attr("data-selected-value");
+								if(jQuery("#select_'.$conf->field_key.'").attr("data-select-type") == "multiple"){
+									var str_array = selectedVal.split(",");
+									for(var i = 0; i < str_array.length; i++) {
+									str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+										jQuery("#select_'.$conf->field_key.'").find("option[value="+str_array[i]+"]").prop("selected", true);
 									}
+								}else{
+									jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
 								}
 							});
-						});
+						
+						</script>';
 					
-					</script>';
+				}else{
+					if($relationDataBaseName && $relationDataBaseKey){
+						$scripts .= '<script>
+							jQuery(document).ready(function(){
+								jQuery.ajax({
+									url: "{{route("database.relation.options")}}?db='.$relationDataBaseName.'&key='.$relationDataBaseKey.'&display1='.$display1.'&display2='.$display2.'&display3='.$display3.'",
+									success: function(response){
+										jQuery("#select_'.$conf->field_key.'").html(response);
+										var selectedVal = jQuery("#select_'.$conf->field_key.'").attr("data-selected-value");
+	
+										if(jQuery("#select_'.$conf->field_key.'").attr("data-select-type") == "multiple"){
+											var str_array = selectedVal.split(",");
+											for(var i = 0; i < str_array.length; i++) {
+											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+												jQuery("#select_'.$conf->field_key.'").find("option[value="+str_array[i]+"]").prop("selected", true);
+											}
+										}else{
+											jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
+										}
+									}
+								});
+							});
+						
+						</script>';
+					}
 				}
+
+				
 				
 			}
 		}

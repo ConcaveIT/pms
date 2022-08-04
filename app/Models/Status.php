@@ -4,7 +4,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class {class} extends Model  {
-	{softdelete}
-	protected $table = '{table}';
+class status extends Model  {
+	
+	protected $table = 'statuses';
 }
