@@ -144,13 +144,89 @@
                                 $format = isset($table_configuration->{$item}->format) ? $table_configuration->{$item}->format : '';
                                 $format_value = isset($table_configuration->{$item}->format_value) ? $table_configuration->{$item}->format_value : '';
 
+                                $tableFieldRelationDatabase          = isset($table_configuration->{$item}->relation_database)  ? $table_configuration->{$item}->relation_database : '';
+                                $tableFieldRelationDatabaseKey       = isset($table_configuration->{$item}->relation_database_key)  ? $table_configuration->{$item}->relation_database_key : '';
+                                $tableFieldRelationDatabaseDisplay1  = isset($table_configuration->{$item}->relation_database_display1)  ? $table_configuration->{$item}->relation_database_display1 : '';
+                                $tableFieldRelationDatabaseDisplay2  = isset($table_configuration->{$item}->relation_database_display2)  ? $table_configuration->{$item}->relation_database_display2 : '';
+                                $tableFieldRelationDatabaseDisplay3  = isset($table_configuration->{$item}->relation_database_display3)  ? $table_configuration->{$item}->relation_database_display3 : '';
+                                $tableFieldAllowMultiple             = isset($table_configuration->{$item}->allow_multiple)  ? 'checked' : '';
+                               
                                 if(!$fieldName){
                                     $fieldName = ucwords(str_replace('_',' ',$item));
                                 }
                              ?>
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
-                                    <td>{{$item}} <a href="javascript:void(0)"><i class="fa fa-link float-end" aria-hidden="true"></i></a></td>
+                                    <td> {{$item}} 
+                                        
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="{{'#linkModal_'.$item}}" ><i class="fa fa-link float-end" aria-hidden="true"></i></a>
+                                     <!-- Link Modal -->
+                                    <div class="modal fade" id="{{'linkModal_'.$item}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title " id="exampleModalLabel">Link <b class="text-primary">{{$item}}</b>to another table</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+
+                                                    <div class="section_database_data">
+
+                                                        <div class="form-group row mb-1">
+                                                            <div class="col-sm-3 col-form-label">Database</div>
+                                                            <div class="col-sm-9 col-form-label">
+                                                                <select name="table_configuration[{{$item}}][relation_database]"  class="form-control database_table_trigger">
+                                                                    <option value="-1" disabled selected>--Select Table --</option>
+                                                                    @foreach($tables as $table)
+                                                                        @foreach ($table as $key => $value)
+                                                                            <option value="{{$value}}" @if($tableFieldRelationDatabase == $value) selected @endif >{{$value}}</option>
+                                                                        @endforeach
+                                                                    @endforeach
+                                                                </select>
+                                                                
+                                                            </div>
+                                                        </div> 
+
+
+                                                        <div class="form-group row mb-1">
+                                                            <div class="col-sm-3 col-form-label">Relation Key</div>
+                                                            <div class="col-sm-9 col-form-label">
+                                                                <select data-selected-value="{{$tableFieldRelationDatabaseKey}}" name="table_configuration[{{$item}}][relation_database_key]" class="form-control relationKey"></select>
+                                                            </div>
+                                                        </div> 
+
+                                                        <div class="form-group row mb-1">
+                                                            <div class="col-sm-3 col-form-label">Display 1</div>
+                                                            <div class="col-sm-9 col-form-label">
+                                                                <select data-selected-value="{{$tableFieldRelationDatabaseDisplay1 }}" name="table_configuration[{{$item}}][relation_database_display1]" class="form-control display1"></select>
+                                                            </div>
+                                                        </div> 
+
+                                                        <div class="form-group row mb-1">
+                                                            <div class="col-sm-3 col-form-label">Display 2</div>
+                                                            <div class="col-sm-9 col-form-label">
+                                                                <select data-selected-value="{{$tableFieldRelationDatabaseDisplay2 }}" name="table_configuration[{{$item}}][relation_database_display2]" class="form-control display2"></select>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row mb-1">
+                                                            <div class="col-sm-3 col-form-label">Display 3</div>
+                                                            <div class="col-sm-9 col-form-label">
+                                                                <select data-selected-value="{{$tableFieldRelationDatabaseDisplay3 }}" name="table_configuration[{{$item}}][relation_database_display3]" class="form-control display3"></select>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                            </div>
+
+
+                                                <div class="modal-footer">
+                                                    <a href="javascript:void(0)" class="btn btn-primary" data-bs-dismiss="modal">Save changes</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    </td>
                                     <th>
                                         <div class="form-group">
                                             <input type="text" name="table_configuration[{{$item}}][field_name]" class="form-control" value="{{ $fieldName }}">
@@ -162,10 +238,12 @@
                                             @php
                                                 $format_options = [
                                                     'default' => 'Default',
+                                                    'select' => 'Select',
                                                     'image' => 'Image',
                                                     'multipleimage' => 'Multiple Image',
                                                     'link' => 'Link',
                                                     'file'  => 'File',
+                                                    'multiplefile'  => 'Multiple File',
                                                     'datetime' => 'Date Time',
                                                     'function' => 'Custom Function',
                                                 ];
@@ -210,7 +288,7 @@
                                 <th>Type</th>
                                 <th></th>
                                 <th>Validation</th>
-                                <th>Action</th>
+                                <th>Options</th>
                             </tr>
                         </thead>
                         <tbody>

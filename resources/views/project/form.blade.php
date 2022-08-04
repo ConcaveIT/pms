@@ -60,7 +60,7 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Project manager id  </label>
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Project manager  </label>
 							<div class="col-sm-9">
 								<select  data-selected-value="{{$data->project_manager_id ?? "" }}" id="select_project_manager_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("project_manager_id") is-invalid @enderror" name="project_manager_id" ></select>
 								
@@ -242,90 +242,6 @@
 										}
 									}else{
 										jQuery("#select_client_ids").find("option[value="+selectedVal+"]").prop("selected", true);
-									}
-								}
-							});
-						});
-					
-					</script><script>
-						jQuery(document).ready(function(){
-							jQuery.ajax({
-								url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
-								success: function(response){
-									jQuery("#select_member_ids").html(response);
-									var selectedVal = jQuery("#select_member_ids").attr("data-selected-value");
-
-									if(jQuery("#select_member_ids").attr("data-select-type") == "multiple"){
-										var str_array = selectedVal.split(",");
-										for(var i = 0; i < str_array.length; i++) {
-										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-											jQuery("#select_member_ids").find("option[value="+str_array[i]+"]").prop("selected", true);
-										}
-									}else{
-										jQuery("#select_member_ids").find("option[value="+selectedVal+"]").prop("selected", true);
-									}
-								}
-							});
-						});
-					
-					</script><script>
-						jQuery(document).ready(function(){
-							jQuery.ajax({
-								url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
-								success: function(response){
-									jQuery("#select_project_manager_id").html(response);
-									var selectedVal = jQuery("#select_project_manager_id").attr("data-selected-value");
-
-									if(jQuery("#select_project_manager_id").attr("data-select-type") == "multiple"){
-										var str_array = selectedVal.split(",");
-										for(var i = 0; i < str_array.length; i++) {
-										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-											jQuery("#select_project_manager_id").find("option[value="+str_array[i]+"]").prop("selected", true);
-										}
-									}else{
-										jQuery("#select_project_manager_id").find("option[value="+selectedVal+"]").prop("selected", true);
-									}
-								}
-							});
-						});
-					
-					</script><script>
-						jQuery(document).ready(function(){
-							jQuery.ajax({
-								url: "{{route("database.relation.options")}}?db=departments&key=id&display1=title&display2=&display3=",
-								success: function(response){
-									jQuery("#select_department_id").html(response);
-									var selectedVal = jQuery("#select_department_id").attr("data-selected-value");
-
-									if(jQuery("#select_department_id").attr("data-select-type") == "multiple"){
-										var str_array = selectedVal.split(",");
-										for(var i = 0; i < str_array.length; i++) {
-										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-											jQuery("#select_department_id").find("option[value="+str_array[i]+"]").prop("selected", true);
-										}
-									}else{
-										jQuery("#select_department_id").find("option[value="+selectedVal+"]").prop("selected", true);
-									}
-								}
-							});
-						});
-					
-					</script><script>
-						jQuery(document).ready(function(){
-							jQuery.ajax({
-								url: "{{route("database.relation.options")}}?db=statuses&key=id&display1=title&display2=&display3=",
-								success: function(response){
-									jQuery("#select_status").html(response);
-									var selectedVal = jQuery("#select_status").attr("data-selected-value");
-
-									if(jQuery("#select_status").attr("data-select-type") == "multiple"){
-										var str_array = selectedVal.split(",");
-										for(var i = 0; i < str_array.length; i++) {
-										str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-											jQuery("#select_status").find("option[value="+str_array[i]+"]").prop("selected", true);
-										}
-									}else{
-										jQuery("#select_status").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
 								}
 							});

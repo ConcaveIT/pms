@@ -30,6 +30,7 @@ class Helper{
 		
 	}
 
+
 	public static function getTableHeader($controller){
 		$tableHeaders = [];
 		$moduleConfig = ModuleGenerator::where('controller_name',$controller)->first();
@@ -43,6 +44,13 @@ class Helper{
 							'field_name' => $tableItem->field_name,
 							'field_format' => $tableItem->format,
 							'field_format_value' => $tableItem->format_value,
+							'database_relation'	=> [
+								'relation_database' => $tableItem->relation_database ?? null,
+								'relation_database_key' => $tableItem->relation_database_key ?? null,
+								'relation_database_display1' => $tableItem->relation_database_display1 ?? null,
+								'relation_database_display2' => $tableItem->relation_database_display2 ?? null,
+								'relation_database_display3' => $tableItem->relation_database_display3 ?? null,
+							]
 						];
 					}
 				}
@@ -52,32 +60,64 @@ class Helper{
 	}
 
 
-	public static function formatTableItem($formatType = 'default',$field_format_value,$value){
+	public static function formatTableItem($formatType = 'default',$field_format_value,$value,$databaseRelation){
 
-		if($formatType == 'datetime'){
-			return date($field_format_value,strtotime($value));
-		}elseif($formatType == 'link'){
-			return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
-		}elseif($formatType == 'image'){
-			return '<img width="100" src="'.$field_format_value.'/'.$value.'" alt="Table Image" >';
-		}elseif($formatType == 'multipleimage'){
-			$images = explode(',',$value);
-			$html = '';
-			foreach($images as $image){
-				if($image){
-					$html.= '<img width="100" src="'.$field_format_value.'/'.$image.'" alt="Table Image" >';
+			if($formatType == 'datetime'){
+				return date($field_format_value,strtotime($value));
+			}elseif($formatType == 'link'){
+				return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
+			}elseif($formatType == 'image'){
+				return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" > <img width="65" src="'.$field_format_value.'/'.$value.'" alt="Table Image" ></a>';
+			}elseif($formatType == 'multipleimage'){
+				$images = explode(',',$value);
+				$html = '';
+				foreach($images as $image){
+					if($image){
+						$html.= '<a  target="_blank" href="'.$field_format_value.'/'.$image.'" ><img style="width:65px;margin-right:5px;" src="'.$field_format_value.'/'.$image.'" alt="Table Image" ></a>';
+					}
+					
 				}
+				return $html;
+			}elseif($formatType == 'file'){
+				return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" ><img style="width:40px;margin-right:5px;" src="/assets/images/file.png"></a>';
+			}elseif($formatType == 'multiplefile'){
+				$files = explode(',',$value);
+				$html = '';
+				foreach($files as $file){
+					if($image){
+						$html.=  '<a  target="_blank" href="'.$field_format_value.'/'.$file.'" ><img style="width:40px;margin-right:5px;" src="/assets/images/file.png"></a>';
+					}
+				}
+				return $html;
+			}elseif( $formatType == 'function'){
+	
+			}elseif($formatType == 'select'){
+				if($databaseRelation['relation_database'] && $databaseRelation['relation_database_key'] ){
+					$display = '';
+					$displayArray = [];
+					$relationDataBaseName = $databaseRelation['relation_database'];
+					$relationDataBaseKey = $databaseRelation['relation_database_key'];
+					$display1 = $databaseRelation['relation_database_display1'];
+					$display2= $databaseRelation['relation_database_display2'];
+					$display3= $databaseRelation['relation_database_display3'];
+	
+					$valueArray = explode(',',$value);
+	
+					$databaseValues = \DB::table($relationDataBaseName)->whereIn($relationDataBaseKey,$valueArray)->get();
+					foreach($databaseValues as $opVal){
+						if($display1) $display = $opVal->{$display1};
+						if($display2) $display .= '--'.$opVal->{$display2};
+						if($display3) $display .= '--'.$opVal->{$display3};
+						$displayArray[] = $display;
+					}
+	
+					return implode(',',$displayArray);
 				
 			}
-			return $html;
-		}
-		elseif($formatType == 'file'){
-			return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
-		}elseif( $formatType == 'function'){
-
-		}else{
-			return $value;
-		}
+			}else{
+				return $value;
+			}
+		
 	}
 
 	
@@ -88,13 +128,6 @@ class Helper{
 		if($form_configuration){
 
 			foreach($form_configuration as $conf){
-				// $selectOptionData['data_type'] = isset($conf->data_type) ? $conf->data_type : null ;
-				// $selectOptionData['relation_database'] = isset($conf->relation_database) ? $conf->relation_database : null ; 
-				// $selectOptionData['relation_database_key'] = isset($conf->relation_database_key) ? $conf->relation_database_key : null ;
-				// $selectOptionData['relation_database_display1'] = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
-				// $selectOptionData['relation_database_display2'] = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
-				// $selectOptionData['relation_database_display3'] = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
-				// $selectOptionData['custom_data'] = isset($conf->custom_data) ? $conf->custom_data : null ;
 				$selectOptionData['allow_multiple'] = isset($conf->allow_multiple) ? true : false ;
 				$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name,$selectOptionData);
 			}
