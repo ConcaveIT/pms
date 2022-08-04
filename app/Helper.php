@@ -130,7 +130,7 @@ class Helper{
 	}
 
 
-	public static function getTitleUppercase(
+	public static function getUppercase(
 		$modelString, //Model Name
 		$rowId, //Field row ID
 		$paramKey1, //Request Parameter 1
