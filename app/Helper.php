@@ -59,9 +59,22 @@ class Helper{
 		}elseif($formatType == 'link'){
 			return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
 		}elseif($formatType == 'image'){
-			return '<img src="'.$field_format_value.'/'.$value.'" alt="Table Image" >';
-		}elseif($formatType == 'file'){
+			return '<img width="100" src="'.$field_format_value.'/'.$value.'" alt="Table Image" >';
+		}elseif($formatType == 'multipleimage'){
+			$images = explode(',',$value);
+			$html = '';
+			foreach($images as $image){
+				if($image){
+					$html.= '<img width="100" src="'.$field_format_value.'/'.$image.'" alt="Table Image" >';
+				}
+				
+			}
+			return $html;
+		}
+		elseif($formatType == 'file'){
 			return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
+		}elseif( $formatType == 'function'){
+
 		}else{
 			return $value;
 		}
@@ -120,10 +133,7 @@ class Helper{
 									}else{
 										jQuery("#select_'.$conf->field_key.'").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
-
-									
 								}
-
 							});
 						});
 					
@@ -133,8 +143,6 @@ class Helper{
 			}
 		}
 
-
-		//var_dump($scripts); exit;
 		return $scripts;
 	}
 
@@ -312,14 +320,16 @@ class Helper{
 				$inputType = 'multiple';
 				$btnText = 'Select Images';
 				$previewImageHtml = '@if(isset($data->'.$configFieldKey.'))
+					<p class="selected_images_gallery">
 					@foreach(explode(",",$data->'.$configFieldKey.') as $img)
 						@if($img)
-						<span>
-							<input type="hidden" value="{{$img}}" name="'.$configFieldKey.'[]">
-							<img src="{{"/".$img}}"> <b data-file-url="{{$img}}" class="selected_image_remove">X</b>
-						</span>
+							<span>
+								<input type="hidden" value="{{$img}}" name="'.$configFieldKey.'[]">
+								<img src="{{"/".$img}}"> <b data-file-url="{{$img}}" class="selected_image_remove">X</b>
+							</span>
 						@endif
 					@endforeach
+					</p>
 				@endif';
 			}
 

@@ -2,13 +2,13 @@
 @section('content')
 
 <style>
-    .section_database_data,.type_database{
-        display: none;
-    }
     .delete_item {
         font-size: 21px;
         margin-top: 8px;
         cursor: pointer;
+    }
+    .trigger_bars{
+        display: none;
     }
 
 </style>
@@ -163,6 +163,7 @@
                                                 $format_options = [
                                                     'default' => 'Default',
                                                     'image' => 'Image',
+                                                    'multipleimage' => 'Multiple Image',
                                                     'link' => 'Link',
                                                     'file'  => 'File',
                                                     'datetime' => 'Date Time',
@@ -207,6 +208,7 @@
                                 <th>Field</th>
                                 <th>Field Name</th>
                                 <th>Type</th>
+                                <th></th>
                                 <th>Validation</th>
                                 <th>Action</th>
                             </tr>
@@ -220,9 +222,9 @@
                                 $formFieldValidation                = isset($form_configuration->{$item}->validation)  ? $form_configuration->{$item}->validation : '';
                                 $formFieldSearchable                = isset($form_configuration->{$item}->searchable)  ? 'checked' : '';
                                 $formFieldFilterable                = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
-                                $formFieldAllowMultiple               = isset($form_configuration->{$item}->allow_multiple)  ? 'checked' : '';
+                                $formFieldAllowMultiple             = isset($form_configuration->{$item}->allow_multiple)  ? 'checked' : '';
                                 $formFieldDataType                  = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
-                                $formFieldCustomData                =  isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : [];
+                                $formFieldCustomData                = isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : [];
                                 $formFieldRelationDatabase          = isset($form_configuration->{$item}->relation_database)  ? $form_configuration->{$item}->relation_database : '';
                                 $formFieldRelationDatabaseKey       = isset($form_configuration->{$item}->relation_database_key)  ? $form_configuration->{$item}->relation_database_key : '';
                                 $formFieldRelationDatabaseDisplay1  = isset($form_configuration->{$item}->relation_database_display1)  ? $form_configuration->{$item}->relation_database_display1 : '';
@@ -404,6 +406,8 @@
 
                                 </td>
 
+                                <td><a class="trigger_bars" href="javascript:void(0)"><i data-bs-toggle="modal" data-bs-target="{{'#optionModal_'.$item}}" class="fa fa-bars"></i></a></td>
+
                                 <td>
                                     <div class="form-group">
                                         <input type="text" name="form_configuration[{{$item}}][validation]" value="{{$formFieldValidation}}"  class="form-control" placeholder="required | unique:posts">
@@ -557,16 +561,7 @@
 </script>
 
 <script>
-    jQuery(document).on('change','.trigger_option',function(){
-        jQuery('.type_database').hide();
-        var selected = jQuery(this).find('option:selected').val();
-        var modalId = jQuery(this).attr('data-modal-id');
-        if(selected == 'radio' || selected == 'checkbox' || selected == 'select'){
-            if(selected == 'select') jQuery('.type_database').show();
-            var myModal = new bootstrap.Modal(document.getElementById(modalId), {keyboard: false})
-            myModal.show();
-        }
-    });
+   
 
     jQuery(document).on('click','.trigger_data_type',function(){
         if(jQuery(this).val() == 'database'){
@@ -615,7 +610,27 @@
     });
 
 
+
+    jQuery(document).on('click','.trigger_option',function(){
+        var selected = jQuery(this).find('option:selected').val();
+        if(selected == 'radio' || selected == 'checkbox' || selected == 'select'){
+            jQuery(this).closest('tr').find('.trigger_bars').show();
+        }else{
+            jQuery(this).closest('tr').find('.trigger_bars').hide();
+        }
+    });
+
+
     jQuery(document).ready(function(){
+
+
+        jQuery('.trigger_option').each(function(key,val){
+            var selected = jQuery(this).find('option:selected').val();
+            if(selected == 'radio' || selected == 'checkbox' || selected == 'select'){
+                jQuery(this).closest('tr').find('.trigger_bars').show();
+            }
+        });
+
 
         jQuery('.dynamicHtml').each(function(key,val){
             if(jQuery(this).find('.trigger_data_type:checked').val() == 'database'){
@@ -655,9 +670,6 @@
             });
         })
     });
-
-
-    
 
 
 </script>

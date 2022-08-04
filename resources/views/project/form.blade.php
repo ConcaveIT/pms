@@ -14,9 +14,9 @@
 				<div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Title<span class="text-danger">*</span>  </label>
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Title  </label>
 							<div class="col-sm-9">
-								<input type="text" name="title"  class="form-control @error("title") is-invalid @enderror" value="{{$data->title ?? "" }}" required>
+								<input type="text" name="title"  class="form-control @error("title") is-invalid @enderror" value="{{$data->title ?? "" }}" >
 								@error("title")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
@@ -121,7 +121,7 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-						  <label for="ModuleTitle" class="col-sm-3 col-form-label">Srs<span class="text-danger">*</span>  </label>
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">Srs  </label>
 						    <div class="col-sm-9">
 						  		<button type="button" data-image-width="800" data-image-height="800" data-input-name="srs" data-input-type="single" class="btn btn-success text-white initConcaveMedia" >Select Image</button>
 						  		@if(isset($data->srs))
@@ -160,7 +160,33 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Department  </label>
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">Related documents  </label>
+						    <div class="col-sm-9">
+						  		<button type="button" data-image-width="800" data-image-height="800" data-input-name="related_documents" data-input-type="multiple" class="btn btn-success text-white initConcaveMedia" >Select Images</button>
+						  		@if(isset($data->related_documents))
+					<p class="selected_images_gallery">
+					@foreach(explode(",",$data->related_documents) as $img)
+						@if($img)
+							<span>
+								<input type="hidden" value="{{$img}}" name="related_documents[]">
+								<img src="{{"/".$img}}"> <b data-file-url="{{$img}}" class="selected_image_remove">X</b>
+							</span>
+						@endif
+					@endforeach
+					</p>
+				@endif
+								@error("related_documents")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Department id  </label>
 							<div class="col-sm-9">
 								<select  data-selected-value="{{$data->department_id ?? "" }}" id="select_department_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("department_id") is-invalid @enderror" name="department_id" ></select>
 								
@@ -173,7 +199,7 @@
 							
 						</div>
 					</div>
-			</div><input type="hidden" name="is_deleted"  value="{{$data->is_deleted ?? "" }}" ><div class="row g-3 align-items-center">
+			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Status  </label>
@@ -203,7 +229,7 @@
 <script>
 						jQuery(document).ready(function(){
 							jQuery.ajax({
-								url: "{{route("database.relation.options")}}?db=clients&key=id&display1=company_name&display2=designation&display3=",
+								url: "{{route("database.relation.options")}}?db=clients&key=id&display1=name&display2=company_name&display3=designation",
 								success: function(response){
 									jQuery("#select_client_ids").html(response);
 									var selectedVal = jQuery("#select_client_ids").attr("data-selected-value");
@@ -217,10 +243,7 @@
 									}else{
 										jQuery("#select_client_ids").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
-
-									
 								}
-
 							});
 						});
 					
@@ -241,10 +264,7 @@
 									}else{
 										jQuery("#select_member_ids").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
-
-									
 								}
-
 							});
 						});
 					
@@ -265,10 +285,7 @@
 									}else{
 										jQuery("#select_project_manager_id").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
-
-									
 								}
-
 							});
 						});
 					
@@ -289,10 +306,7 @@
 									}else{
 										jQuery("#select_department_id").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
-
-									
 								}
-
 							});
 						});
 					
@@ -313,10 +327,7 @@
 									}else{
 										jQuery("#select_status").find("option[value="+selectedVal+"]").prop("selected", true);
 									}
-
-									
 								}
-
 							});
 						});
 					
