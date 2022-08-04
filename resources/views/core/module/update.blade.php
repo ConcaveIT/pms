@@ -119,7 +119,7 @@
                                             Image - <code>/uploads/images</code> <br>
                                             File - <code>/uploads/file</code> <br>
                                             Link - <code>https://example.com  </code><br>
-                                            Function - <code> function_name:param1:param2:param:3 </code>
+                                            Function (Helper.php) - <code> getTitleUppercase:arg1:arg2:arg3 </code>
                                         ">
                                         <i class="fa fa-info-circle text-info"></i>
                                     </span>

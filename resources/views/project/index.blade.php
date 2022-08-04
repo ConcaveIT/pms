@@ -38,6 +38,7 @@
 											<td>{{$loop->iteration}}</td>
 											@foreach ($tableGrid as $tableItem)
 												<td>{!! Helper::formatTableItem(
+													$result->id,
 													$tableItem['field_format'],
 													$tableItem['field_format_value'],
 													$result->{$tableItem['field_key']},

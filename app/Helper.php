@@ -45,6 +45,7 @@ class Helper{
 							'field_format' => $tableItem->format,
 							'field_format_value' => $tableItem->format_value,
 							'database_relation'	=> [
+								'current_db_model' => $controller,
 								'relation_database' => $tableItem->relation_database ?? null,
 								'relation_database_key' => $tableItem->relation_database_key ?? null,
 								'relation_database_display1' => $tableItem->relation_database_display1 ?? null,
@@ -60,7 +61,7 @@ class Helper{
 	}
 
 
-	public static function formatTableItem($formatType = 'default',$field_format_value,$value,$databaseRelation){
+	public static function formatTableItem($rowId,$formatType = 'default',$field_format_value,$value,$databaseRelation){
 
 			if($formatType == 'datetime'){
 				return date($field_format_value,strtotime($value));
@@ -90,7 +91,15 @@ class Helper{
 				}
 				return $html;
 			}elseif( $formatType == 'function'){
-	
+
+				$args = explode(':',$field_format_value);
+				$functionName = $args[0];
+				$paramKey1 = isset($args[1]) ? $args[1] :null;
+				$paramKey2 = isset($args[2]) ? $args[2] :null;
+				$paramKey3 = isset($args[3]) ? $args[3] :null;
+				$modelString = $databaseRelation['current_db_model'];
+				return \Helper::{$functionName}($modelString,$rowId,$paramKey1,$paramKey2,$paramKey3);
+
 			}elseif($formatType == 'select'){
 				if($databaseRelation['relation_database'] && $databaseRelation['relation_database_key'] ){
 					$display = '';
@@ -118,6 +127,19 @@ class Helper{
 				return $value;
 			}
 		
+	}
+
+
+	public static function getTitleUppercase(
+		$modelString, //Model Name
+		$rowId, //Field row ID
+		$paramKey1, //Request Parameter 1
+		$paramKey2, //Request Parameter 2
+		$paramKey3 //Request Parameter 3
+		){
+		$model = 'App\\Models\\'.$modelString;
+		$model = $model::find($rowId);
+		return strtoupper($model->title);
 	}
 
 	
