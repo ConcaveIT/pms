@@ -17,8 +17,8 @@
                         <div class="form-group row  mb-1">
                             <label for="ModuleTitle" class="col-sm-3 col-form-label">Table Title<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control @error('table_title') is-invalid @enderror" >
-                                @error('table_title')
+                                <input type="text" name="table_name" class="form-control @error('table_name') is-invalid @enderror" required >
+                                @error('table_name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -57,6 +57,7 @@
                                         <td> 
                                             <select class="form-control" name="table[0][data_type]">
                                                 <option value='text'>text</option>
+                                                <option value='id'>id</option>
                                                 <option value='bigInteger'>bigInteger</option>
                                                 <option value='binary'>binary</option>
                                                 <option value='boolean'>boolean</option>
@@ -66,7 +67,6 @@
                                                 <option value='double'>double</option>
                                                 <option value='enum'>enum</option>
                                                 <option value='float'>float</option>
-                                                <option value='id'>id</option>
                                                 <option value='increments'>increments</option>
                                                 <option value='integer'>integer</option>
                                                 <option value='json'>json</option>
@@ -77,7 +77,6 @@
                                                 <option value='nullableTimestamps'>nullableTimestamps</option>
                                                 <option value='smallIncrements'>smallIncrements</option>
                                                 <option value='smallInteger'>smallInteger</option>
-                                                <option value='softDeletes'>softDeletes</option>
                                                 <option value='string'>string</option>
                                                 <option value='time'>time</option>
                                                 <option value='timestamp'>timestamp</option>

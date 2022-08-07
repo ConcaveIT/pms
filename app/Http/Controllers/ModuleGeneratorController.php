@@ -7,6 +7,7 @@ use App\Models\ModuleGenerator;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Schema;
 use Auth;
 
 class ModuleGeneratorController extends Controller
@@ -331,17 +332,95 @@ class ModuleGeneratorController extends Controller
         return view('core.module.create-migration'); 
     }
 
+
+
     public function generateMigration(Request $request){
-        var_dump($request->all());
+
+       $request->validate([
+            'table_name' => 'required',
+        ]);
+
+        $codes = [];
+        $tableClass = '';
+        $migrationSting = '';
+
+        $table_name =  $request->table_name;
+        
+        if(Schema::hasTable($table_name)){
+            return back()->with('error','Table already exists! Please try with another table name!');
+        }
+
+
+        $codes['table_name'] = $table_name;
+        $explodeTableName = explode('_',$table_name);
+        foreach($explodeTableName as $tbName){
+            $tableClass.= ucwords($tbName);
+        }
+
+        $codes['table_class'] = 'Create'.$tableClass.'Table';
+
+        
+        $softDelete = ($request->softdelete) ? true : false;
+
+        foreach($request->table as $key => $val){
+
+            if(isset($val['data_type']) && $val['data_type'] == 'id'){
+                $migrationSting.= '$table->id();';
+            }else{
+
+                if(isset($val['auto_increment'])){
+                    $migrationSting.= '$table->increments("'.$val['column_name'].'");';
+                }else{
+                    $part = '';
+
+                    if(isset($val['default_value'])){
+                        $part.= '->default("'.$val['default_value'].'")';
+                    }
+    
+                    if(!isset($val['not_null'])){
+                        $part.= '->nullable()';
+                    }
+
+                    if(isset($val['data_length'])){
+                        $migrationSting.= '$table->'.$val['data_type'].'("'.$val['column_name'].'",'.$val['data_length'].')'.$part.';';
+                    }else{
+                        $migrationSting.= '$table->'.$val['data_type'].'("'.$val['column_name'].'")'.$part.';';
+                    }
+
+                }
+
+            }
+        }
+
+
+        if($softDelete){
+            $migrationSting.= '$table->softDeletes();';
+        }
+
+        $migrationSting.= '$table->timestamps();';
+        $codes['migration'] = $migrationSting;
+        $template = base_path().'/resources/views/core/template/native/';
+        $migration = file_get_contents(  $template.'migration.tpl' );
+        $build_migration = \Helper::blend($migration,$codes);   
+        $migrationPath = database_path('migrations');
+        $migrationFile = $migrationPath.'/'.date('Y_m_d_his').'_create_'.$table_name.'_table.php';
+        
+        file_put_contents($migrationFile, $build_migration);
+
+        try {
+			\Artisan::call('migrate');
+            return back()->with('success','Table has been created successfully!');
+		}
+		catch(\Exception $e) {
+            File::delete($migrationFile);
+            return back()->with('error','Table could not created. Because of invalid migration format!');
+		}
+
+        
+
+        
+
     }
-
-    public function apiLogin(Request $request){
-        $email = $request->email;
-        $password = $request->password;
-
-        echo 'ddd'; exit;
-    }
-
 
 
 }
