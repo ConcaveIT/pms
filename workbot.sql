@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 04, 2022 at 01:42 PM
+-- Generation Time: Aug 07, 2022 at 01:33 PM
 -- Server version: 10.4.20-MariaDB
 -- PHP Version: 7.4.22
 
@@ -171,7 +171,13 @@ INSERT INTO `activity_log` (`id`, `log_name`, `description`, `subject_type`, `su
 (124, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 04:52:43', '2022-08-04 04:52:43'),
 (125, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 05:09:47', '2022-08-04 05:09:47'),
 (126, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 05:13:15', '2022-08-04 05:13:15'),
-(127, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 05:41:17', '2022-08-04 05:41:17');
+(127, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 05:41:17', '2022-08-04 05:41:17'),
+(128, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 05:44:10', '2022-08-04 05:44:10'),
+(129, 'default', 'Model data has been deleted', 'App\\Models\\ModuleGenerator', 10, 'App\\Models\\User', 2, '[]', '2022-08-04 05:45:25', '2022-08-04 05:45:25'),
+(130, 'default', 'Model data has been created', 'App\\Models\\ModuleGenerator', 1, 'App\\Models\\User', 2, '[]', '2022-08-07 00:03:48', '2022-08-07 00:03:48'),
+(131, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 1, 'App\\Models\\User', 2, '[]', '2022-08-07 00:04:03', '2022-08-07 00:04:03'),
+(132, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 1, 'App\\Models\\User', 2, '[]', '2022-08-07 00:04:21', '2022-08-07 00:04:21'),
+(133, 'default', 'Model data has been updated', 'App\\Models\\ModuleGenerator', 1, 'App\\Models\\User', 2, '[]', '2022-08-07 05:09:11', '2022-08-07 05:09:11');
 
 -- --------------------------------------------------------
 
@@ -423,10 +429,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (17, '2022_07_27_194619_create_expenses_table', 1),
 (18, '2022_07_27_194648_create_leave_requests_table', 1),
 (19, '2022_07_28_052251_create_salary_elements_table', 1),
-(20, '2022_07_28_062331_create_module_generators_table', 2),
 (21, '2022_07_28_203205_create_activity_log_table', 3),
 (22, '2021_11_10_020553_create_concave_media_table', 4),
-(23, '2022_08_01_080131_create_statuses_table', 4);
+(25, '2022_07_28_062331_create_module_generators_table', 5),
+(26, '2022_08_01_080131_create_statuses_table', 5);
 
 -- --------------------------------------------------------
 
@@ -474,7 +480,8 @@ CREATE TABLE `module_generators` (
   `database_table_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `grid_table_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `configuration` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `permission_title` varchar(256) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `permission_title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `softdelete` int(11) NOT NULL DEFAULT 1,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -484,8 +491,8 @@ CREATE TABLE `module_generators` (
 -- Dumping data for table `module_generators`
 --
 
-INSERT INTO `module_generators` (`id`, `module_title`, `module_description`, `controller_name`, `database_table_name`, `grid_table_type`, `configuration`, `permission_title`, `status`, `created_at`, `updated_at`) VALUES
-(10, 'Project', NULL, 'Project', 'projects', 'native', '{\"table_configuration\":{\"id\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Id\",\"format\":\"default\",\"format_value\":null},\"title\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Title\",\"format\":\"function\",\"format_value\":\"getTitleUppercase\",\"listview\":\"on\"},\"client_ids\":{\"relation_database\":\"clients\",\"relation_database_key\":\"id\",\"relation_database_display1\":\"name\",\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Clients\",\"format\":\"select\",\"format_value\":null,\"listview\":\"on\"},\"member_ids\":{\"relation_database\":\"members\",\"relation_database_key\":\"id\",\"relation_database_display1\":\"name\",\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Members\",\"format\":\"default\",\"format_value\":null,\"listview\":\"on\"},\"project_manager_id\":{\"relation_database\":\"members\",\"relation_database_key\":\"id\",\"relation_database_display1\":\"name\",\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Project\",\"format\":\"default\",\"format_value\":null,\"listview\":\"on\"},\"total_hour\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Total Hour\",\"format\":\"default\",\"format_value\":null,\"listview\":\"on\"},\"deadline\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Deadline\",\"format\":\"default\",\"format_value\":\"d M, h:ia\",\"listview\":\"on\"},\"total_worth\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Total Worth\",\"format\":\"default\",\"format_value\":null},\"srs\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"SRS\",\"format\":\"file\",\"format_value\":null,\"listview\":\"on\"},\"description\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Description\",\"format\":\"default\",\"format_value\":null},\"related_documents\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Related Documents\",\"format\":\"multipleimage\",\"format_value\":null,\"listview\":\"on\"},\"department_id\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Department Id\",\"format\":\"default\",\"format_value\":null},\"is_deleted\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Is Deleted\",\"format\":\"default\",\"format_value\":null},\"status\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Status\",\"format\":\"default\",\"format_value\":null,\"listview\":\"on\"},\"deleted_at\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Deleted At\",\"format\":\"default\",\"format_value\":null},\"created_at\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Created At\",\"format\":\"default\",\"format_value\":null},\"updated_at\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Updated At\",\"format\":\"default\",\"format_value\":null}},\"form_configuration\":{\"id\":{\"field_key\":\"id\",\"field_name\":\"Id\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"title\":{\"field_key\":\"title\",\"field_name\":\"Title\",\"type\":\"text\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"client_ids\":{\"field_key\":\"client_ids\",\"field_name\":\"Client ids\",\"type\":\"select\",\"data_type\":\"database\",\"relation_database\":\"clients\",\"relation_database_key\":\"id\",\"relation_database_display1\":\"name\",\"relation_database_display2\":\"company_name\",\"relation_database_display3\":\"designation\",\"allow_multiple\":\"on\",\"validation\":null},\"member_ids\":{\"field_key\":\"member_ids\",\"field_name\":\"Member ids\",\"type\":\"select\",\"data_type\":\"database\",\"relation_database\":\"members\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"project_manager_id\":{\"field_key\":\"project_manager_id\",\"field_name\":\"Project manager\",\"type\":\"select\",\"data_type\":\"database\",\"relation_database\":\"members\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"total_hour\":{\"field_key\":\"total_hour\",\"field_name\":\"Total hour\",\"type\":\"number\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"deadline\":{\"field_key\":\"deadline\",\"field_name\":\"Deadline\",\"type\":\"datetime\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"total_worth\":{\"field_key\":\"total_worth\",\"field_name\":\"Total worth\",\"type\":\"number\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"srs\":{\"field_key\":\"srs\",\"field_name\":\"Srs\",\"type\":\"image\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"description\":{\"field_key\":\"description\",\"field_name\":\"Description\",\"type\":\"textareawitheditor\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"related_documents\":{\"field_key\":\"related_documents\",\"field_name\":\"Related documents\",\"type\":\"multipleimages\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"department_id\":{\"field_key\":\"department_id\",\"field_name\":\"Department id\",\"type\":\"select\",\"data_type\":\"database\",\"relation_database\":\"departments\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"is_deleted\":{\"field_key\":\"is_deleted\",\"field_name\":\"Is deleted\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"status\":{\"field_key\":\"status\",\"field_name\":\"Status\",\"type\":\"select\",\"data_type\":\"database\",\"relation_database\":\"statuses\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"deleted_at\":{\"field_key\":\"deleted_at\",\"field_name\":\"Deleted at\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"created_at\":{\"field_key\":\"created_at\",\"field_name\":\"Created at\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"updated_at\":{\"field_key\":\"updated_at\",\"field_name\":\"Updated at\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null}}}', 'project', 1, '2022-08-03 23:40:11', '2022-08-04 05:41:17');
+INSERT INTO `module_generators` (`id`, `module_title`, `module_description`, `controller_name`, `database_table_name`, `grid_table_type`, `configuration`, `permission_title`, `softdelete`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Status', NULL, 'Status', 'statuses', 'native', '{\"table_configuration\":{\"id\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Id\",\"format\":\"default\",\"format_value\":null},\"title\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Title\",\"format\":\"default\",\"format_value\":null,\"listview\":\"on\"},\"status\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Status\",\"format\":\"default\",\"format_value\":null},\"created_at\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Created At\",\"format\":\"default\",\"format_value\":null},\"updated_at\":{\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"field_name\":\"Updated At\",\"format\":\"default\",\"format_value\":null}},\"form_configuration\":{\"id\":{\"field_key\":\"id\",\"field_name\":\"Id\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"title\":{\"field_key\":\"title\",\"field_name\":\"Title\",\"type\":\"text\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":\"required\"},\"status\":{\"field_key\":\"status\",\"field_name\":\"Status\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"created_at\":{\"field_key\":\"created_at\",\"field_name\":\"Created at\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null},\"updated_at\":{\"field_key\":\"updated_at\",\"field_name\":\"Updated at\",\"type\":\"primary\",\"relation_database_key\":null,\"relation_database_display1\":null,\"relation_database_display2\":null,\"relation_database_display3\":null,\"validation\":null}}}', 'status', 0, 1, '2022-08-07 00:03:48', '2022-08-07 05:09:11');
 
 -- --------------------------------------------------------
 
@@ -660,7 +667,8 @@ INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VAL
 (3, 'member', 'web', '2022-08-02 01:05:29', '2022-08-02 01:05:29'),
 (4, 'accountant', 'web', '2022-08-02 01:05:29', '2022-08-02 01:05:29'),
 (5, 'hrm', 'web', '2022-08-02 01:05:29', '2022-08-02 01:05:29'),
-(6, 'client', 'web', '2022-08-02 01:05:29', '2022-08-02 01:05:29');
+(6, 'client', 'web', '2022-08-02 01:05:29', '2022-08-02 01:05:29'),
+(7, 'api', 'web', '2022-08-07 00:07:49', '2022-08-07 00:07:49');
 
 -- --------------------------------------------------------
 
@@ -701,13 +709,19 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (21, 1),
 (22, 1),
 (29, 1),
+(29, 7),
 (30, 1),
+(30, 7),
 (31, 1),
+(31, 7),
 (32, 1),
+(32, 7),
 (33, 1),
 (33, 2),
+(33, 7),
 (34, 1),
 (34, 2),
+(34, 7),
 (35, 1),
 (36, 1),
 (37, 1),
@@ -780,8 +794,7 @@ CREATE TABLE `settings` (
 
 CREATE TABLE `statuses` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `title` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `deleted_at` timestamp NULL DEFAULT NULL,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -791,9 +804,9 @@ CREATE TABLE `statuses` (
 -- Dumping data for table `statuses`
 --
 
-INSERT INTO `statuses` (`id`, `title`, `deleted_at`, `status`, `created_at`, `updated_at`) VALUES
-(1, 'Active', NULL, 1, NULL, NULL),
-(3, 'Inactive', NULL, 2, NULL, NULL);
+INSERT INTO `statuses` (`id`, `title`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Active', 1, '2022-08-07 00:05:57', '2022-08-07 00:06:22'),
+(2, 'Inactive', 1, '2022-08-07 00:06:05', '2022-08-07 00:06:05');
 
 -- --------------------------------------------------------
 
@@ -859,7 +872,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `phone`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, 'concaveit', 'concaveit@gmail.com', '01711158729', NULL, '$2y$10$Es2lxu6M.RyOwJIGxg/hYuLuoQz57zyhT5Pei4pheHo5JVAl3Uyi6', NULL, '2022-07-30 04:08:11', '2022-07-30 04:08:11');
+(2, 'concaveit', 'concaveit@gmail.com', '01711158729', NULL, '$2y$10$Es2lxu6M.RyOwJIGxg/hYuLuoQz57zyhT5Pei4pheHo5JVAl3Uyi6', NULL, '2022-07-30 04:08:11', '2022-07-30 04:08:11'),
+(4, 'concaveit', 'api@gmail.com', '01758207025', NULL, '$2y$10$Es2lxu6M.RyOwJIGxg/hYuLuoQz57zyhT5Pei4pheHo5JVAl3Uyi6', NULL, '2022-07-30 04:08:11', '2022-07-30 04:08:11');
 
 --
 -- Indexes for dumped tables
@@ -1054,7 +1068,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `activity_log`
 --
 ALTER TABLE `activity_log`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `clients`
@@ -1114,13 +1128,13 @@ ALTER TABLE `member_experiences`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `module_generators`
 --
 ALTER TABLE `module_generators`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `payments`
@@ -1150,7 +1164,7 @@ ALTER TABLE `projects`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `salaries`
@@ -1192,7 +1206,7 @@ ALTER TABLE `task_reports`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
