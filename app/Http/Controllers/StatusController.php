@@ -35,7 +35,7 @@ class StatusController extends Controller {
 		];
 
 		return view( $this->module.'.index',compact('results','tableGrid','info'));
-	} //end index
+	}
 	
 
 	function create() {
@@ -50,7 +50,7 @@ class StatusController extends Controller {
 		];
 
 		return view( $this->module.'.form',compact('info'));
-	} //end create
+	}
 
 
 	function edit( Request $request , $id ){
@@ -119,7 +119,7 @@ class StatusController extends Controller {
 			return back()->with('error', 'Something went wrong. Please try again later!');
         }
 		
-	}	//End Store
+	}
 
 
 
@@ -174,7 +174,7 @@ class StatusController extends Controller {
 			return back()->with('error', 'Something went wrong. Please try again later!');
         }
 		
-	}	//End Update
+	}
 
 
 
@@ -193,7 +193,7 @@ class StatusController extends Controller {
 			return back()->with('error', 'Unable to delete this record!');
 		}
 
-	}	//end destroy
+	}
 	
 	
 }

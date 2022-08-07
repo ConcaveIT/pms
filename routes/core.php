@@ -17,6 +17,8 @@
     
     Route::get('/create-migration',[App\Http\Controllers\ModuleGeneratorController::class,'createMigration'])->name('module.create.migration');
     Route::post('/generate-migration',[App\Http\Controllers\ModuleGeneratorController::class,'generateMigration'])->name('module.generate.migration');
+
+    Route::post('/api-login',[App\Http\Controllers\ModuleGeneratorController::class,'apiLogin'])->name('module.api.login');
     
     
 

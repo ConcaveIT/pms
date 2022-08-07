@@ -22,6 +22,11 @@ Route::group(['prefix' => 'core','middleware' => 'auth'], function () {
 Route::group(['prefix' => 'module','middleware' => 'auth'], function () {
 	include('module.php');
 });
+
+Route::group(['prefix' => 'service'], function () {
+	include('services.php');
+});
+
  
 
 Auth::routes();

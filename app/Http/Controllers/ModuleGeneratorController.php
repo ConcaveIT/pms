@@ -335,6 +335,13 @@ class ModuleGeneratorController extends Controller
         var_dump($request->all());
     }
 
+    public function apiLogin(Request $request){
+        $email = $request->email;
+        $password = $request->password;
+
+        echo 'ddd'; exit;
+    }
+
 
 
 }

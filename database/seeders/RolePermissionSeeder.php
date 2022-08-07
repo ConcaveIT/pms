@@ -22,6 +22,7 @@ class RolePermissionSeeder extends Seeder
         Role::findOrCreate('accountant','web');
         Role::findOrCreate('hrm','web');
         Role::findOrCreate('client','web');
+        Role::findOrCreate('api','web');
 
         //Permission list Array
 
