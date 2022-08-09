@@ -27,7 +27,7 @@
                                     <th>Database</th> 
                                     <th>Created Date</th> 
                                     <th>Status</th>   
-                                    <th>Actions</th>  
+                                    <th class="text-center" >Actions</th>  
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,8 +46,9 @@
                                         @endif
                                     </td>
                                 
-                                    <td>
+                                    <td class="text-center">
                                         <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                            <a href="{{route( strtolower($item->controller_name).'.index')}}" class="btn btn-outline-secondary"><i class="icofont-eye text-warning"></i></a>
                                             <a href="{{route('module.edit',$item->id)}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
                                             <a href="{{route('module.destroy',$item->id )}}" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>
                                         </div>

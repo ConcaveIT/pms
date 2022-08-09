@@ -99,6 +99,12 @@
                                 </div>
                             </div>
                             <div class="form-group row  mb-1">
+                                <label for="ModuleTitle" class="col-sm-3 col-form-label">Permission Title</label>
+                                <div class="col-sm-9">
+                                    <input type="text"  class="form-control" value="{{$moduleData->permission_title}}" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row  mb-1">
                                 <label for="ModuleTitle" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
                                     <input  type="checkbox" id="flexSwitchCheckDefault" {{ $moduleData->status == 1 ? 'checked' : '' }}>
