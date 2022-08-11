@@ -52,6 +52,12 @@ class ModuleGeneratorController extends Controller
     public function store(Request $request)
     {
 
+        $reservedTitles = ['user','modulegenerator'];
+
+        if(in_array(strtolower($request->controller_name),$reservedTitles )){
+            return back()->with('error','Invalid controller name. Reserved controller names are '.implode(',',$reservedTitles));
+        }
+
         $validated = $request->validate([
             'module_title' => 'required',
             'controller_name' => 'required | unique:module_generators',
@@ -65,10 +71,10 @@ class ModuleGeneratorController extends Controller
 
         $model->module_title = $request->module_title;
         $model->module_description = $request->module_description;
-        $model->controller_name = trim($request->controller_name);
+        $model->controller_name = preg_replace('/\s+/', '', trim($request->controller_name));
         $model->database_table_name = $request->database_table_name;
         $model->grid_table_type = $request->grid_table_type;
-        $model->permission_title = strtolower(trim($request->permission_title));
+        $model->permission_title = preg_replace('/\s+/', '', trim($request->permission_title));
         $model->configuration = '';
         $model->status = $request->status;
         $model->softdelete = ($request->softdelete) ? 1 : 0;
@@ -146,6 +152,7 @@ class ModuleGeneratorController extends Controller
         $model = $moduleGenerator->find($id);
         $model->module_title = $request->module_title;
         $model->module_description = $request->module_description;
+        $model->softdelete = ($request->softdelete) ? 1 : 0;
 
         $model->configuration =  json_encode([
             'table_configuration' => $request->table_configuration,

@@ -77,9 +77,9 @@
                         </div>
 
                         <div class="form-group row  mb-1">
-                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Soft Delete</label>
+                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Soft Delete?</label>
                             <div class="col-sm-9">
-                             <input type="text"  class="form-control" value="@if($moduleData->softdelete) Available @else Not Available @endif" disabled>
+                             <input type="checkbox" name="softdelete" class="col-form-label" @if($moduleData->softdelete) checked @endif> YES
                                
                             </div>
                         </div>
@@ -175,11 +175,11 @@
                                         
                                     <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="{{'#linkModal_'.$item}}" ><i class="fa fa-link float-end" aria-hidden="true"></i></a>
                                      <!-- Link Modal -->
-                                    <div class="modal fade" id="{{'linkModal_'.$item}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="{{'linkModal_'.$item}}" tabindex="-1" aria-labelledby="{{'linkModalLabel_'.$item}}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title " id="exampleModalLabel">Link <b class="text-primary">{{$item}}</b>to another table</h5>
+                                                    <h5 class="modal-title " id="{{'linkModalLabel_'.$item}}">Link <b class="text-primary">{{$item}}</b>to another table</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -367,11 +367,11 @@
                                     </select>
 
                                     <!-- Modal -->
-                                    <div class="modal fade" id="{{'optionModal_'.$item}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="{{'optionModal_'.$item}}" tabindex="-1" aria-labelledby="{{'optionModalLabel_'.$item}}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title " id="exampleModalLabel">Choose option for <b class="text-primary">{{ucwords($item)}}</b></h5>
+                                                    <h5 class="modal-title " id="{{'optionModalLabel_'.$item}}">Choose option for <b class="text-primary">{{ucwords($item)}}</b></h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
@@ -689,14 +689,15 @@
     });
 
     jQuery(document).on('change','.database_table_trigger',function(){
+        var that = jQuery(this);
         jQuery.ajax({
             url: "/core/database-columns/"+jQuery(this).find('option:selected').val(),
             cache: false,
             success: function(response){
-                $(".relationKey").html(response);
-                $(".display1").html(response);
-                $(".display2").html(response);
-                $(".display3").html(response);
+                that.closest('.section_database_data').find(".relationKey").html(response);
+                that.closest('.section_database_data').find(".display1").html(response);
+                that.closest('.section_database_data').find(".display2").html(response);
+                that.closest('.section_database_data').find(".display3").html(response);
             }
         });
     });

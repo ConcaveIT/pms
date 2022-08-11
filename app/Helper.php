@@ -35,8 +35,9 @@ class Helper{
 		$tableHeaders = [];
 		$moduleConfig = ModuleGenerator::where('controller_name',$controller)->first();
 		if($moduleConfig){
-			$tableGrid = json_decode($moduleConfig->configuration)->table_configuration;
+			$tableGrid = json_decode($moduleConfig->configuration);
 			if($tableGrid){
+				$tableGrid = $tableGrid->table_configuration;
 				foreach ($tableGrid as $tableItemKey => $tableItem){
 					if($tableItem && isset($tableItem->listview)){
 						$tableHeaders[] = [
@@ -148,11 +149,12 @@ class Helper{
 		$selectOptionData = [];
 		$form_configuration = isset(json_decode($config)->form_configuration) ? json_decode($config)->form_configuration : [];
 		if($form_configuration){
-
 			foreach($form_configuration as $conf){
 				$selectOptionData['allow_multiple'] = isset($conf->allow_multiple) ? true : false ;
 				$html .= \Helper::buildInputs($conf->type,$conf->field_key,$conf->validation,$conf->field_name,$selectOptionData);
 			}
+		}else{
+			$html .= '<h6 class="text-center text-danger text-uppercase p-5 mt-5">Please configure and build module form and table to use this module!</h6>';
 		}
 		return $html;
 	}

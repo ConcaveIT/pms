@@ -36,11 +36,13 @@
 			@if (session()->has('success'))
 				Toast.fire({
 					icon: 'success',
+					timer: 7000,
 					title: "{{ session()->get('success') }}"
 				});
 			@elseif(session()->has('error'))
 				Toast.fire({
 					icon: 'error',
+					timer: 7000,
 					title: "{{ session()->get('error') }}"
 				});
 			@endif
