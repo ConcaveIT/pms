@@ -131,6 +131,93 @@ class Helper{
 	}
 
 
+
+	public static function formatDataTableItem($controller){
+
+		$tableGrid = Helper::getTableHeader($controller);
+		$result = '';
+		$rawColumns = ['action'];
+		
+		foreach ($tableGrid as $tableItem){
+
+			$formatType = $tableItem['field_format'];
+			$field_format_value = $tableItem['field_format_value'];
+			$databaseRelation = $tableItem['database_relation'];
+			$field_key = $tableItem['field_key'];
+
+			if($formatType == 'datetime'){
+				$result .= '
+				->editColumn("'.$field_key.'", function($row){
+					return date("'.$field_format_value.'",strtotime($row->'.$field_key.'));
+				})';
+				$rawColumns [] = $field_key;
+			}elseif($formatType == 'link'){
+				return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
+			}elseif($formatType == 'image'){
+				
+				$result .= '
+				->editColumn("'.$field_key.'", function($row){
+					return \'<a  target="_blank"  href="'.$field_format_value.'/\'.$row->'.$field_key.'.\'" >  <img width="65" src="'.$field_format_value.'/\'.$row->'.$field_key.'.\'" ></a> \';
+				})';
+
+				$rawColumns [] = $field_key;
+
+			}elseif($formatType == 'multipleimage'){
+				$images = explode(',',$value);
+				$html = '';
+				foreach($images as $image){
+					if($image){
+						$html.= '<a  target="_blank" href="'.$field_format_value.'/'.$image.'" ><img style="width:65px;margin-right:5px;" src="'.$field_format_value.'/'.$image.'" alt="Table Image" ></a>';
+					}
+					
+				}
+				return $html;
+			}elseif($formatType == 'file'){
+				return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" ><img style="width:40px;margin-right:5px;" src="/assets/images/file.png"></a>';
+			}elseif($formatType == 'multiplefile'){
+				$files = explode(',',$value);
+				$html = '';
+				foreach($files as $file){
+					if($image){
+						$html.=  '<a  target="_blank" href="'.$field_format_value.'/'.$file.'" ><img style="width:40px;margin-right:5px;" src="/assets/images/file.png"></a>';
+					}
+				}
+				return $html;
+			}elseif($formatType == 'select'){
+				if($databaseRelation['relation_database'] && $databaseRelation['relation_database_key'] ){
+					$display = '';
+					$displayArray = [];
+					$relationDataBaseName = $databaseRelation['relation_database'];
+					$relationDataBaseKey = $databaseRelation['relation_database_key'];
+					$display1 = $databaseRelation['relation_database_display1'];
+					$display2= $databaseRelation['relation_database_display2'];
+					$display3= $databaseRelation['relation_database_display3'];
+	
+					$valueArray = explode(',',$value);
+	
+					$databaseValues = \DB::table($relationDataBaseName)->whereIn($relationDataBaseKey,$valueArray)->get();
+					foreach($databaseValues as $opVal){
+						if($display1) $display = $opVal->{$display1};
+						if($display2) $display .= '--'.$opVal->{$display2};
+						if($display3) $display .= '--'.$opVal->{$display3};
+						$displayArray[] = $display;
+					}
+	
+					return implode(',',$displayArray);
+				}
+			}
+			
+		}
+
+		$rawColumns = implode("','",$rawColumns);
+		$result .= "
+		
+		->rawColumns(['".$rawColumns."'])";
+		return $result;
+	}
+
+
+
 	public static function getUppercase(
 		$modelString, //Model Name
 		$rowId, //Field row ID

@@ -35,3 +35,9 @@ Route::get('/project-dashboard', [App\Http\Controllers\DashboardController::clas
 
 //Activity Log
 Route::get('/activity-log', [App\Http\Controllers\LogController::class, 'getLog'] )->name('activity.log');
+
+
+Route::get('/get-list', [App\Http\Controllers\PaymentsController::class, 'getList'] )->name('getList.list');
+
+
+

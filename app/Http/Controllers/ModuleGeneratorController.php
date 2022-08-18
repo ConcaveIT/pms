@@ -147,11 +147,13 @@ class ModuleGeneratorController extends Controller
             'module_title' => 'required',
             'form_configuration' => 'required',
             'table_configuration' => 'required',
+            'grid_table_type' => 'required',
         ]);
 
         $model = $moduleGenerator->find($id);
         $model->module_title = $request->module_title;
         $model->module_description = $request->module_description;
+        $model->grid_table_type = $request->grid_table_type;
         $model->softdelete = ($request->softdelete) ? 1 : 0;
 
         $model->configuration =  json_encode([
@@ -261,12 +263,13 @@ class ModuleGeneratorController extends Controller
         $codes['form_html'] = \Helper::generateForm($module->configuration);
         $codes['script_html'] = \Helper::generateScript($module->configuration);
 
-        $mType = ( $module->grid_table_type == 'native' ? 'native' :  $row->grid_table_type);
+        $mType = ( $module->grid_table_type == 'native' ? 'native' :  $module->grid_table_type);
+
+            if( $mType == 'datatable')  $codes['datatable_cols'] = \Helper::formatDataTableItem(ucwords($class));
 
             if(is_dir( base_path().'/resources/views/core/template/'.$mType )){
-                 
                  require_once( base_path().'/resources/views/core/template/'.$mType.'/config/config.php');
-            } else {
+            }else {
                 if($request->ajax() == true && \Auth::check() == true){
                     return response()->json(array('status'=>'success','message'=>'Template is Not Exists')); 
                 } else {

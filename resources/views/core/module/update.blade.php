@@ -69,12 +69,24 @@
                         </div>
 
 
-                        <div class="form-group row  mb-1">
-                            <label for="ModuleTitle" class="col-sm-3 col-form-label">Grid / Table Type</label>
+                        <div class="form-group row mb-1">
+                            <label class="form-label col-sm-3">Grid/Table Type<span class="text-danger">*</span></label>
                             <div class="col-sm-9">
-                                <input type="text"  class="form-control" value="{{$moduleData->grid_table_type}}" disabled>
+                                <select name="grid_table_type" class="form-control @error('grid_table_type') is-invalid @enderror" required>
+                                    <option value="native" @if($moduleData->grid_table_type == 'native') selected @endif>Laravel Native</option>
+                                    <option value="datatable" @if($moduleData->grid_table_type == 'datatable') selected @endif >Datatable</option>
+                                </select>
+        
+                                @error('grid_table_type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
+
                         </div>
+
+                        
 
                         <div class="form-group row  mb-1">
                             <label for="ModuleTitle" class="col-sm-3 col-form-label">Soft Delete?</label>

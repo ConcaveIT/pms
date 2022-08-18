@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers;
 
-use App\Models\{controller};
+use App\Models\Payments;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
@@ -8,8 +8,8 @@ use Yajra\DataTables\DataTables;
 use Validator, Input, Redirect, Auth; 
 
 
-class {controller}Controller extends Controller {
-	public $module = '{class}';
+class PaymentsController extends Controller {
+	public $module = 'payments';
 	public $per_page	= '20';
 
 	public function __construct(){
@@ -22,16 +22,16 @@ class {controller}Controller extends Controller {
 
 	public function index( Request $request ){
 	
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.view')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$tableGrid = \Helper::getTableHeader('{controller}');
-		$results = {controller}::all();
+		$tableGrid = \Helper::getTableHeader('Payments');
+		$results = Payments::all();
 		
 		$info = [
 			'module_name' => ucwords($this->module),
-			'create_button' => '{controller}',
+			'create_button' => 'Payments',
 			'module_route' => $this->module
 		];
 
@@ -46,15 +46,25 @@ class {controller}Controller extends Controller {
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$tableGrid = \Helper::getTableHeader('{controller}');
+		$tableGrid = \Helper::getTableHeader('Payments');
 
 
-		$data = {controller}::all();
+		$data = Payments::all();
 
 	
 		return Datatables::of($data)->addIndexColumn()
 
-		{datatable_cols}
+		
+				
+				->editColumn("project_id", function($row){
+					return '<a  target="_blank"  href="/'.$row->project_id.'" >  <img width="65" src="/'.$row->project_id.'" ></a> ';
+				})
+				
+				->editColumn("payment_date", function($row){
+					return date("y-m-d h:ia",strtotime($row->payment_date));
+				})
+		
+		->rawColumns(['action','project_id','payment_date'])
 
 		->addColumn('action', function($row){
 			$btn = '';
@@ -71,13 +81,13 @@ class {controller}Controller extends Controller {
 
 
 	function create() {
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.create')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.create')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
 		$info = [
 			'module_name' => ucwords($this->module),
-			'create_button' => '{controller}',
+			'create_button' => 'Payments',
 			'module_route' => $this->module
 		];
 
@@ -87,17 +97,17 @@ class {controller}Controller extends Controller {
 
 	function edit( Request $request , $id ){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.update')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.update')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
-		$data =  {controller}::find($id);
+		$data =  Payments::find($id);
 		return view($this->module.'.form',compact('data'));
 	}
 
 
 	function store(Request $request){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.create')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.create')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
@@ -125,7 +135,7 @@ class {controller}Controller extends Controller {
 
 		$request->validate($validationArray);
 
-		$model = new {controller}();
+		$model = new Payments();
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
@@ -150,7 +160,7 @@ class {controller}Controller extends Controller {
 
 	function update(Request $request,$id){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.create')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.create')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
@@ -178,7 +188,7 @@ class {controller}Controller extends Controller {
 
 		$request->validate($validationArray);
 
-		$model = {controller}::find($id);
+		$model = Payments::find($id);
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
@@ -205,11 +215,11 @@ class {controller}Controller extends Controller {
 
 	public function destroy($id){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.delete')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.delete')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$result = {controller}::find($id);
+		$result = Payments::find($id);
 		$update = $result->delete();
 		if($update){
 			return back()->with('success', 'Record has been successfully deleted!');

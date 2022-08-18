@@ -1,5 +1,5 @@
 <?php
-        $template = base_path().'/resources/views/core/template/native/';
+        $template = base_path().'/resources/views/core/template/datatable/';
         $controller = file_get_contents(  $template.'controller.tpl' );
         $controller_api = file_get_contents(  $template.'controller_api.tpl' );
         $grid = file_get_contents(  $template.'grid.tpl' );               

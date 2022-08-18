@@ -1,15 +1,15 @@
 <?php namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\{controller};
+use App\Models\Payments;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
 use Validator, Input, Redirect, Auth; 
 
 
-class {controller}Controller extends Controller {
-	public $module = '{class}';
+class PaymentsController extends Controller {
+	public $module = 'payments';
 	public $per_page	= '20';
 
 	public function __construct(){
@@ -22,22 +22,22 @@ class {controller}Controller extends Controller {
 
 	public function index( Request $request ){
 	
-		if(!$this->role->hasPermissionTo('{permission_title}.view')){
+		if(!$this->role->hasPermissionTo('payments.view')){
 			return response()->json("You do not have enough privileges to perform this action!", 400);
         }
 
-		$tableGrid = \Helper::getTableHeader('{controller}');
-		$results = {controller}::paginate(30);
+		$tableGrid = \Helper::getTableHeader('Payments');
+		$results = Payments::paginate(30);
 		return response()->json($results, 200);
 	
 	}
 	
 
 	function show( Request $request , $id ) {
-		if(!$this->role->hasPermissionTo('{permission_title}.view')){
+		if(!$this->role->hasPermissionTo('payments.view')){
 			return response()->json("You do not have enough privileges to perform this action!", 400);
         }
-		$result = {controller}::find($id);
+		$result = Payments::find($id);
 		return response()->json($result, 200);
 	}
 
@@ -45,7 +45,7 @@ class {controller}Controller extends Controller {
 
 	function store(Request $request){
 
-		if(!$this->role->hasPermissionTo('{permission_title}.create')){
+		if(!$this->role->hasPermissionTo('payments.create')){
 			return response()->json("You do not have enough privileges to perform this action!", 400);
         }
 
@@ -77,7 +77,7 @@ class {controller}Controller extends Controller {
         }
 
 
-		$model = new {controller}();
+		$model = new Payments();
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
@@ -107,7 +107,7 @@ class {controller}Controller extends Controller {
 
 	function update(Request $request,$id){
 
-		if(!$this->role->hasPermissionTo('{permission_title}.update')){
+		if(!$this->role->hasPermissionTo('payments.update')){
 			return response()->json("You do not have enough privileges to perform this action!", 400);
         }
 
@@ -139,7 +139,7 @@ class {controller}Controller extends Controller {
         }
 
 
-		$model = {controller}::find($id);
+		$model = Payments::find($id);
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
@@ -166,11 +166,11 @@ class {controller}Controller extends Controller {
 
 	public function destroy($id){
 
-		if(!$this->role->hasPermissionTo('{permission_title}.delete')){
+		if(!$this->role->hasPermissionTo('payments.delete')){
 			return response()->json("You do not have enough privileges to perform this action!", 400);
         }
 
-		$result = {controller}::find($id);
+		$result = Payments::find($id);
 		$update = $result->delete();
 
 		if($update) {
