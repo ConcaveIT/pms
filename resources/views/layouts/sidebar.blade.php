@@ -24,6 +24,44 @@
                     </ul>
                 </li>
 
+                 @foreach(App\Models\Sidemenu::where('parent_id','0')->where('position','sidebar')->orderBy('ordering','asc')->get() as $sidemenu)
+
+                    @if($sidemenu->module == 'separator')
+                        <li class="nav-small-cap"> <span> {{ $sidemenu->menu_name}} </span></li>  
+                    @else
+
+                        @if(count($sidemenu->submenues) > 0)
+                            <li class="collapsed">
+                                <span class="m-link">
+                                    <a  href="{{route( strtolower($sidemenu->module).'.index')}}">
+                                        <i class="{{ $sidemenu->menu_icons}}"></i> <span>{{ $sidemenu->menu_name}}</span>
+                                    </a>
+                                    <a data-bs-toggle="collapse" data-bs-target="#extra-Components"  href="javascript:void(0)">
+                                        <span class="arrow icofont-dotted-down ms-auto text-end fs-5"></span>
+                                    </a>
+                                 </span>
+                                
+
+                                <!-- Menu: Sub menu ul -->
+                                <ul class="sub-menu collapse" id="extra-Components">
+                                    @foreach($sidemenu->submenues as $sub)
+                                        @if($sub->module != 'separator')
+                                            <li><a class="ms-link" href="{{route( strtolower($sub->module).'.index')}}"> <span>{{ $sub->menu_name }}</span></a></li>
+                                        @endif
+
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @else
+                            @if($sidemenu->module != 'separator')
+                                <li>
+                                    <a class="m-link" href="{{route( strtolower($sidemenu->module).'.index')}}"><i class="{{ $sidemenu->menu_icons}}"></i> <span>{{ $sidemenu->menu_name }}</span></a>
+                                </li>
+                            @endif
+                        @endif
+                    @endif
+                @endforeach
+
 
                 <li class="collapsed"><a class="m-link"  href="{{route('module.index')}}"><i class="icofont-users-alt-5"></i> <span>Modules</span></a></li>
                 <li class="collapsed"><a class="m-link"  href="{{route('activity.log')}}"><i class="icofont-users-alt-5"></i> <span>Activity Log</span></a></li>

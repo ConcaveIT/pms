@@ -13,6 +13,23 @@
                                     </div>
                                 </li>
                             </ul>
+
+                            <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
+                                <a class="nav-link dropdown-toggle pulse avatar-list avatar-list-stacked px-3" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
+                                    <span class="avatar rounded-circle text-center pointer"><i class="icofont-ui-add"></i></span>
+                                </a>
+                                <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 mt-3">
+                                    <div class="card border-0 w280">
+                                        <div class="list-group m-2 ">
+
+                                            <a href="{{route('module.index')}}" class="list-group-item list-group-item-action border-0 "><i class="icofont-tasks fs-5 me-3"></i>Module Generator</a>
+
+                                            <a href="{{route('sidemenu.create')}}" class="list-group-item list-group-item-action border-0 "><i class="icofont-navigation-menu fs-6 me-3"></i>Manage Navigation</a>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         
                             <div class="avatar-list avatar-list-stacked px-3">
                                 <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar2.jpg')}}" alt="">
