@@ -11,7 +11,7 @@
 
 
     Route::resource('/module',App\Http\Controllers\ModuleGeneratorController::class);
-    Route::post('/build-module/{id}',[App\Http\Controllers\ModuleGeneratorController::class,'buildModule'])->name('module.build');
+    Route::any('/build-module/{id}',[App\Http\Controllers\ModuleGeneratorController::class,'buildModule'])->name('module.build');
 
     Route::resource('/sidemenu',App\Http\Controllers\SideMenuController::class);
     Route::get('/sidemenu/edit/{any?}',[App\Http\Controllers\SideMenuController::class,'edit']);

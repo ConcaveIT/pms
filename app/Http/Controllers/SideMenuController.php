@@ -9,6 +9,8 @@ use DB;
 
 
 class SidemenuController extends Controller {
+
+	const MESSAGE = 'You don\'t have enough privileges to perform this action!';
 	
 	public function __construct(){
         $this->middleware(function($request,$next){
@@ -17,12 +19,15 @@ class SidemenuController extends Controller {
 			$this->model = new Sidemenu();
             return $next($request);
         });
+
     }
+
+	
 
 	public function index( Request $request ){
 	
 		if(is_null($this->user)){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+            return redirect()->route('dashboard')->with('error',self::MESSAGE);
         }
 
 		$results = Sidemenu::all();
@@ -32,7 +37,7 @@ class SidemenuController extends Controller {
 
 	function create( Request $request ,$id = null) {
 		if(is_null($this->user)){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+            return redirect()->route('dashboard')->with('error', self::MESSAGE);
         }
         $pos = (!is_null($request->input('pos')) ? $request->input('pos') : 'top' );
         $row = DB::table('core_menu')->where('menu_id',$id)->get();
@@ -73,14 +78,13 @@ class SidemenuController extends Controller {
 	function edit( Request $request , $id ){
 
 		if(is_null($this->user)){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+            return redirect()->route('dashboard')->with('error', self::MESSAGE);
         }
 
         $pos = (!is_null($request->input('pos')) ? $request->input('pos') : 'top' );
         $row = DB::table('core_menu')->where('menu_id',$id)->get();
 		if(count($row)>=1)
 		{
-			
 			$rows = $row[0];
 			$this->data['row'] =  (array) $rows;   
 		} else {
@@ -114,7 +118,7 @@ class SidemenuController extends Controller {
 	function show( Request $request , $id ) {
 
 		if(is_null($this->user) || !$this->role->hasPermissionTo('SideMenu.view')){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+            return redirect()->route('dashboard')->with('error', self::MESSAGE);
         }
 	}
 
@@ -153,16 +157,13 @@ class SidemenuController extends Controller {
 				$arr[$g->id] = (isset($_POST['groups'][$g->id]) ? "1" : "0" );	
 			}
 
-			// var_dump(json_encode($arr));
-			// exit();
-
 			$menu->access_data = json_encode($arr);		
 			$menu->allow_guest = $request->input('allow_guest');
 			
 			$menu->save();
 			
 			return redirect()->back()
-				->with('success', 'Data Has Been Save Successfull')->with('status','success');
+				->with('success', 'Menu item has been saved successfully!')->with('status','success');
 		} else {
 			return redirect()->back()
 				->with('error', 'The following errors occurred')->with('status','error')->withErrors($validator)->withInput();
@@ -220,18 +221,14 @@ class SidemenuController extends Controller {
 	public function destroy(Request $request,$id){
 
 		if(is_null($this->user) || !$this->role->hasPermissionTo('SideMenu.delete')){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+            return redirect()->route('dashboard')->with('error', self::MESSAGE);
         }
 
 		$result = DB::table('core_menu')->where('menu_id',$id)->delete();
-		// $update = $result->delete();
-
 		if($result){
-			// return back()->with('success', 'Record has been successfully deleted!');
 			return redirect('core/sidemenu/create/?pos='.$request->input('pos'))
 				->with('success', 'Successfully deleted row!')->with('status','success');
 		}else{
-			// return back()->with('error', 'Unable to delete this record!');
 			return redirect('core/sidemenu/create/?pos='.$request->input('pos'))
 				->with('error', 'Unable to delete this record!')->with('status','error');
 		}
@@ -242,8 +239,6 @@ class SidemenuController extends Controller {
 
 	public function getIcons(Request $request ,$id = null  )
 	{
-		// var_dump('test');
-		// exit();
 		return view('core.sidemenu.icons');
 	}
 	

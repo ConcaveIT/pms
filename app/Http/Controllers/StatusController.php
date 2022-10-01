@@ -111,13 +111,13 @@ class StatusController extends Controller {
 
 		}
 
-        $update = $model->save();
+		try{
+			$model->save();
+			return redirect()->route($this->module.'.index')->with('success', 'Module data has been successfully saved!');
+		}catch( \Exception $e){
+			return back()->with('error', 'Something went wrong. Please try again later! \n\n Error: '.$e->getMessage());
+		}
 
-		if($update) {
-            return redirect()->route($this->module.'.index')->with('success', 'Module data has been successfully saved!');
-        }else {
-			return back()->with('error', 'Something went wrong. Please try again later!');
-        }
 		
 	}
 

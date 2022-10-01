@@ -14,32 +14,7 @@
                                 </li>
                             </ul>
 
-                            <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
-                                <a class="nav-link dropdown-toggle pulse avatar-list avatar-list-stacked px-3" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <span class="avatar rounded-circle text-center pointer"><i class="icofont-ui-add"></i></span>
-                                </a>
-                                <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 mt-3">
-                                    <div class="card border-0 w280">
-                                        <div class="list-group m-2 ">
-
-                                            <a href="{{route('module.index')}}" class="list-group-item list-group-item-action border-0 "><i class="icofont-tasks fs-5 me-3"></i>Module Generator</a>
-
-                                            <a href="{{route('sidemenu.create')}}" class="list-group-item list-group-item-action border-0 "><i class="icofont-navigation-menu fs-6 me-3"></i>Manage Navigation</a>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         
-                            <div class="avatar-list avatar-list-stacked px-3">
-                                <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar2.jpg')}}" alt="">
-                                <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar1.jpg')}}" alt="">
-                                <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar3.jpg')}}" alt="">
-                                <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar4.jpg')}}" alt="">
-                                <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar7.jpg')}}" alt="">
-                                <img class="avatar rounded-circle" src="{{asset('assets/images/xs/avatar8.jpg')}}" alt="">
-                                <span class="avatar rounded-circle text-center pointer" data-bs-toggle="modal" data-bs-target="#addUser"><i class="icofont-ui-add"></i></span>
-                            </div>
                         </div>
                         <div class="dropdown notifications zindex-popover">
                             <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
@@ -120,8 +95,8 @@
                         </div>
                         <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                             <div class="u-info me-2">
-                                <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Dylan Hunter</span></p>
-                                <small>Admin Profile</small>
+                                <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">{{Auth::user()->name}}</span></p>
+                                <small>{{ ucwords(Auth::user()->getRoleNames()[0])  }}</small>
                             </div>
                             <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
                                 <img class="avatar lg rounded-circle img-thumbnail" src="{{asset('assets/images/profile_av.png')}}" alt="profile">
@@ -132,8 +107,8 @@
                                         <div class="d-flex py-1">
                                             <img class="avatar rounded-circle" src="{{asset('assets/images/profile_av.png')}}" alt="profile">
                                             <div class="flex-fill ms-3">
-                                                <p class="mb-0"><span class="font-weight-bold">Dylan Hunter</span></p>
-                                                <small class="">Dylan.hunter@gmail.com</small>
+                                                <p class="mb-0"><span class="font-weight-bold">{{Auth::user()->name}}</span></p>
+                                                <small class="">{{Auth::user()->email}}</small>
                                             </div>
                                         </div>
                                         

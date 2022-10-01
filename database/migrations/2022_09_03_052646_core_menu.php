@@ -27,7 +27,7 @@ class CoreMenu extends Migration
             $table->string('menu_icons')->nullable();
             $table->integer('active')->default(1);
             $table->text('access_data')->nullable();
-            $table->integer('allow_guest')->default(0);
+            $table->integer('allow_guest')->nullable()->default(0);
             $table->text('menu_lang')->nullable();
             $table->timestamps();
         });

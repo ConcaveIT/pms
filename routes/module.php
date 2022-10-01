@@ -3,23 +3,19 @@
 Route::resource('status',App\Http\Controllers\StatusController::class);
 // End Routes for Status
 
-// Start Routes for payments 
-Route::resource('payments',App\Http\Controllers\PaymentsController::class);
-// End Routes for payments
+// Start Routes for Department 
+Route::resource('department',App\Http\Controllers\DepartmentController::class);
+// End Routes for Department
 
-// Start Routes for Settings 
-Route::resource('settings',App\Http\Controllers\SettingsController::class);
-// End Routes for Settings
+// Start Routes for Member 
+Route::resource('member',App\Http\Controllers\MemberController::class);
+// End Routes for Member
 
-// Start Routes for Members 
-Route::resource('members',App\Http\Controllers\MembersController::class);
-// End Routes for Members
+// Start Routes for User Accounts 
+Route::resource('useraccounts',App\Http\Controllers\UserAccountsController::class);
+// End Routes for User Accounts
 
-// Start Routes for Salary 
-Route::resource('salary',App\Http\Controllers\SalaryController::class);
-// End Routes for Salary
-
-// Start Routes for Salary Elements 
-Route::resource('salaryelements',App\Http\Controllers\SalaryElementsController::class);
-// End Routes for Salary Elements
+// Start Routes for Task Report 
+Route::resource('taskreport',App\Http\Controllers\TaskReportController::class);
+// End Routes for Task Report
 ?>
