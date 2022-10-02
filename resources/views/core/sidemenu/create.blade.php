@@ -114,8 +114,7 @@
 								 		
 								
 										<select name='module' rows='5' id='module'  style="width:100%" 
-										class='select2	'    >
-
+										class="select2">
 											<option value=""> -- Select Module or Page -- </option>
 											<option value="separator" @if($row['module']== 'separator' ) selected="selected" @endif> Separator Menu </option>
 											<optgroup label="Module ">
@@ -196,7 +195,7 @@
 									<div class="col-md-8">
 										<div class="">
 											<input  type='checkbox' name='allow_guest'  class="filled-in" id="all"  
-					 						@if($row['allow_guest'] ==1 ) checked  @endif	
+					 						@if($row['allow_guest'] == 1 ) checked  @endif	
 										  	value="1"	/> <label for="all">  Yes  </lable>
 										</div>   
 									</div>
