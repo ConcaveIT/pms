@@ -55,11 +55,9 @@ class PaymentsController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
-				
 				->editColumn("project_id", function($row){
 					return '<a  target="_blank"  href="/'.$row->project_id.'" >  <img width="65" src="/'.$row->project_id.'" ></a> ';
 				})
-				
 				->editColumn("payment_date", function($row){
 					return date("y-m-d h:ia",strtotime($row->payment_date));
 				})
