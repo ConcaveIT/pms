@@ -31,6 +31,7 @@
 				<i style="font-size: 23px;line-height: 60px;" class="fa fa-wrench"></i>
 			  </div>
 			  <ul>
+				<li class="bg-info"><a class="text-white" title="Activity Log" href="{{route('activity.log')}}"><i class="fa fa-book"></i></a></li>
 				<li class="bg-success"><a class="text-white" title="Database Table Creator" href="{{route('module.create.migration')}}" ><i class="fa fa-database"></i></a></li>
 				<li class="bg-danger"><a class="text-white" title="Module Generator" href="{{route('module.index')}}" ><i class="fa fa-cogs"></i></a></li>
 				<li class="bg-warning"><a class="text-white" title="Manage Navigation" href="{{route('sidemenu.create')}}" ><i class="fa fa-bars"></i></a></li>

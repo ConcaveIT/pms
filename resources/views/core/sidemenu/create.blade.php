@@ -14,9 +14,10 @@
 
 			<div class="toolbar-nav">
 			    <div class="btn-group">
-			    	<a href="{{ url('core/sidemenu/create/?pos=top')}}" class="btn  btn-sm btn-primary"> <i class="fa fa-plus"></i> new  </a>
-			        <a href="{{ url('core/sidemenu/create/?pos=top')}}" class="btn  btn-sm btn-info"> <i class="fa fa-bars"></i> Top Menu  </a>
-			        <a href="{{  url('core/sidemenu/create/?pos=sidebar') }}" class="btn  btn-sm btn-success post_url"> <i class="fa fa-bars"></i> Admin Menu </a>
+					<a href="{{ url('core/sidemenu/create?type=bulk')}}" class="btn  btn-sm btn-danger text-white"> <i class="fa fa-plus"></i> Bulk Create </a>
+			    	<a href="{{ url('core/sidemenu/create/')}}" class="btn  btn-sm btn-primary"> <i class="fa fa-plus"></i> New Menu </a>
+			        <a href="{{ url('core/sidemenu/create/?pos=top')}}" class="btn  btn-sm btn-info  text-white"> <i class="fa fa-bars"></i> Top Menu  </a>
+			        <a href="{{  url('core/sidemenu/create/?pos=sidebar') }}" class="btn  btn-sm btn-success post_url  text-white"> <i class="fa fa-bars"></i> Admin Menu </a>
 			    </div>
 			</div>
 
@@ -25,7 +26,8 @@
 				<div class="row">	
 					<div class="col-md-5" >
 						<fieldset style="min-height: 400px;">
-							<legend> Menu navigation</legend>
+							<legend> Menu Navigation <small style="font-size: 11px;" class="text-danger"> Note! Menus only support 3 levels</small></legend>
+							
 							<div id="list2" class="dd myadmin-dd-empty " style="min-height:350px;">
 					            <ol class="dd-list">
 									@foreach ($results as $menu)
@@ -64,16 +66,13 @@
 					            </ol>
 					        </div>
 							{!! Form::open(array('url'=>'core/menu/saveorder', 'class'=>'form-horizontal','files' => true)) !!}	
-								<input type="hidden" name="reorder" id="reorder" value="" />
-									<div class="infobox infobox-danger ">
-										<p class="p-4 text-danger bg-secondary"> Note!, Menus only support 3 levels	</p>
-									</div>	
+								<input type="hidden" name="reorder" id="reorder" value="" />	
 								<button type="submit" class="btn btn-primary btn-sm ">Reorder Menu</button>	
 							{!! Form::close() !!}	
 						</fieldset>
 					</div>	
 
-					<div class="col-md-7 card" style="margin-top: 42px;">
+					<div class="col-md-7 card">
 						<fieldset style="min-height: 400px;" class="card-body">
 							<legend> Create / Update</legend>
 		 					{!! Form::open(array('url'=>'core/menu/save', 'class'=>'form-horizontal','files' => true  , 'parsley-validate'=>'','novalidate'=>' ')) !!}

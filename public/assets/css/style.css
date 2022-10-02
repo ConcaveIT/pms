@@ -19223,32 +19223,44 @@ box-shadow:1px 1px 0 rgba(255, 255, 255, 0.2) inset;
   #main-wrapper #floating-snap-btn-wrapper.fab-active li:hover {
     background-color: #f8e487;
   }
+
   #main-wrapper #floating-snap-btn-wrapper.fab-active.left li:nth-child(1) {
     top: 0%;
-    left: 300%;
+    left: 400%;
     transition-delay: 0s;
   }
   #main-wrapper #floating-snap-btn-wrapper.fab-active.left li:nth-child(2) {
     top: 0%;
-    left: 200%;
+    left: 300%;
     transition-delay: 0.2s;
   }
   #main-wrapper #floating-snap-btn-wrapper.fab-active.left li:nth-child(3) {
     top: 0%;
+    left: 200%;
+    transition-delay: 0.4s;
+  }
+  #main-wrapper #floating-snap-btn-wrapper.fab-active.left li:nth-child(4) {
+    top: 0%;
     left: 100%;
     transition-delay: 0.4s;
   }
+
   #main-wrapper #floating-snap-btn-wrapper.fab-active.right li:nth-child(1) {
     top: 0%;
-    left: -300%;
+    left: -400%;
     transition-delay: 0s;
   }
   #main-wrapper #floating-snap-btn-wrapper.fab-active.right li:nth-child(2) {
     top: 0%;
-    left: -200%;
+    left: -300%;
     transition-delay: 0.2s;
   }
   #main-wrapper #floating-snap-btn-wrapper.fab-active.right li:nth-child(3) {
+    top: 0%;
+    left: -200%;
+    transition-delay: 0.4s;
+  }
+  #main-wrapper #floating-snap-btn-wrapper.fab-active.right li:nth-child(4) {
     top: 0%;
     left: -100%;
     transition-delay: 0.4s;

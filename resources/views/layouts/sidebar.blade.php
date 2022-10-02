@@ -60,11 +60,7 @@
                             @endif
                         @endif
                     @endif
-                @endforeach
-
-
-                <li class="collapsed"><a class="m-link"  href="{{route('module.index')}}"><i class="icofont-users-alt-5"></i> <span>Modules</span></a></li>
-                <li class="collapsed"><a class="m-link"  href="{{route('activity.log')}}"><i class="icofont-users-alt-5"></i> <span>Activity Log</span></a></li>
+                @endforeach  
 
             </ul>
 
