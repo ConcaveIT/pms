@@ -74,7 +74,6 @@ class SidemenuController extends Controller {
 		return view('core.sidemenu.create', $this->data);
 	}
 
-
 	function edit( Request $request , $id ){
 
 		if(is_null($this->user)){
@@ -117,9 +116,53 @@ class SidemenuController extends Controller {
 
 	function show( Request $request , $id ) {
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('SideMenu.view')){
+		if(is_null($this->user)){
             return redirect()->route('dashboard')->with('error', self::MESSAGE);
         }
+	}
+
+
+
+	
+	function bulkCreate(){
+
+		$modules = ModuleGenerator::select('module_title','controller_name')->get();
+		$sidemenus = Sidemenu::select('module')->get();
+
+		$allModules = [];
+		$allMenus = [];
+
+		foreach($sidemenus as $sidemenu){
+			$allMenus[] = $sidemenu->module;
+		}
+
+		foreach($modules as $module){
+			if(!in_array(strtolower($module->controller_name),$allMenus)){
+				$allModules[strtolower($module->controller_name)] = $module->controller_name;
+			}
+		}
+
+		foreach($allModules as $key => $val){
+			$menu = new Sidemenu();
+			$menu->module = $key;	
+			$menu->url = null;	
+			$menu->menu_name = $val;	
+			$menu->menu_type = 'internal';	
+			$menu->position = 'sidebar';	
+			$menu->menu_icons = 'icofont-book';	
+			$menu->active = 1;	
+
+			$arr = array();
+			$groups = \DB::table('roles')->get();
+			foreach($groups as $g){
+				$arr[$g->id] = (isset($_POST['groups'][$g->id]) ? "1" : "0" );	
+			}
+
+			$menu->access_data = json_encode($arr);		
+			$menu->allow_guest = 0;
+			$menu->save();
+		}
+		return redirect('core/sidemenu/create?pos=sidebar')->with('success', 'Bulk menu has been deployed successfully!')->with('status','success');
 	}
 
 
@@ -220,7 +263,7 @@ class SidemenuController extends Controller {
 
 	public function destroy(Request $request,$id){
 
-		if(is_null($this->user) || !$this->role->hasPermissionTo('SideMenu.delete')){
+		if(is_null($this->user)){
             return redirect()->route('dashboard')->with('error', self::MESSAGE);
         }
 

@@ -18448,7 +18448,7 @@
  }
  .sidebar .menu-list .arrow {
      color: var(--white-color);
-     opacity: 0.3;
+     opacity: 1;
      font-size: 10px;
  }
  .sidebar .menu-list .divider {
@@ -19265,3 +19265,17 @@ box-shadow:1px 1px 0 rgba(255, 255, 255, 0.2) inset;
     left: -100%;
     transition-delay: 0.4s;
   }
+  .menu_active{
+    border-bottom: 3px solid #000 !important;
+  }
+
+  .menu-list li{
+    position: relative;
+  }
+
+  .menu-list li .m-link a[data-bs-toggle="collapse"]{
+    position: absolute;
+    right: 0;
+  }
+
+  

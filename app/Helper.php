@@ -144,6 +144,7 @@ class Helper{
 			$field_format_value = $tableItem['field_format_value'];
 			$databaseRelation = $tableItem['database_relation'];
 			$field_key = $tableItem['field_key'];
+			$value = '';
 
 			if($formatType == 'datetime'){
 				$result .= '
@@ -184,6 +185,7 @@ class Helper{
 				}
 				return $html;
 			}elseif($formatType == 'select'){
+				$html = '';
 				if($databaseRelation['relation_database'] && $databaseRelation['relation_database_key'] ){
 					$display = '';
 					$displayArray = [];
@@ -194,6 +196,8 @@ class Helper{
 					$display3= $databaseRelation['relation_database_display3'];
 	
 					$valueArray = explode(',',$value);
+
+					
 	
 					$databaseValues = \DB::table($relationDataBaseName)->whereIn($relationDataBaseKey,$valueArray)->get();
 					foreach($databaseValues as $opVal){
@@ -203,8 +207,15 @@ class Helper{
 						$displayArray[] = $display;
 					}
 	
-					return implode(',',$displayArray);
+					$html.= implode(',',$displayArray);
+					
 				}
+
+				$result .= '
+				->editColumn("'.$field_key.'", function($row){
+					return  $row->'.$field_key.';
+				})';
+
 			}
 			
 		}

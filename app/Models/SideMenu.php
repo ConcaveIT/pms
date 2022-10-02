@@ -5,7 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Sidemenu;
 
-class sidemenu extends Model  {
+class Sidemenu extends Model  {
 	
 	protected $table = 'core_menu';
 	protected $primaryKey 	= 'menu_id';

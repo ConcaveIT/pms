@@ -14,10 +14,10 @@
 
 			<div class="toolbar-nav">
 			    <div class="btn-group">
-					<a href="{{ url('core/sidemenu/create?type=bulk')}}" class="btn  btn-sm btn-danger text-white"> <i class="fa fa-plus"></i> Bulk Create </a>
-			    	<a href="{{ url('core/sidemenu/create/')}}" class="btn  btn-sm btn-primary"> <i class="fa fa-plus"></i> New Menu </a>
-			        <a href="{{ url('core/sidemenu/create/?pos=top')}}" class="btn  btn-sm btn-info  text-white"> <i class="fa fa-bars"></i> Top Menu  </a>
-			        <a href="{{  url('core/sidemenu/create/?pos=sidebar') }}" class="btn  btn-sm btn-success post_url  text-white"> <i class="fa fa-bars"></i> Admin Menu </a>
+					<a href="{{ url('core/sidemenu-bulk-create')}}" class="btn  btn-sm btn-danger text-white"> <i class="fa fa-plus"></i> Bulk Create </a>
+			    	<a href="{{ url('core/sidemenu/create')}}" class="btn  btn-sm btn-primary @if(is_null(request()->pos)) menu_active @endif"> <i class="fa fa-plus"></i> New Menu </a>
+			        <a href="{{ url('core/sidemenu/create/?pos=top')}}" class="btn  btn-sm btn-info text-white @if(request()->pos == 'top') menu_active @endif"> <i class="fa fa-bars"></i> Top Menu  </a>
+			        <a href="{{  url('core/sidemenu/create/?pos=sidebar') }}" class="btn  btn-sm btn-success post_url text-white @if(request()->pos == 'sidebar') menu_active @endif"> <i class="fa fa-bars"></i> Admin Menu </a>
 			    </div>
 			</div>
 

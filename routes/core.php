@@ -15,6 +15,7 @@
 
     Route::resource('/sidemenu',App\Http\Controllers\SideMenuController::class);
     Route::get('/sidemenu/edit/{any?}',[App\Http\Controllers\SideMenuController::class,'edit']);
+    Route::get('/sidemenu-bulk-create',[App\Http\Controllers\SideMenuController::class,'bulkCreate']);
     Route::get('/sidemenu/destroy/{any?}',[App\Http\Controllers\SideMenuController::class,'destroy']);
 
     Route::get('/menu/icon',[App\Http\Controllers\SideMenuController::class,'getIcons']);

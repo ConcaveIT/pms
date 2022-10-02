@@ -57,7 +57,7 @@ class RolePermissionSeeder extends Seeder
             'module.create',
             'module.update',
             'module.delete',
-
+            
             //Clean Cache
             'cache.view',
             'cache.create',
