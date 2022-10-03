@@ -36,14 +36,14 @@
                                     <a  href="{{route( strtolower($sidemenu->module).'.index')}}">
                                         <i class="{{ $sidemenu->menu_icons}}"></i> <span>{{ $sidemenu->menu_name}}</span>
                                     </a>
-                                    <a data-bs-toggle="collapse" data-bs-target="#extra-Components"  href="javascript:void(0)">
+                                    <a data-bs-toggle="collapse" data-bs-target="#menu_{{ $sidemenu->menu_id}}"  href="javascript:void(0)">
                                         <span class="arrow icofont-dotted-down ms-auto text-end fs-5"></span>
                                     </a>
                                  </span>
                                 
 
                                 <!-- Menu: Sub menu ul -->
-                                <ul class="sub-menu collapse" id="extra-Components">
+                                <ul class="sub-menu collapse" id="menu_{{ $sidemenu->menu_id}}">
                                     @foreach($sidemenu->submenues as $sub)
                                         @if($sub->module != 'separator')
                                             <li><a class="ms-link" href="{{route( strtolower($sub->module).'.index')}}"> <span>{{ $sub->menu_name }}</span></a></li>

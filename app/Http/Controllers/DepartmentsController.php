@@ -53,8 +53,15 @@ class DepartmentsController extends Controller {
 
 	
 		return Datatables::of($data)->addIndexColumn()
-
 		
+			->editColumn("head_of_department", function($row){
+				$databaseRelation = '{"current_db_model":"Departments","relation_database":"users","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"phone","relation_database_display3":null}';
+				return  \Helper::selectDatabaseFormat( $databaseRelation, $row->head_of_department);
+			})
+			->editColumn("status", function($row){
+				$databaseRelation = '{"current_db_model":"Departments","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+				return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+			})
 		
 		->rawColumns(['action'])
 

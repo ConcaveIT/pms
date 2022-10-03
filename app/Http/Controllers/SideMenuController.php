@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
 use Validator, Input, Redirect, Auth; 
+use Spatie\Permission\Models\Permission;
 use DB;
 
 
@@ -126,11 +127,12 @@ class SidemenuController extends Controller {
 	
 	function bulkCreate(){
 
-		$modules = ModuleGenerator::select('module_title','controller_name')->get();
+		$modules = ModuleGenerator::select('module_title','controller_name','permission_title')->get();
 		$sidemenus = Sidemenu::select('module')->get();
 
 		$allModules = [];
 		$allMenus = [];
+		$permissions = [];
 
 		foreach($sidemenus as $sidemenu){
 			$allMenus[] = $sidemenu->module;
@@ -140,6 +142,12 @@ class SidemenuController extends Controller {
 			if(!in_array(strtolower($module->controller_name),$allMenus)){
 				$allModules[strtolower($module->controller_name)] = $module->controller_name;
 			}
+
+			$permissions[] = $module->permission_title.'.view,';
+			$permissions[] = $module->permission_title.'.create,';
+			$permissions[] = $module->permission_title.'.update,';
+			$permissions[] = $module->permission_title.'.delete,';
+
 		}
 
 		foreach($allModules as $key => $val){
@@ -162,6 +170,19 @@ class SidemenuController extends Controller {
 			$menu->allow_guest = 0;
 			$menu->save();
 		}
+
+
+
+		/** Generate Permissions **/
+
+		//var_dump($permissions); exit;
+        $RoleSuperAdmin = Role::findOrCreate('superadmin','web'); //Create Role Supperadmin
+        foreach($permissions as $permission){ //Create & Assign Permissions
+            $permission = Permission::findOrCreate($permission,'web');
+            $RoleSuperAdmin->givePermissionTo($permission);
+            $permission->assignRole($RoleSuperAdmin);
+        }
+
 		return redirect('core/sidemenu/create?pos=sidebar')->with('success', 'Bulk menu has been deployed successfully!')->with('status','success');
 	}
 

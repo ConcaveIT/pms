@@ -42,7 +42,7 @@
 												 	<li data-id="{{$menu2['menu_id']}}" class="dd-item dd3-item">
 														<div class="dd-handle dd3-handle"></div><div class="dd3-content">{{$menu2['menu_name']}}
 															<span class="pull-right">
-															<a href="" class="text-info"><i class="icofont-edit"></i></a></span>
+															<a href="{{ url('core/sidemenu/edit/'.$menu2['menu_id'].'?pos='.$active)}}" class="text-info"><i class="icofont-edit"></i></a></span>
 														</div>
 														@if(count($menu2->submenues) > 0)
 															<ol class="dd-list" style="">
@@ -50,7 +50,7 @@
 														 			<li data-id="{{$menu3['menu_id']}}" class="dd-item dd3-item">
 																		<div class="dd-handle dd3-handle"></div><div class="dd3-content">{{ $menu3['menu_name'] }}
 																			<span class="pull-right">
-																			<a href="" class="text-info"><i class="icofont-edit"></i></a>
+																			<a href="{{ url('core/sidemenu/edit/'.$menu3['menu_id'].'?pos='.$active)}}" class="text-info"><i class="icofont-edit"></i></a>
 																			</span>
 																		</div>
 																	</li>	
@@ -184,7 +184,7 @@
 										?>		
 										  	<div class="">
 										  		<input type="checkbox" name="groups[<?php echo $group->id;?>]" value="<?php echo $group->id;?>" <?php echo $checked;?> class="filled-in" id="a-<?php echo $group->id;?>"  />   
-										  		<label for="a-<?php echo $group->id;?>"><?php echo $group->name;?>  </label>
+										  		<label for="a-<?php echo $group->id;?>"><?php echo ucfirst($group->name); ?>  </label>
 										  	</div>
 								  		<?php } ?>
 									</div> 
