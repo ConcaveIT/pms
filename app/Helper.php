@@ -187,35 +187,14 @@ class Helper{
 			}elseif($formatType == 'select'){
 				$html = '';
 				if($databaseRelation['relation_database'] && $databaseRelation['relation_database_key'] ){
-					$display = '';
-					$displayArray = [];
-					$relationDataBaseName = $databaseRelation['relation_database'];
-					$relationDataBaseKey = $databaseRelation['relation_database_key'];
-					$display1 = $databaseRelation['relation_database_display1'];
-					$display2= $databaseRelation['relation_database_display2'];
-					$display3= $databaseRelation['relation_database_display3'];
-	
-					$valueArray = explode(',',$value);
+					
+					$result .= '
+					->editColumn("'.$field_key.'", function($row){
+						$databaseRelation = \''.json_encode($databaseRelation).'\';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->'.$field_key.');
+					})';
 
-					
-	
-					$databaseValues = \DB::table($relationDataBaseName)->whereIn($relationDataBaseKey,$valueArray)->get();
-					foreach($databaseValues as $opVal){
-						if($display1) $display = $opVal->{$display1};
-						if($display2) $display .= '--'.$opVal->{$display2};
-						if($display3) $display .= '--'.$opVal->{$display3};
-						$displayArray[] = $display;
-					}
-	
-					$html.= implode(',',$displayArray);
-					
 				}
-
-				$result .= '
-				->editColumn("'.$field_key.'", function($row){
-					return  $row->'.$field_key.';
-				})';
-
 			}
 			
 		}
@@ -225,6 +204,33 @@ class Helper{
 		
 		->rawColumns(['".$rawColumns."'])";
 		return $result;
+	}
+
+
+	public static function selectDatabaseFormat( $databaseRelation, $value){
+			$databaseRelation = json_decode($databaseRelation);
+			$display = '';
+			$displayArray = [];
+			$relationDataBaseName = $databaseRelation->relation_database;
+			$relationDataBaseKey = $databaseRelation->relation_database_key;
+			$display1 = $databaseRelation->relation_database_display1;
+			$display2= $databaseRelation->relation_database_display2;
+			$display3= $databaseRelation->relation_database_display3;
+
+			
+			$valueArray = explode(',',$value);
+
+			$databaseValues = \DB::table($relationDataBaseName)->whereIn($relationDataBaseKey,$valueArray)->get();
+	
+			foreach($databaseValues as $opVal){
+				if($display1) $display = $opVal->{$display1};
+				if($display2) $display .= '--'.$opVal->{$display2};
+				if($display3) $display .= '--'.$opVal->{$display3};
+				$displayArray[] = $display;
+			}
+
+			return  implode(',',$displayArray);
+			
 	}
 
 

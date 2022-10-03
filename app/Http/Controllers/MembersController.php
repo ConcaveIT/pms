@@ -4,6 +4,7 @@ use App\Models\Members;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
+use Yajra\DataTables\DataTables;
 use Validator, Input, Redirect, Auth; 
 
 
@@ -36,7 +37,44 @@ class MembersController extends Controller {
 
 		return view( $this->module.'.index',compact('results','tableGrid','info'));
 	}
+
+
+
+	public function show($id){
 	
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
+            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+        }
+
+		$tableGrid = \Helper::getTableHeader('Members');
+
+
+		$data = Members::all();
+
+	
+		return Datatables::of($data)->addIndexColumn()
+
+		
+					->editColumn("user_id", function($row){
+						$databaseRelation = '{"current_db_model":"Members","relation_database":"users","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->user_id);
+					})
+		
+		->rawColumns(['action'])
+
+		->addColumn('action', function($row){
+			$btn = '';
+			$btn .= '<a href="'.route($this->module.'.edit',$row->id ).'" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>';
+			$btn .= '<a href="'.route($this->module.'.destroy',$row->id ).'" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>';
+			
+			return $btn;
+		})
+
+		->make(true);
+
+	}
+
+
 
 	function create() {
 		if(is_null($this->user) || !$this->role->hasPermissionTo('members.create')){
@@ -61,14 +99,6 @@ class MembersController extends Controller {
 		$data =  Members::find($id);
 		return view($this->module.'.form',compact('data'));
 	}
-
-	function show( Request $request , $id ) {
-
-		if(is_null($this->user) || !$this->role->hasPermissionTo('members.view')){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
-        }
-	}
-
 
 
 	function store(Request $request){
