@@ -55,8 +55,22 @@ class MemberexperiencesController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
+					->editColumn("member_id", function($row){
+						$databaseRelation = '{"current_db_model":"Memberexperiences","relation_database":"members","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"designation","relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->member_id);
+					})
+				->editColumn("start_date", function($row){
+					return date("",strtotime($row->start_date));
+				})
+				->editColumn("end_date", function($row){
+					return date("",strtotime($row->end_date));
+				})
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Memberexperiences","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
 		
-		->rawColumns(['action'])
+		->rawColumns(['action','start_date','end_date'])
 
 		->addColumn('action', function($row){
 			$btn = '';

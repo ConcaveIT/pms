@@ -18,7 +18,7 @@ class CreateMembersTable extends Migration
             $table->integer('user_id');
             $table->string('name');
             $table->string('designation');
-            $table->mediumText('description');
+            $table->mediumText('description')->nullable();
             $table->string('phone');
             $table->dateTime('dob', $precision = 0);
             $table->string('email');

@@ -17,9 +17,9 @@
 	</head>
 	<body id="main-wrapper">
 		<div id="mytask-layout" class="theme-indigo">
-				@include('layouts.sidebar')
+				{{-- @include('layouts.sidebar') --}}
 			<div class="main px-lg-4 px-md-4">
-				@include('layouts.header')
+				{{-- @include('layouts.header') --}}
 				@yield('content')
 			</div>
 			<form id="delete-form" action="#" method="POST" class="d-none">@csrf @method('delete')</form>

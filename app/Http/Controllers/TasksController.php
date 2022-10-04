@@ -55,8 +55,27 @@ class TasksController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
+					->editColumn("project_id", function($row){
+						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"projects","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->project_id);
+					})
+					->editColumn("assaigned_member_ids", function($row){
+						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"users","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->assaigned_member_ids);
+					})
+					->editColumn("department_id", function($row){
+						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"departments","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->department_id);
+					})
+				->editColumn("deadline", function($row){
+					return date("",strtotime($row->deadline));
+				})
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
 		
-		->rawColumns(['action'])
+		->rawColumns(['action','deadline'])
 
 		->addColumn('action', function($row){
 			$btn = '';

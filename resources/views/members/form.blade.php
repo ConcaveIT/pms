@@ -371,7 +371,7 @@
 						
 						</script><script>
 							jQuery(document).ready(function(){
-								jQuery("#select_merital_status").html("");
+								jQuery("#select_merital_status").html("<option value='Married'>Married</option><option value='Unmarried'>Unmarried</option>");
 								var selectedVal = jQuery("#select_merital_status").attr("data-selected-value");
 								if(jQuery("#select_merital_status").attr("data-select-type") == "multiple"){
 									var str_array = selectedVal.split(",");

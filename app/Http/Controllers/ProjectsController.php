@@ -55,8 +55,27 @@ class ProjectsController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
+					->editColumn("client_ids", function($row){
+						$databaseRelation = '{"current_db_model":"Projects","relation_database":"clients","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"company_name","relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->client_ids);
+					})
+					->editColumn("member_ids", function($row){
+						$databaseRelation = '{"current_db_model":"Projects","relation_database":"members","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"designation","relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->member_ids);
+					})
+					->editColumn("project_manager_id", function($row){
+						$databaseRelation = '{"current_db_model":"Projects","relation_database":"members","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"designation","relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->project_manager_id);
+					})
+				->editColumn("deadline", function($row){
+					return date("",strtotime($row->deadline));
+				})
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Projects","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
 		
-		->rawColumns(['action'])
+		->rawColumns(['action','deadline'])
 
 		->addColumn('action', function($row){
 			$btn = '';
