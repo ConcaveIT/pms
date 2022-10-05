@@ -121,6 +121,21 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">SRS<span class="text-danger">*</span>  </label>
+							<div class="col-sm-9">
+								<input type="file" name="srs"  class="form-control @error("srs") is-invalid @enderror" value="{{$data->srs ?? "" }}" required>
+								@error("srs")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+							
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Description  </label>
 							<div class="col-sm-9">
 								<textarea  name="description"  class="textEditor form-control @error("description") is-invalid @enderror" 

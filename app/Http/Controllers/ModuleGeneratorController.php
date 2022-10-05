@@ -271,22 +271,19 @@ class ModuleGeneratorController extends Controller
                  require_once( base_path().'/resources/views/core/template/'.$mType.'/config/config.php');
             }else {
                 if($request->ajax() == true && \Auth::check() == true){
-                    return response()->json(array('status'=>'success','message'=>'Template is Not Exists')); 
+                    return response()->json(array('status'=>'success','message'=>'Template does not exists!')); 
                 } else {
-                    return redirect('concave/module')->with('message','Template is Not Exists')->with('status','success');   
+                    return redirect('concave/module')->with('message','Template does not exists!')->with('status','success');   
                 }  
             } 
 
            self::createRouters($module->id);
     
-        if($request->ajax() == true && \Auth::check() == true)
-        {
-            return response()->json(array('status'=>'success','message'=>'Code Script has been replaced successfull')); 
+        if($request->ajax() == true && \Auth::check() == true){
+            return response()->json(array('status'=>'success','message'=>'Module has been build successfully!')); 
         } else {
-
-            session()->flash('success','Code Script has been successfully replaced!');
+            session()->flash('success','Module has been build successfully!');
             return back();
-    
         } 
         
     }

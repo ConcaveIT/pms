@@ -232,7 +232,7 @@ class Helper{
 			return  implode(',',$displayArray);
 			
 	}
-
+ 
 
 
 	public static function getUppercase(
@@ -559,6 +559,27 @@ class Helper{
 							<div class="col-sm-9">
 								<select '.$multiple.' data-selected-value="{{$data->'.$configFieldKey.' ?? "" }}" id="select_'.$configFieldKey.'"  data-live-search="true" data-select-type="'.$multiple.'"  class="form-control select2 @error("'.$configFieldKey.'") is-invalid @enderror" name="'.$configFieldKey.$multipleString.'" '.$required.'></select>
 								
+								@error("'.$configFieldKey.'")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+							
+						</div>
+					</div>
+			</div>';
+		}
+
+
+
+		if($configType == 'file') {
+			$html .= '<div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
+							<div class="col-sm-9">
+								<input type="file" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
 								@error("'.$configFieldKey.'")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>

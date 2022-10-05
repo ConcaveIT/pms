@@ -14,23 +14,9 @@
 				<div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Id  </label>
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Title<span class="text-danger">*</span>  </label>
 							<div class="col-sm-9">
-								<input type="text" name="id"  class="form-control @error("id") is-invalid @enderror" value="{{$data->id ?? "" }}" >
-								@error("id")
-									<span class="invalid-feedback" role="alert">
-										<strong>{{ $message }}</strong>
-									</span>
-								@enderror
-							</div>
-						</div>
-					</div>
-			</div><div class="row g-3 align-items-center">
-					<div class="col-md-12">
-						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Title  </label>
-							<div class="col-sm-9">
-								<input type="text" name="title"  class="form-control @error("title") is-invalid @enderror" value="{{$data->title ?? "" }}" >
+								<input type="text" name="title"  class="form-control @error("title") is-invalid @enderror" value="{{$data->title ?? "" }}" required>
 								@error("title")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
@@ -42,15 +28,17 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Head of department  </label>
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Head of department<span class="text-danger">*</span>  </label>
 							<div class="col-sm-9">
-								<input type="text" name="head_of_department"  class="form-control @error("head_of_department") is-invalid @enderror" value="{{$data->head_of_department ?? "" }}" >
+								<select  data-selected-value="{{$data->head_of_department ?? "" }}" id="select_head_of_department"  data-live-search="true" data-select-type=""  class="form-control select2 @error("head_of_department") is-invalid @enderror" name="head_of_department" required></select>
+								
 								@error("head_of_department")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
 									</span>
 								@enderror
 							</div>
+							
 						</div>
 					</div>
 			</div><div class="row g-3 align-items-center">
@@ -58,55 +46,15 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Status  </label>
 							<div class="col-sm-9">
-								<input type="text" name="status"  class="form-control @error("status") is-invalid @enderror" value="{{$data->status ?? "" }}" >
+								<select  data-selected-value="{{$data->status ?? "" }}" id="select_status"  data-live-search="true" data-select-type=""  class="form-control select2 @error("status") is-invalid @enderror" name="status" ></select>
+								
 								@error("status")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
 									</span>
 								@enderror
 							</div>
-						</div>
-					</div>
-			</div><div class="row g-3 align-items-center">
-					<div class="col-md-12">
-						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Deleted at  </label>
-							<div class="col-sm-9">
-								<input type="text" name="deleted_at"  class="form-control @error("deleted_at") is-invalid @enderror" value="{{$data->deleted_at ?? "" }}" >
-								@error("deleted_at")
-									<span class="invalid-feedback" role="alert">
-										<strong>{{ $message }}</strong>
-									</span>
-								@enderror
-							</div>
-						</div>
-					</div>
-			</div><div class="row g-3 align-items-center">
-					<div class="col-md-12">
-						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Created at  </label>
-							<div class="col-sm-9">
-								<input type="text" name="created_at"  class="form-control @error("created_at") is-invalid @enderror" value="{{$data->created_at ?? "" }}" >
-								@error("created_at")
-									<span class="invalid-feedback" role="alert">
-										<strong>{{ $message }}</strong>
-									</span>
-								@enderror
-							</div>
-						</div>
-					</div>
-			</div><div class="row g-3 align-items-center">
-					<div class="col-md-12">
-						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">Updated at  </label>
-							<div class="col-sm-9">
-								<input type="text" name="updated_at"  class="form-control @error("updated_at") is-invalid @enderror" value="{{$data->updated_at ?? "" }}" >
-								@error("updated_at")
-									<span class="invalid-feedback" role="alert">
-										<strong>{{ $message }}</strong>
-									</span>
-								@enderror
-							</div>
+							
 						</div>
 					</div>
 			</div>
@@ -120,5 +68,47 @@
 @endsection
 
 @push('script')
-
+<script>
+							jQuery(document).ready(function(){
+								jQuery.ajax({
+									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
+									success: function(response){
+										jQuery("#select_head_of_department").html(response);
+										var selectedVal = jQuery("#select_head_of_department").attr("data-selected-value");
+	
+										if(jQuery("#select_head_of_department").attr("data-select-type") == "multiple"){
+											var str_array = selectedVal.split(",");
+											for(var i = 0; i < str_array.length; i++) {
+											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+												jQuery("#select_head_of_department").find("option[value="+str_array[i]+"]").prop("selected", true);
+											}
+										}else{
+											jQuery("#select_head_of_department").find("option[value="+selectedVal+"]").prop("selected", true);
+										}
+									}
+								});
+							});
+						
+						</script><script>
+							jQuery(document).ready(function(){
+								jQuery.ajax({
+									url: "{{route("database.relation.options")}}?db=statuses&key=id&display1=title&display2=&display3=",
+									success: function(response){
+										jQuery("#select_status").html(response);
+										var selectedVal = jQuery("#select_status").attr("data-selected-value");
+	
+										if(jQuery("#select_status").attr("data-select-type") == "multiple"){
+											var str_array = selectedVal.split(",");
+											for(var i = 0; i < str_array.length; i++) {
+											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+												jQuery("#select_status").find("option[value="+str_array[i]+"]").prop("selected", true);
+											}
+										}else{
+											jQuery("#select_status").find("option[value="+selectedVal+"]").prop("selected", true);
+										}
+									}
+								});
+							});
+						
+						</script>
 @endpush

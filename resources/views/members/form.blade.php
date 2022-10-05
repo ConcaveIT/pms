@@ -329,49 +329,7 @@
 @push('script')
 <script>
 							jQuery(document).ready(function(){
-								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=users&key=id&display1=name&display2=phone&display3=",
-									success: function(response){
-										jQuery("#select_user_id").html(response);
-										var selectedVal = jQuery("#select_user_id").attr("data-selected-value");
-	
-										if(jQuery("#select_user_id").attr("data-select-type") == "multiple"){
-											var str_array = selectedVal.split(",");
-											for(var i = 0; i < str_array.length; i++) {
-											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-												jQuery("#select_user_id").find("option[value="+str_array[i]+"]").prop("selected", true);
-											}
-										}else{
-											jQuery("#select_user_id").find("option[value="+selectedVal+"]").prop("selected", true);
-										}
-									}
-								});
-							});
-						
-						</script><script>
-							jQuery(document).ready(function(){
-								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=salaries&key=id&display1=user_id&display2=total_salary&display3=",
-									success: function(response){
-										jQuery("#select_salary_id").html(response);
-										var selectedVal = jQuery("#select_salary_id").attr("data-selected-value");
-	
-										if(jQuery("#select_salary_id").attr("data-select-type") == "multiple"){
-											var str_array = selectedVal.split(",");
-											for(var i = 0; i < str_array.length; i++) {
-											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-												jQuery("#select_salary_id").find("option[value="+str_array[i]+"]").prop("selected", true);
-											}
-										}else{
-											jQuery("#select_salary_id").find("option[value="+selectedVal+"]").prop("selected", true);
-										}
-									}
-								});
-							});
-						
-						</script><script>
-							jQuery(document).ready(function(){
-								jQuery("#select_merital_status").html("<option value='Married'>Married</option><option value='Unmarried'>Unmarried</option>");
+								jQuery("#select_merital_status").html("");
 								var selectedVal = jQuery("#select_merital_status").attr("data-selected-value");
 								if(jQuery("#select_merital_status").attr("data-select-type") == "multiple"){
 									var str_array = selectedVal.split(",");
