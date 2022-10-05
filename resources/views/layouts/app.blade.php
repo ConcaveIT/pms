@@ -191,7 +191,10 @@
 				jQuery('.initConcaveMedia').each(function(key, val) {
 					var widthText = jQuery(this).attr('data-image-width');
 					var heightText = jQuery(this).attr('data-image-height');
-					jQuery(this).after('<small style="color:red;font-style:italic;margin-left: 10px;white-space: nowrap;">Image Size (width:' + widthText + ' X height:' + heightText + ')</small>');
+					if(widthText && heightText){
+						jQuery(this).after('<small style="color:red;font-style:italic;margin-left: 10px;white-space: nowrap;">Image Size (width:' + widthText + ' X height:' + heightText + ')</small>');
+					}
+					
 				});
 			});
 

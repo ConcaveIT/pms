@@ -121,16 +121,24 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">SRS<span class="text-danger">*</span>  </label>
-							<div class="col-sm-9">
-								<input type="file" name="srs"  class="form-control @error("srs") is-invalid @enderror" value="{{$data->srs ?? "" }}" required>
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">SRS<span class="text-danger">*</span>  </label>
+						    <div class="col-sm-9">
+						  		<button type="button" data-input-name="srs" data-input-type="single" class="btn btn-success text-white initConcaveMedia" >Select File</button>
+						  		@if(isset($data->srs))
+					<p class="selected_images_gallery">
+						<span>
+						<input type="hidden" value="{{$data->srs}}" name="srs">
+						<img src="{{"/".$data->srs}}"> 
+						<b data-file-url="{{$data->srs}}" class="selected_image_remove"><i class="fa fa-trash"></i></b>
+						</span>
+					</p>
+				@endif
 								@error("srs")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
 									</span>
 								@enderror
 							</div>
-							
 						</div>
 					</div>
 			</div><div class="row g-3 align-items-center">
@@ -147,6 +155,32 @@
 								@enderror
 							</div>
 							
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">Related documents  </label>
+						    <div class="col-sm-9">
+						  		<button type="button" data-input-name="related_documents" data-input-type="multiple" class="btn btn-success text-white initConcaveMedia" >Select Files</button>
+						  		@if(isset($data->related_documents))
+					<p class="selected_images_gallery">
+					@foreach(explode(",",$data->related_documents) as $file)
+						@if($$file)
+							<span>
+								<input type="hidden" value="{{$img}}" name="related_documents[]">
+								<img src="{{"/".$$file}}"> <b data-file-url="{{$$file}}" class="selected_image_remove">X</b>
+							</span>
+						@endif
+					@endforeach
+					</p>
+				@endif
+								@error("related_documents")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
 						</div>
 					</div>
 			</div><div class="row g-3 align-items-center">

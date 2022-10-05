@@ -573,20 +573,53 @@ class Helper{
 
 
 
-		if($configType == 'file') {
+		if($configType == 'file' || $configType == 'multiplefiles' ) {
+			$previewImageHtml = '';
+			if($configType == 'file'){
+				$inputType = 'single';
+				$btnText = 'Select File';
+
+				$previewImageHtml = '@if(isset($data->'.$configFieldKey.'))
+					<p class="selected_images_gallery">
+						<span>
+						<input type="hidden" value="{{$data->'.$configFieldKey.'}}" name="'.$configFieldKey.'">
+						<img src="{{"/".$data->'.$configFieldKey.'}}"> 
+						<b data-file-url="{{$data->'.$configFieldKey.'}}" class="selected_image_remove"><i class="fa fa-trash"></i></b>
+						</span>
+					</p>
+				@endif';
+
+
+			}else{
+				$inputType = 'multiple';
+				$btnText = 'Select Files';
+				$previewImageHtml = '@if(isset($data->'.$configFieldKey.'))
+					<p class="selected_images_gallery">
+					@foreach(explode(",",$data->'.$configFieldKey.') as $file)
+						@if($$file)
+							<span>
+								<input type="hidden" value="{{$img}}" name="'.$configFieldKey.'[]">
+								<img src="{{"/".$$file}}"> <b data-file-url="{{$$file}}" class="selected_image_remove">X</b>
+							</span>
+						@endif
+					@endforeach
+					</p>
+				@endif';
+			}
+
 			$html .= '<div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
-							<div class="col-sm-9">
-								<input type="file" name="'.$configFieldKey.'"  class="form-control @error("'.$configFieldKey.'") is-invalid @enderror" value="{{$data->'.$configFieldKey.' ?? "" }}" '.$required.'>
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">'.$configFieldName . $requiredHtml.'  </label>
+						    <div class="col-sm-9">
+						  		<button type="button" data-input-name="'.$configFieldKey.'" data-input-type="'.$inputType .'" class="btn btn-success text-white initConcaveMedia" >'.$btnText.'</button>
+						  		'.$previewImageHtml.'
 								@error("'.$configFieldKey.'")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
 									</span>
 								@enderror
 							</div>
-							
 						</div>
 					</div>
 			</div>';
