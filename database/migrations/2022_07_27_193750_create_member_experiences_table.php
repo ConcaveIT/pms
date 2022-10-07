@@ -19,7 +19,7 @@ class CreateMemberExperiencesTable extends Migration
             $table->string('company_name');
             $table->string('designation');
             $table->string('start_date');
-            $table->string('end_date');
+            $table->string('end_date')->nullable();
             $table->integer('status')->default(1);
             $table->softDeletes();
             $table->timestamps();

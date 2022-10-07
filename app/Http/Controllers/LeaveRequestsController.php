@@ -55,8 +55,18 @@ class LeaverequestsController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
+				->editColumn("leave_from", function($row){
+					return date("d M, Y",strtotime($row->leave_from));
+				})
+				->editColumn("leave_to", function($row){
+					return date("d M, Y",strtotime($row->leave_to));
+				})
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Leaverequests","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
 		
-		->rawColumns(['action'])
+		->rawColumns(['action','leave_from','leave_to'])
 
 		->addColumn('action', function($row){
 			$btn = '';
@@ -131,6 +141,7 @@ class LeaverequestsController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

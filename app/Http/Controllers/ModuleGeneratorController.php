@@ -155,6 +155,7 @@ class ModuleGeneratorController extends Controller
         $model->module_description = $request->module_description;
         $model->grid_table_type = $request->grid_table_type;
         $model->softdelete = ($request->softdelete) ? 1 : 0;
+        $model->status = ($request->status) ? 1 : 0;
 
         $model->configuration =  json_encode([
             'table_configuration' => $request->table_configuration,
@@ -237,54 +238,63 @@ class ModuleGeneratorController extends Controller
      */
     public function buildModule(Request $request, ModuleGenerator $moduleGenerator,$id){
         $module = $moduleGenerator::find($id);
-        $class =  strtolower($module->controller_name);
-        $dir = base_path().'/resources/views/'.$class; 
-        $dirC = app_path().'/Http/Controllers/';
-        $dirApi = app_path().'/Http/Controllers/Api/';
-        $dirM = app_path().'/Models/';
-        $ctr = ucwords($module->controller_name);
 
-        if(!is_dir($dir)) mkdir( $dir,0777 );  
+        if($module &&  $module->status == 1){
+            $class =  strtolower($module->controller_name);
+            $dir = base_path().'/resources/views/'.$class; 
+            $dirC = app_path().'/Http/Controllers/';
+            $dirApi = app_path().'/Http/Controllers/Api/';
+            $dirM = app_path().'/Models/';
+            $ctr = ucwords($module->controller_name);
 
-        $f = '';
-        $req = '';
+            if(!is_dir($dir)) mkdir( $dir,0777 );  
+
+            $f = '';
+            $req = '';
 
 
-        $codes = [
-            'controller'       => ucwords($class),
-            'class'            => $class,
-            'table'            => $module->database_table_name ,
-            'title'            => $module->module_title ,
-            'note'             => $module->module_description,
-            'permission_title' => $module->permission_title,
-            'softdelete'       => ($module->softdelete) ? 'use SoftDeletes; protected $softDelete = true;' : '',
-        ];
+            $codes = [
+                'controller'       => ucwords($class),
+                'class'            => $class,
+                'table'            => $module->database_table_name ,
+                'title'            => $module->module_title ,
+                'note'             => $module->module_description,
+                'permission_title' => $module->permission_title,
+                'softdelete'       => ($module->softdelete) ? 'use SoftDeletes; protected $softDelete = true;' : '',
+            ];
 
-        $codes['form_html'] = \Helper::generateForm($module->configuration);
-        $codes['script_html'] = \Helper::generateScript($module->configuration);
+            $codes['form_html'] = \Helper::generateForm($module->configuration);
+            $codes['script_html'] = \Helper::generateScript($module->configuration);
 
-        $mType = ( $module->grid_table_type == 'native' ? 'native' :  $module->grid_table_type);
+            $mType = ( $module->grid_table_type == 'native' ? 'native' :  $module->grid_table_type);
 
-            if( $mType == 'datatable')  $codes['datatable_cols'] = \Helper::formatDataTableItem(ucwords($class));
+                if( $mType == 'datatable')  $codes['datatable_cols'] = \Helper::formatDataTableItem(ucwords($class));
 
-            if(is_dir( base_path().'/resources/views/core/template/'.$mType )){
-                 require_once( base_path().'/resources/views/core/template/'.$mType.'/config/config.php');
-            }else {
-                if($request->ajax() == true && \Auth::check() == true){
-                    return response()->json(array('status'=>'success','message'=>'Template does not exists!')); 
-                } else {
-                    return redirect('concave/module')->with('message','Template does not exists!')->with('status','success');   
-                }  
-            } 
+                if(is_dir( base_path().'/resources/views/core/template/'.$mType )){
+                    require_once( base_path().'/resources/views/core/template/'.$mType.'/config/config.php');
+                }else {
+                    if($request->ajax() == true && \Auth::check() == true){
+                        return response()->json(array('status'=>'success','message'=>'Template does not exists!')); 
+                    } else {
+                        return redirect('concave/module')->with('message','Template does not exists!')->with('status','success');   
+                    }  
+                } 
 
-           self::createRouters($module->id);
-    
-        if($request->ajax() == true && \Auth::check() == true){
-            return response()->json(array('status'=>'success','message'=>'Module has been build successfully!')); 
-        } else {
-            session()->flash('success','Module has been build successfully!');
-            return back();
-        } 
+            self::createRouters($module->id);
+        
+            if($request->ajax() == true && \Auth::check() == true){
+                return response()->json(array('status'=>'success','message'=>'Module has been build successfully!')); 
+            } else {
+                session()->flash('success','Module has been build successfully!');
+                return back();
+            }
+        }else{
+            return back()->with('error', 'Module can not build because it is not enabled or not found!');
+        }
+
+
+
+
         
     }
 

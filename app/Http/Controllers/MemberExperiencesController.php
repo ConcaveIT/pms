@@ -60,10 +60,14 @@ class MemberexperiencesController extends Controller {
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->member_id);
 					})
 				->editColumn("start_date", function($row){
-					return date("",strtotime($row->start_date));
+					if($row->start_date){
+						return date("d M, Y",strtotime($row->start_date));
+					}
 				})
 				->editColumn("end_date", function($row){
-					return date("",strtotime($row->end_date));
+					if($row->end_date){
+						return date("d M, Y",strtotime($row->end_date));
+					}
 				})
 					->editColumn("status", function($row){
 						$databaseRelation = '{"current_db_model":"Memberexperiences","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
@@ -145,6 +149,7 @@ class MemberexperiencesController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

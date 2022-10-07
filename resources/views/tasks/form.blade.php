@@ -202,7 +202,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=users&key=id&display1=name&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
 									success: function(response){
 										jQuery("#select_assaigned_member_ids").html(response);
 										var selectedVal = jQuery("#select_assaigned_member_ids").attr("data-selected-value");
@@ -243,7 +243,7 @@
 						
 						</script><script>
 							jQuery(document).ready(function(){
-								jQuery("#select_priority").html("");
+								jQuery("#select_priority").html("<option value='High'>High</option><option value='Medium'>Medium</option><option value='Low'>Low</option>");
 								var selectedVal = jQuery("#select_priority").attr("data-selected-value");
 								if(jQuery("#select_priority").attr("data-select-type") == "multiple"){
 									var str_array = selectedVal.split(",");

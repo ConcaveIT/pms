@@ -60,7 +60,7 @@ class TasksController extends Controller {
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->project_id);
 					})
 					->editColumn("assaigned_member_ids", function($row){
-						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"users","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":null,"relation_database_display3":null}';
+						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"members","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"designation","relation_database_display3":null}';
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->assaigned_member_ids);
 					})
 					->editColumn("department_id", function($row){
@@ -68,7 +68,9 @@ class TasksController extends Controller {
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->department_id);
 					})
 				->editColumn("deadline", function($row){
-					return date("",strtotime($row->deadline));
+					if($row->deadline){
+						return date("d M, Y h:ia",strtotime($row->deadline));
+					}
 				})
 					->editColumn("status", function($row){
 						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
@@ -150,6 +152,7 @@ class TasksController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

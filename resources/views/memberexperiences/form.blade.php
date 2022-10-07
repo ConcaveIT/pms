@@ -60,7 +60,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Start date  </label>
 							<div class="col-sm-9">
-								<input type="datetime-local" name="start_date"  class="form-control @error("start_date") is-invalid @enderror" value="{{$data->start_date ?? "" }}" >
+								<input type="date" name="start_date"  class="form-control @error("start_date") is-invalid @enderror" value="{{$data->start_date ?? "" }}" >
 								@error("start_date")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
@@ -75,7 +75,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">End date  </label>
 							<div class="col-sm-9">
-								<input type="datetime-local" name="end_date"  class="form-control @error("end_date") is-invalid @enderror" value="{{$data->end_date ?? "" }}" >
+								<input type="date" name="end_date"  class="form-control @error("end_date") is-invalid @enderror" value="{{$data->end_date ?? "" }}" >
 								@error("end_date")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>

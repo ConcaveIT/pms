@@ -55,6 +55,14 @@ class TaskreportsController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
+					->editColumn("task_id", function($row){
+						$databaseRelation = '{"current_db_model":"Taskreports","relation_database":"tasks","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->task_id);
+					})
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Taskreports","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
 		
 		->rawColumns(['action'])
 
@@ -131,6 +139,7 @@ class TaskreportsController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

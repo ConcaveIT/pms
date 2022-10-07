@@ -147,10 +147,14 @@ class Helper{
 			$value = '';
 
 			if($formatType == 'datetime'){
+				
 				$result .= '
 				->editColumn("'.$field_key.'", function($row){
-					return date("'.$field_format_value.'",strtotime($row->'.$field_key.'));
+					if($row->'.$field_key.'){
+						return date("'.$field_format_value.'",strtotime($row->'.$field_key.'));
+					}
 				})';
+
 				$rawColumns [] = $field_key;
 			}elseif($formatType == 'link'){
 				return '<a  target="_blank" href="'.$field_format_value.'/'.$value.'" >'.$value.'</a>';
@@ -195,6 +199,12 @@ class Helper{
 					})';
 
 				}
+			}elseif($formatType == 'html'){
+				$result .= '
+				->editColumn("'.$field_key.'", function($row){
+					return $row->'.$field_key.';
+				})';
+				$rawColumns [] = $field_key;
 			}
 			
 		}

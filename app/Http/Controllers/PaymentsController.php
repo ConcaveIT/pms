@@ -55,14 +55,17 @@ class PaymentsController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
-				->editColumn("project_id", function($row){
-					return '<a  target="_blank"  href="/'.$row->project_id.'" >  <img width="65" src="/'.$row->project_id.'" ></a> ';
-				})
 				->editColumn("payment_date", function($row){
-					return date("y-m-d h:ia",strtotime($row->payment_date));
+					if($row->payment_date){
+						return date("d M, Y h:ia",strtotime($row->payment_date));
+					}
 				})
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Payments","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
 		
-		->rawColumns(['action','project_id','payment_date'])
+		->rawColumns(['action','payment_date'])
 
 		->addColumn('action', function($row){
 			$btn = '';
@@ -137,6 +140,7 @@ class PaymentsController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

@@ -14,11 +14,11 @@
 				<div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-							<label for="ModuleTitle" class="col-sm-3 col-form-label">User<span class="text-danger">*</span>  </label>
+							<label for="ModuleTitle" class="col-sm-3 col-form-label">Member  </label>
 							<div class="col-sm-9">
-								<select  data-selected-value="{{$data->user_id ?? "" }}" id="select_user_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("user_id") is-invalid @enderror" name="user_id" required></select>
+								<select  data-selected-value="{{$data->member_id ?? "" }}" id="select_member_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("member_id") is-invalid @enderror" name="member_id" ></select>
 								
-								@error("user_id")
+								@error("member_id")
 									<span class="invalid-feedback" role="alert">
 										<strong>{{ $message }}</strong>
 									</span>
@@ -87,19 +87,19 @@
 <script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=users&key=id&display1=name&display2=phone&display3=",
+									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
 									success: function(response){
-										jQuery("#select_user_id").html(response);
-										var selectedVal = jQuery("#select_user_id").attr("data-selected-value");
+										jQuery("#select_member_id").html(response);
+										var selectedVal = jQuery("#select_member_id").attr("data-selected-value");
 	
-										if(jQuery("#select_user_id").attr("data-select-type") == "multiple"){
+										if(jQuery("#select_member_id").attr("data-select-type") == "multiple"){
 											var str_array = selectedVal.split(",");
 											for(var i = 0; i < str_array.length; i++) {
 											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-												jQuery("#select_user_id").find("option[value="+str_array[i]+"]").prop("selected", true);
+												jQuery("#select_member_id").find("option[value="+str_array[i]+"]").prop("selected", true);
 											}
 										}else{
-											jQuery("#select_user_id").find("option[value="+selectedVal+"]").prop("selected", true);
+											jQuery("#select_member_id").find("option[value="+selectedVal+"]").prop("selected", true);
 										}
 									}
 								});

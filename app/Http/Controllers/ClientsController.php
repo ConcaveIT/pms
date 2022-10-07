@@ -4,6 +4,7 @@ use App\Models\Clients;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
+use Yajra\DataTables\DataTables;
 use Validator, Input, Redirect, Auth; 
 
 
@@ -36,7 +37,44 @@ class ClientsController extends Controller {
 
 		return view( $this->module.'.index',compact('results','tableGrid','info'));
 	}
+
+
+
+	public function show($id){
 	
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
+            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+        }
+
+		$tableGrid = \Helper::getTableHeader('Clients');
+
+
+		$data = Clients::all();
+
+	
+		return Datatables::of($data)->addIndexColumn()
+
+		
+					->editColumn("status", function($row){
+						$databaseRelation = '{"current_db_model":"Clients","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
+						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->status);
+					})
+		
+		->rawColumns(['action'])
+
+		->addColumn('action', function($row){
+			$btn = '';
+			$btn .= '<a href="'.route($this->module.'.edit',$row->id ).'" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>';
+			$btn .= '<a href="'.route($this->module.'.destroy',$row->id ).'" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>';
+			
+			return $btn;
+		})
+
+		->make(true);
+
+	}
+
+
 
 	function create() {
 		if(is_null($this->user) || !$this->role->hasPermissionTo('Clients.create')){
@@ -61,14 +99,6 @@ class ClientsController extends Controller {
 		$data =  Clients::find($id);
 		return view($this->module.'.form',compact('data'));
 	}
-
-	function show( Request $request , $id ) {
-
-		if(is_null($this->user) || !$this->role->hasPermissionTo('Clients.view')){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
-        }
-	}
-
 
 
 	function store(Request $request){
@@ -105,6 +135,7 @@ class ClientsController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

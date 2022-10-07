@@ -55,8 +55,14 @@ class HolidaysController extends Controller {
 		return Datatables::of($data)->addIndexColumn()
 
 		
+				->editColumn("start_date", function($row){
+					return date("d M, Y",strtotime($row->start_date));
+				})
+				->editColumn("end_date", function($row){
+					return date("d M, Y",strtotime($row->end_date));
+				})
 		
-		->rawColumns(['action'])
+		->rawColumns(['action','start_date','end_date'])
 
 		->addColumn('action', function($row){
 			$btn = '';
@@ -131,6 +137,7 @@ class HolidaysController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

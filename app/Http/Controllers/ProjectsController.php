@@ -68,7 +68,9 @@ class ProjectsController extends Controller {
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->project_manager_id);
 					})
 				->editColumn("deadline", function($row){
-					return date("",strtotime($row->deadline));
+					if($row->deadline){
+						return date("d M, Y h:ia",strtotime($row->deadline));
+					}
 				})
 					->editColumn("status", function($row){
 						$databaseRelation = '{"current_db_model":"Projects","relation_database":"statuses","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';

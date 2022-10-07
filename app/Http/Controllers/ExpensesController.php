@@ -4,6 +4,7 @@ use App\Models\Expenses;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
+use Yajra\DataTables\DataTables;
 use Validator, Input, Redirect, Auth; 
 
 
@@ -36,7 +37,43 @@ class ExpensesController extends Controller {
 
 		return view( $this->module.'.index',compact('results','tableGrid','info'));
 	}
+
+
+
+	public function show($id){
 	
+		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
+            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
+        }
+
+		$tableGrid = \Helper::getTableHeader('Expenses');
+
+
+		$data = Expenses::all();
+
+	
+		return Datatables::of($data)->addIndexColumn()
+
+		
+				->editColumn("description", function($row){
+					return $row->description;
+				})
+		
+		->rawColumns(['action','description'])
+
+		->addColumn('action', function($row){
+			$btn = '';
+			$btn .= '<a href="'.route($this->module.'.edit',$row->id ).'" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>';
+			$btn .= '<a href="'.route($this->module.'.destroy',$row->id ).'" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>';
+			
+			return $btn;
+		})
+
+		->make(true);
+
+	}
+
+
 
 	function create() {
 		if(is_null($this->user) || !$this->role->hasPermissionTo('Expenses.create')){
@@ -61,14 +98,6 @@ class ExpensesController extends Controller {
 		$data =  Expenses::find($id);
 		return view($this->module.'.form',compact('data'));
 	}
-
-	function show( Request $request , $id ) {
-
-		if(is_null($this->user) || !$this->role->hasPermissionTo('Expenses.view')){
-            return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
-        }
-	}
-
 
 
 	function store(Request $request){
@@ -105,6 +134,7 @@ class ExpensesController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}

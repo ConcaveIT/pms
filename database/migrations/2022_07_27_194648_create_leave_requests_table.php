@@ -15,7 +15,7 @@ class CreateLeaveRequestsTable extends Migration
     {
         Schema::create('leave_requests', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->integer('member_id');
             $table->string('leave_type');
             $table->dateTime('leave_from', $precision = 0);
             $table->dateTime('leave_to', $precision = 0);

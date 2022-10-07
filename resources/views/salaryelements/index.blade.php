@@ -21,7 +21,7 @@
 				<div class="card">
 					<div class="card-body">
 							<div class="table-responsive">
-							<table class="table  table-hover table-striped  " id="projectTable">
+							<table class="table  table-hover table-striped" id="dataTable" style="width: 100%">
 								<thead>
 									<tr>
 										<td> SL </td>
@@ -31,32 +31,6 @@
 										<td>Action</td>
 									</tr>
 								</thead>
-
-								<tbody>
-									@foreach($results as $result)
-										<tr>
-											<td>{{$loop->iteration}}</td>
-											@foreach ($tableGrid as $tableItem)
-												<td>{!! Helper::formatTableItem(
-													$result->id,
-													$tableItem['field_format'],
-													$tableItem['field_format_value'],
-													$result->{$tableItem['field_key']},
-													$tableItem['database_relation']
-												) !!}</td>
-											@endforeach
-					
-											<td>
-												<div class="btn-group" role="group" aria-label="Basic outlined example">
-													<a href="{{route($info['module_route'].'.edit',$result->id )}}" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-													<a href="{{route($info['module_route'].'.destroy',$result->id )}}" class="delete_btn btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></a>
-												</div>
-											</td>
-										
-										</tr>
-									@endforeach        						
-								</tbody>
-							
 							</table>
 							</div>
 							
@@ -69,4 +43,37 @@
 	</div>
 </div>
 @endsection
+
+@push('footer')
+
+<script>
+	jQuery('#dataTable').DataTable({
+        dom: 'Brftlip',
+        buttons: [ 'csv', 'excel', 'pdf', 'print'],
+        responsive: true,
+        processing: true,
+        serverSide: true,
+        autoWidth: true,
+        ajax: {
+          url: "{{route($info['module_route'].'.show',0)}}",
+          type: 'GET',
+        },
+        aLengthMenu: [
+            [25, 50, 100, 500, 5000, -1],
+            [25, 50, 100, 500, 5000, "All"]
+         ],
+         iDisplayLength: 25,
+        "language": {"processing": '<span style="color:#4eb9fa;">LOADING...</span>'},
+        "order": [[0, 'desc']],
+        columns: [
+            {data: 'DT_RowIndex',"className" : "text-center",orderable: false, searchable: false,},
+			@foreach ($tableGrid as $tableItem)
+			{data: '{{$tableItem['field_key']}}'},
+			@endforeach
+            {data: 'action', name: 'action', orderable: false, searchable: false, "className" : "text-center"},
+        ]
+      });
+</script>
+	
+@endpush
 

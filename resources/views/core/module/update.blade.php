@@ -21,6 +21,7 @@
                 <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                     <h3 class="fw-bold mb-0">Update {{$moduleData->module_title}}</h3>
                     <div class="col-auto d-flex w-sm-100">
+                        <a class="btn btn-warning btn-set-task w-sm-100 mr-2 text-white"  href="{{route('module.index')}}"> <i class="fa fa-bars"></i> Module List</a>
                         <a class="btn btn-dark btn-set-task w-sm-100" target="_blank" href="{{route( strtolower($moduleData->controller_name).'.index')}}"> <i class="fa fa-eye"></i> View Module</a>
                     </div>
                 </div>
@@ -119,7 +120,7 @@
                             <div class="form-group row  mb-1">
                                 <label for="ModuleTitle" class="col-sm-3 col-form-label">Status</label>
                                 <div class="col-sm-9">
-                                    <input  type="checkbox" id="flexSwitchCheckDefault" {{ $moduleData->status == 1 ? 'checked' : '' }}>
+                                    <input type="checkbox" name="status" id="flexSwitchCheckDefault" {{ $moduleData->status == 1 ? 'checked' : '' }}>
                                 </div>
                             </div>
                         </div>
@@ -271,6 +272,7 @@
                                                     'file'  => 'File',
                                                     'multiplefile'  => 'Multiple File',
                                                     'datetime' => 'Date Time',
+                                                    'html' => 'Html',
                                                     'function' => 'Custom Function',
                                                 ];
                                             @endphp
@@ -328,7 +330,9 @@
                                 $formFieldFilterable                = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
                                 $formFieldAllowMultiple             = isset($form_configuration->{$item}->allow_multiple)  ? 'checked' : '';
                                 $formFieldDataType                  = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
+                                
                                 $formFieldCustomData                = isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : [];
+                               
                                 $formFieldRelationDatabase          = isset($form_configuration->{$item}->relation_database)  ? $form_configuration->{$item}->relation_database : '';
                                 $formFieldRelationDatabaseKey       = isset($form_configuration->{$item}->relation_database_key)  ? $form_configuration->{$item}->relation_database_key : '';
                                 $formFieldRelationDatabaseDisplay1  = isset($form_configuration->{$item}->relation_database_display1)  ? $form_configuration->{$item}->relation_database_display1 : '';
@@ -407,7 +411,9 @@
 
                                                         <div class="section_custom_data form-group row  mb-1">
                                                             <div class="col-sm-10">
-                                                            @php $itemKeyArray = [0]; @endphp
+                                                            @php $itemKeyArray = [0]; 
+                                                            
+                                                            @endphp
                                                                 @if($formFieldCustomData)
                                                                     @foreach($formFieldCustomData as $key=>$cData)
                                                                         <div class="row cloned_item">
@@ -416,10 +422,10 @@
                                                                             </div>
                                                                             <div class="col-sm-9 col-form-label">
                                                                                 <label class="fancy-radio" style="width:48%;float: left;margin-right: 3px;">
-                                                                                    <input type="text" name="form_configuration[{{$item}}][{{$key}}][custom_data]" value="{{$cData->name}}" placeholder="Name"  class="form-control">
+                                                                                    <input type="text" name="form_configuration[{{$item}}][custom_data][{{$key}}][name]" value="{{$cData->name}}" placeholder="Name"  class="form-control">
                                                                                 </label>
                                                                                 <label class="fancy-radio" style="width:48%;float: left;">
-                                                                                    <input type="text" name="form_configuration[{{$item}}][{{$key}}][custom_data]" value="{{$cData->value}}" placeholder="Value" class="form-control">
+                                                                                    <input type="text" name="form_configuration[{{$item}}][custom_data][{{$key}}][value]" value="{{$cData->value}}" placeholder="Value" class="form-control">
                                                                                 </label>
                                                                             </div> 
                                                                         </div>
@@ -629,9 +635,17 @@
                 </div>
 
                 <div class="tab-pane fade" id="nav-builder" role="tabpanel">
+                    
+                    
                     <p class="text-center p-5">
+                        @if($moduleData->status == 1)
                         <a  class="btn btn-danger text-white" onclick="event.preventDefault(); document.getElementById('build-form').submit();"><i class="fa fa-cogs"></i> Build All Codes</a>
+                        @else
+                        <i class="text-danger">Warning! This Module is not activated for rebuilding. That means it may have a custom code structure.  Please get a backup first and enable it to rebuild.</i>
+                        @endif
                     </p>
+
+
                 </div>
 
             </div>

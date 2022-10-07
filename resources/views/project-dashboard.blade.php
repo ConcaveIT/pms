@@ -49,42 +49,7 @@
                 </div>
             </div>
         </div><!-- Row End -->
-        <div class="row g-3 mb-3 row-deck">
-            <div class="col-md-12 col-lg-8 col-xl-7 col-xxl-7">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-12 col-md-5 col-lg-6 order-md-2 ">
-                                <div class="text-center p-4">
-                                    <img src="assets/images/task-view.svg" alt="..." class="img-fluid">
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-7 col-lg-6 order-md-1 px-4">
-                                <h3 class="fw-bold ">Dylan Hunter</h3>
-                                <p class="line-height-custom">Welcome back Dylan Hunter.Integer molestie, arcu non porta sollicitudin, arcu felis aliquam urna, placerat maximus lorem urna commodo sem. Pellentesque venenatis leo quam, sed mattis sapien lobortis ut.placerat maximus lorem urna commodo sem</p>
-                                <a class="btn bg-secondary text-light btn-lg lift" href="http://pixelwibes.com/" target="_blank">Free Inquire</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12 col-lg-4 col-xl-5 col-xxl-5">
-                <div class="alert alert-primary p-3 mb-0 w-100">
-                    <h6 class="fw-bold mb-1">Create Project Credentials</h6>
-                    <p class="small mb-4">Create a Project credentials now and never miss</p>
-                    <div class="my-3 ">
-                        <input type="text" class="form-control form-control-lg" placeholder="Enter Username">
-                    </div>
-                    <div class="my-3">
-                        <input type="password" class="form-control form-control-lg" placeholder="Enter Password">
-                    </div>
-                    <div class="my-3">
-                        <input type="password" class="form-control form-control-lg" placeholder="Confirm Password">
-                    </div>
-                    <button class="btn btn-primary mt-2">Create Credentials</button>
-                </div>
-            </div>
-        </div><!-- Row End -->
+
         <div class="row g-3 mb-3 row-deck">
             <div class="col-md-12 col-lg-4">
                 <div class="card">
