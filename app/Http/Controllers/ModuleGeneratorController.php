@@ -342,7 +342,7 @@ class ModuleGeneratorController extends Controller
 
 
     public function getDatabaseRelationOptions(Request $request){
-        return \Helper::getSlelectDatabaseValues($request->db,$request->key,$request->display1,$request->display2,$request->display3);
+        return \Helper::getSlelectDatabaseValues($request->db,$request->key,$request->display1,$request->display2,$request->display3,$request->parent_filter);
     }
 
     public function createMigration(){

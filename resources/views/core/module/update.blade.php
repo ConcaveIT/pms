@@ -329,10 +329,9 @@
                                 $formFieldSearchable                = isset($form_configuration->{$item}->searchable)  ? 'checked' : '';
                                 $formFieldFilterable                = isset($form_configuration->{$item}->filterable)  ? 'checked' : '';
                                 $formFieldAllowMultiple             = isset($form_configuration->{$item}->allow_multiple)  ? 'checked' : '';
+                                $formFieldParentFilter              = isset($form_configuration->{$item}->parent_filter)  ? $form_configuration->{$item}->parent_filter : '';
                                 $formFieldDataType                  = isset($form_configuration->{$item}->data_type)  ? $form_configuration->{$item}->data_type : '';
-                                
                                 $formFieldCustomData                = isset($form_configuration->{$item}->custom_data)  ? $form_configuration->{$item}->custom_data : [];
-                               
                                 $formFieldRelationDatabase          = isset($form_configuration->{$item}->relation_database)  ? $form_configuration->{$item}->relation_database : '';
                                 $formFieldRelationDatabaseKey       = isset($form_configuration->{$item}->relation_database_key)  ? $form_configuration->{$item}->relation_database_key : '';
                                 $formFieldRelationDatabaseDisplay1  = isset($form_configuration->{$item}->relation_database_display1)  ? $form_configuration->{$item}->relation_database_display1 : '';
@@ -494,6 +493,16 @@
 
                                                         </div>
 
+
+
+                                                        <div class="form-group row  mb-1">
+                                                            <label class="col-sm-3 col-form-label">Parent Filter</label>
+                                                            <div class="col-sm-9 col-form-label">
+                                                                    <input type="text" placeholder="role:member" name="form_configuration[{{$item}}][parent_filter]" value="{{$formFieldParentFilter}}"  class="form-control parent_filter" >
+                                                            </div>
+                                                        </div>
+
+
                                                         <div class="form-group row  mb-1">
                                                             <label class="col-sm-4 col-form-label">Allow Multiple ? </label>
                                                             <div class="col-sm-4 col-form-label">
@@ -501,7 +510,8 @@
                                                                     <input type="checkbox" name="form_configuration[{{$item}}][allow_multiple]" {{$formFieldAllowMultiple}} > YES
                                                                 </label>
                                                             </div>
-                                                        </div>
+                                                        </div>                                                       
+
 
                                                     </div>
                                                 </div>

@@ -288,6 +288,7 @@ class Helper{
 				$display1 = isset($conf->relation_database_display1) ? $conf->relation_database_display1 : null ;
 				$display2 = isset($conf->relation_database_display2) ? $conf->relation_database_display2 : null ;
 				$display3 = isset($conf->relation_database_display3) ? $conf->relation_database_display3 : null ;
+				$parent_filter = isset($conf->parent_filter) ? $conf->parent_filter : null ;
 
 				if($relationDataDataType == 'custom'){
 
@@ -318,7 +319,7 @@ class Helper{
 						$scripts .= '<script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db='.$relationDataBaseName.'&key='.$relationDataBaseKey.'&display1='.$display1.'&display2='.$display2.'&display3='.$display3.'",
+									url: "{{route("database.relation.options")}}?db='.$relationDataBaseName.'&key='.$relationDataBaseKey.'&display1='.$display1.'&display2='.$display2.'&display3='.$display3.'&parent_filter='.$parent_filter.'",
 									success: function(response){
 										jQuery("#select_'.$conf->field_key.'").html(response);
 										var selectedVal = jQuery("#select_'.$conf->field_key.'").attr("data-selected-value");
@@ -349,9 +350,30 @@ class Helper{
 	}
 
 
-	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$display2=null,$display3=null){
+	public static function getSlelectDatabaseValues($relationDataBaseName,$relationDataBaseKey,$display1,$display2=null,$display3=null,$parent_filter=null){
 		$optionHtml = '';
-		$databaseValues = \DB::table($relationDataBaseName)->get();
+		if($parent_filter){
+			$parent_filter = explode(':',$parent_filter);
+			if(count($parent_filter) > 1){
+				$key = $parent_filter[0];
+				$value = $parent_filter[1];
+				
+				try {
+					$databaseValues = \DB::table($relationDataBaseName)->where($key,$value)->get();
+				} catch (Throwable $e) {
+					$databaseValues = [];
+				}
+
+				
+			}else{
+				$databaseValues = \DB::table($relationDataBaseName)->get();
+			}
+
+		}else{
+			$databaseValues = \DB::table($relationDataBaseName)->get();
+		}
+		
+
 		$display = '';
 
 		foreach($databaseValues as $opVal){
