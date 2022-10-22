@@ -69,7 +69,7 @@ class ProjectsController extends Controller {
 					})
 				->editColumn("deadline", function($row){
 					if($row->deadline){
-						return date("d M, Y h:ia",strtotime($row->deadline));
+						return date("",strtotime($row->deadline));
 					}
 				})
 					->editColumn("status", function($row){

@@ -121,7 +121,7 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
-						  <label for="ModuleTitle" class="col-sm-3 col-form-label">SRS<span class="text-danger">*</span>  </label>
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">SRS  </label>
 						    <div class="col-sm-9">
 						  		<button type="button" data-input-name="srs" data-input-type="single" class="btn btn-success text-white initConcaveMedia" >Select File</button>
 						  		@if(isset($data->srs))
@@ -188,7 +188,7 @@
 						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Department  </label>
 							<div class="col-sm-9">
-								<select  data-selected-value="{{$data->department_id ?? "" }}" id="select_department_id"  data-live-search="true" data-select-type=""  class="form-control select2 @error("department_id") is-invalid @enderror" name="department_id" ></select>
+								<select multiple data-selected-value="{{$data->department_id ?? "" }}" id="select_department_id"  data-live-search="true" data-select-type="multiple"  class="form-control select2 @error("department_id") is-invalid @enderror" name="department_id[]" ></select>
 								
 								@error("department_id")
 									<span class="invalid-feedback" role="alert">
@@ -229,7 +229,7 @@
 <script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=clients&key=id&display1=name&display2=company_name&display3=",
+									url: "{{route("database.relation.options")}}?db=clients&key=id&display1=name&display2=company_name&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_client_ids").html(response);
 										var selectedVal = jQuery("#select_client_ids").attr("data-selected-value");
@@ -250,7 +250,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
+									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_member_ids").html(response);
 										var selectedVal = jQuery("#select_member_ids").attr("data-selected-value");
@@ -271,7 +271,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
+									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_project_manager_id").html(response);
 										var selectedVal = jQuery("#select_project_manager_id").attr("data-selected-value");
@@ -292,7 +292,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=departments&key=id&display1=title&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=departments&key=id&display1=title&display2=&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_department_id").html(response);
 										var selectedVal = jQuery("#select_department_id").attr("data-selected-value");
@@ -313,7 +313,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=statuses&key=id&display1=title&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=statuses&key=id&display1=title&display2=&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_status").html(response);
 										var selectedVal = jQuery("#select_status").attr("data-selected-value");
