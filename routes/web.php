@@ -30,8 +30,8 @@ Route::group(['prefix' => 'service'], function () {
  
 
 Auth::routes();
-Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-Route::get('/project-dashboard', [App\Http\Controllers\DashboardController::class, 'projectDashboard'])->name('project.dashboard');
+Route::get('/', [App\Http\Controllers\DashboardController::class, 'projectDashboard'])->name('dashboard');
+Route::get('/hr-dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('hr.dashboard');
 
 //Activity Log
 Route::get('/activity-log', [App\Http\Controllers\LogController::class, 'getLog'] )->name('activity.log');

@@ -19,8 +19,8 @@
                         <i class="icofont-home fs-5"></i> <span>Dashboard</span> <span class="arrow icofont-dotted-down ms-auto text-end fs-5"></span></a>
                     <!-- Menu: Sub menu ul -->
                     <ul class="sub-menu collapse show" id="dashboard-Components">
-                        <li><a class="ms-link active" href="{{route('dashboard')}}"> <span>HR Dashboard</span></a></li>
-                        <li><a class="ms-link" href="{{route('project.dashboard')}}"> <span>Project Dashboard</span></a></li>
+                        <li><a class="ms-link active" href="{{route('dashboard')}}"> <span>Project Dashboard</span></a></li>
+                        <li><a class="ms-link" href="{{route('hr.dashboard')}}"> <span>HR Dashboard</span></a></li>
                     </ul>
                 </li>
 

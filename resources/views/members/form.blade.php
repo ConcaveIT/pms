@@ -44,6 +44,29 @@
 			</div><div class="row g-3 align-items-center">
 					<div class="col-md-12">
 						<div class="form-group row  mb-1">
+						  <label for="ModuleTitle" class="col-sm-3 col-form-label">Profile image  </label>
+						    <div class="col-sm-9">
+						  		<button type="button" data-image-width="800" data-image-height="800" data-input-name="profile_image" data-input-type="single" class="btn btn-success text-white initConcaveMedia" >Select Image</button>
+						  		@if(isset($data->profile_image))
+					<p class="selected_images_gallery">
+						<span>
+						<input type="hidden" value="{{$data->profile_image}}" name="profile_image">
+						<img src="{{"/".$data->profile_image}}"> 
+						<b data-file-url="{{$data->profile_image}}" class="selected_image_remove"><i class="fa fa-trash"></i></b>
+						</span>
+					</p>
+				@endif
+								@error("profile_image")
+									<span class="invalid-feedback" role="alert">
+										<strong>{{ $message }}</strong>
+									</span>
+								@enderror
+							</div>
+						</div>
+					</div>
+			</div><div class="row g-3 align-items-center">
+					<div class="col-md-12">
+						<div class="form-group row  mb-1">
 							<label for="ModuleTitle" class="col-sm-3 col-form-label">Designation<span class="text-danger">*</span>  </label>
 							<div class="col-sm-9">
 								<input type="text" name="designation"  class="form-control @error("designation") is-invalid @enderror" value="{{$data->designation ?? "" }}" required>
@@ -350,28 +373,7 @@
 						
 						</script><script>
 							jQuery(document).ready(function(){
-								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=salaries&key=id&display1=user_id&display2=total_salary&display3=&parent_filter=",
-									success: function(response){
-										jQuery("#select_salary_id").html(response);
-										var selectedVal = jQuery("#select_salary_id").attr("data-selected-value");
-	
-										if(jQuery("#select_salary_id").attr("data-select-type") == "multiple"){
-											var str_array = selectedVal.split(",");
-											for(var i = 0; i < str_array.length; i++) {
-											str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-												jQuery("#select_salary_id").find("option[value="+str_array[i]+"]").prop("selected", true);
-											}
-										}else{
-											jQuery("#select_salary_id").find("option[value="+selectedVal+"]").prop("selected", true);
-										}
-									}
-								});
-							});
-						
-						</script><script>
-							jQuery(document).ready(function(){
-								jQuery("#select_merital_status").html("<option value='Married'>Married</option><option value='Unmarried'>Unmarried</option>");
+								jQuery("#select_merital_status").html("");
 								var selectedVal = jQuery("#select_merital_status").attr("data-selected-value");
 								if(jQuery("#select_merital_status").attr("data-select-type") == "multiple"){
 									var str_array = selectedVal.split(",");
