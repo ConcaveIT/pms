@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 use App\Models\Tasks;
 use App\Models\Projects;
+use App\Models\Expenses;
+use App\Models\Salary;
+
 
 class DashboardController extends Controller
 {
@@ -42,9 +46,44 @@ class DashboardController extends Controller
         $data['ongoingProjects'] = Projects::where('status',1)->count();
         $data['completedProjects'] = Projects::where('status',4)->count();
 
+        $data['totalIncome'] = Projects::where('status',4)->sum('total_worth');
 
+        $UtilityExpense =  Expenses::where('status',1)->sum('amount');
+        $SalaryExpense =  Salary::where('status',1)->sum('total_salary');
+
+        $data['totalExpense'] = $UtilityExpense+$SalaryExpense;
+        $data['totalProfit'] =  $data['totalIncome'] - $data['totalExpense'];
+
+        $data['incomeChart'] = Projects::select('title','total_worth')->where('status',4)->get();
+
+        $data['taskResolvedThisYear'] = $this->_taskResolved(date('Y-m-d'));
+        $data['taskResolvedLastYear'] = $this->_taskResolved(Carbon::now()->year-1);
+        $data['taskResolvedLast2Year'] = $this->_taskResolved(Carbon::now()->year-2);
 
         return view('project-dashboard',compact('data'));
+    }
+
+    private function _taskResolved($date){
+        $taskResolved = Tasks::whereYear('created_at', '=', $date)->select('id', 'created_at')
+        ->where('status',4)
+        ->get()
+        ->groupBy(function($date) {
+            return Carbon::parse($date->created_at)->format('m');
+        });
+        $montCount = [];
+        $resultArry = [];
+        foreach ($taskResolved as $key => $value) {
+            $montCount[(int)$key] = count($value);
+        }
+        for($i = 1; $i <= 12; $i++){
+            if(!empty($montCount[$i])){
+                $resultArry[$i] = $montCount[$i];    
+            }else{
+                $resultArry[$i] = 0;    
+            }
+        }
+        ksort($resultArry);
+       return $resultArry;
     }
     
 }

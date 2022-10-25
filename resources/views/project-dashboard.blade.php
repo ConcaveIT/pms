@@ -57,36 +57,54 @@
                        <h6 class="mb-3 fw-bold ">Income Analytics</h6>
                         <div class="d-flex justify-content-end text-center">
                             <div class="p-2">
-                                <h6 class="mb-0 fw-bold">$5,318</h6>
-                                <small class="text-muted">Income</small>
+                                <h6 class="mb-0 fw-bold">{{'BDT '.Helper::currencyFormat($data['totalIncome'] )?? 0}}</h6>
+                                <small class="text-muted">Revenue</small>
                             </div>
                             <div class="p-2 ms-4">
-                                <h6 class="mb-0 fw-bold">$2,840</h6>
+                                <h6 class="mb-0 fw-bold">{{'BDT '.Helper::currencyFormat($data['totalExpense'] ) ?? 0}}</h6>
                                 <small class="text-muted">Expense</small>
                             </div>
+
+                            <div class="p-2 ms-4">
+                                <h6 class="mb-0 fw-bold">{{'BDT '.Helper::currencyFormat($data['totalProfit'] ) ?? 0}}</h6>
+                                <small class="text-muted">Profit</small>
+                            </div>
+
                         </div>
                         <div class="mt-3" id="incomeanalytics"></div>
                     </div>
                 </div>
             </div>
+
             <div class="col-md-12 col-lg-8">
                 <div class="card">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                        <div class="info-header">
-                            <h6 class="mb-0 fw-bold ">Project Timeline</h6>
-                        </div>
-                        <button class="btn btn-sm btn-link  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                        <ul class="dropdown-menu border-0 shadow dropdown-menu-end">
-                            <li><a class="dropdown-item py-2 rounded" href="#">Last 7 days</a></li>
-                            <li><a class="dropdown-item py-2 rounded" href="#">Last 30 days</a></li>
-                            <li><a class="dropdown-item py-2 rounded" href="#">Last 60 days</a></li>
-                        </ul>
-                    </div>
                     <div class="card-body">
+                        <h6 class="mb-3 fw-bold ">Cash Flow Analysis</h6>
+                        <div id="apex-cashFlow"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8 col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="mb-3 fw-bold ">Task Resolved</h6>
                         <div id="apex-timeline"></div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-4 col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="mb-3 fw-bold ">Employees</h6>
+                        <div id="apex-employes-category"></div>
+                    </div>
+                </div>
+            </div>
+
+            
+
         </div><!-- Row End -->
         <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-2 row-cols-xl-4 row-cols-xxl-4">
             <div class="col">
@@ -172,6 +190,11 @@
                                                     $completedTask = App\Models\Tasks::select('status')->where('status',4)->where('project_id',$project->id)->count();
                                                     $completedPercent = (($task/100)*$completedTask)*100;
                                                 }
+                                                if($project->status == 2){
+                                                    $task = App\Models\Tasks::select('status')->where('project_id',$project->id)->count();
+                                                    $completedTask = App\Models\Tasks::select('status')->where('status',4)->where('project_id',$project->id)->count();
+                                                    $completedPercent = (($task/100)*$completedTask)*100;
+                                                }
                                             @endphp
 
 
@@ -185,11 +208,11 @@
                                                @if($project->status == 4)
                                                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"  style="width: 100%;">100%</div>
                                                 @elseif($project->status == 3)
-                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"  style="width: 10%;">0%</div>
-                                           
+                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"  style="width: 0%;">0%</div>
                                                 @elseif($project->status == 1)
-
-                                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="{{$completedPercent}}" aria-valuemin="0" aria-valuemax="100"  style="width: {{$completedPercent}}%;">{{$completedPercent}}%</div>
+                                                    <div class="progress-bar bg-info" role="progressbar" aria-valuenow="{{$completedPercent ?? 10}}" aria-valuemin="0" aria-valuemax="100"  style="width: {{$completedPercent}}%;">{{$completedPercent}}%</div>
+                                                 @elseif($project->status == 2)
+                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="{{$completedPercent ?? 10}}" aria-valuemin="0" aria-valuemax="100"  style="width: {{$completedPercent}}%;">{{$completedPercent}}%</div>
                                                  @endif
 
                                             </div>
@@ -201,87 +224,12 @@
                                                 <span class="badge bg-warning">YET TO START</span>
                                             @elseif($project->status == 1)
                                                 <span class="badge bg-info">ON GOING</span>
+                                            @elseif($project->status == 2)
+                                                <span class="badge bg-danger">Canceled</span>
                                             @endif
                                         </td>
                                     </tr>
                                 @endforeach
-
-
-                                    {{-- <tr>
-                                        <td><a href="projects.html">Practice to Perfect</a></td>
-                                        <td>12-02-2021</td>
-                                        <td>1 Month</td>
-                                        <td><img src="assets/images/xs/avatar2.jpg" alt="Avatar" class="avatar sm rounded-circle me-2"><a href="#">Colin</a></td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar  bg-primary" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;">80%</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-success">LOW</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="projects.html">Rhinestone</a></td>
-                                        <td>18-02-2021</td>
-                                        <td>2 Month</td>
-                                        <td><img src="assets/images/xs/avatar3.jpg" alt="Avatar" class="avatar sm rounded-circle me-2"><a href="#">Adam</a></td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar  bg-primary" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">90%</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-danger">HIGH</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="projects.html">Box of Crayons</a></td>
-                                        <td>23-02-2021</td>
-                                        <td>1 Month</td>
-                                        <td><img src="assets/images/xs/avatar4.jpg" alt="Avatar" class="avatar sm rounded-circle me-2"><a href="#">Peter</a></td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar  bg-primary" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">85%</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-warning">MEDIUM</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="projects.html">Gob Geeklords</a></td>
-                                        <td>16-03-2021</td>
-                                        <td>10 Month</td>
-                                        <td><img src="assets/images/xs/avatar5.jpg" alt="Avatar" class="avatar sm rounded-circle me-2"><a href="#">Evan</a></td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar  bg-primary" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%;">65%</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-success">LOW</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="projects.html">Java Dalia</a></td>
-                                        <td>17-03-2021</td>
-                                        <td>8 Month</td>
-                                        <td><img src="assets/images/xs/avatar6.jpg" alt="Avatar" class="avatar sm rounded-circle me-2"><a href="#">Connor</a></td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar  bg-primary" role="progressbar" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100" style="width: 48%;">48%</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-secondary">MEDIUM</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><a href="projects.html">Fast Cad</a></td>
-                                        <td>14-04-2021</td>
-                                        <td>2 Month</td>
-                                        <td><img src="assets/images/xs/avatar7.jpg" alt="Avatar" class="avatar sm rounded-circle me-2"><a href="#">Benjamin</a></td>
-                                        <td>
-                                            <div class="progress">
-                                                <div class="progress-bar  bg-primary" role="progressbar" aria-valuenow="76" aria-valuemin="0" aria-valuemax="100" style="width: 76%;">76%</div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-secondary">MEDIUM</span></td>
-                                    </tr> --}}
-
-
-
                                 </tbody>
                             </table>
                         </div>
@@ -299,5 +247,258 @@
 
 @push('script')
     <script src="{{asset('assets/js/page/index.js')}}"></script>
+    <script>
+     // Income Analytics
+    $(document).ready(function() {
+        var options = {
+            align: 'center',
+            series: [
+                @foreach($data['incomeChart'] as $iChart)
+                    {{$iChart->total_worth}},
+                @endforeach
+            ],
+            responsive: [{
+                breakpoint: 420,
+                options: {
+                    chart: {
+                        width: 200,
+                        align: 'center',
+                    },
+                    legend: {
+                        position: 'bottom',
+                        markers: {
+                            fillColors:'var(--chart-color1)'
+                        },
+                        labels: {
+                            colors: 'var(--chart-color1)'
+                        },
+                    }
+                }
+            }],
+            chart: {
+                height: 336,
+                type: 'polarArea',
+                toolbar: {
+                    show: false,
+                },
+            },
+            labels: [
+                @foreach($data['incomeChart'] as $iChart)
+                    "{{$iChart->title}}",
+                @endforeach
+            ],
+            fill: {
+                opacity: 1,
+                colors: [
+                    @foreach($data['incomeChart'] as $iChart)
+                        'var(--chart-color{{$loop->iteration}})', 
+                    @endforeach
+                    
+                ],
+            },
+            stroke: {
+                width: 1,
+                colors: undefined
+            },
+            yaxis: {
+                show: false
+            },
+            legend: {
+                position: 'bottom', // left, right, top, bottom
+                horizontalAlign: 'center',  // left, right, center
+            },
+            plotOptions: {
+                polarArea: {
+                    rings: {
+                        strokeWidth: 0
+                    }
+                }
+            },
+            theme: {
+                monochrome: {
+                enabled: true,
+                shadeTo: 'light',
+                shadeIntensity: 0.6
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#incomeanalytics"), options);
+        chart.render();
+    }); 
+ </script>
+
+
+<script>
+    //Task Resolved
+        $(document).ready(function() {
+        
+        var options = {
+            series: [
+            {
+                name: '{{date("Y")}}',
+                data: [
+                    @foreach($data['taskResolvedThisYear'] as $taskResolved)
+                       {{$taskResolved}},
+                    @endforeach
+                ],
+            },
+            {
+
+                name: '{{Carbon\Carbon::now()->year-1}}',
+                data: [
+                    @foreach($data['taskResolvedLastYear'] as $taskResolvedLastYear)
+                        {{$taskResolvedLastYear}},
+                    @endforeach
+                ],
+            },
+            {
+
+                name: '{{Carbon\Carbon::now()->year-2}}',
+                data: [
+                    @foreach($data['taskResolvedLast2Year'] as $taskResolvedLast2Year)
+                        {{$taskResolvedLast2Year}},
+                    @endforeach
+                ],
+            }
+
+        ],
+            chart: {
+                type: 'bar',
+                height: 300,
+                stacked: true,
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                }
+            },
+            colors: ['var(--chart-color1)','var(--chart-color2)','var(--chart-color3)'],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    legend: {
+                        position: 'bottom',
+                        offsetX: -10,
+                        offsetY: 0
+                    }
+                }
+            }],
+            xaxis: {
+                categories: ['Jan','Feb','March','Apr','May','Jun','July','Aug','Sept','Oct','Nov','Dec'],
+            },
+            legend: {
+                position: 'top', // top, bottom
+                horizontalAlign: 'right', // left, right
+            },
+            
+            dataLabels: {
+                enabled: false,
+            },
+            fill: {
+                opacity: 1
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#apex-timeline"), options);
+        chart.render();
+    });
+</script>
+
+<script>
+       var options = {
+          series: [{
+          name: 'Net Profit',
+          data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+        }, {
+          name: 'Revenue',
+          data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+        }, {
+          name: 'Free Cash Flow',
+          data: [35, 41, 36, 26, 45, 48, 52, 53, 41,45,12,65]
+        }],
+          chart: {
+          type: 'bar',
+          height: 350
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        xaxis: {
+          categories: ['Jan','Feb','March','Apr','May','Jun','July','Aug','Sept','Oct','Nov','Dec'],
+        },
+        yaxis: {
+          title: {
+            text: 'BDT (thousands)'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return "$ " + val + " thousands"
+            }
+          }
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#apex-cashFlow"), options);
+        chart.render();
+</script>
+
+<script>
+       // Employees Data
+       $(document).ready(function() {
+        var options = {
+            align: 'center',
+            chart: {
+                height: 250,
+                type: 'donut',
+                align: 'center',
+            },
+            labels: ['Man', 'Women'],
+            dataLabels: {
+                enabled: false,
+            },
+            legend: {
+                position: 'bottom',
+                horizontalAlign: 'center',
+                show: true,
+            },
+            colors: ['var(--chart-color4)', 'var(--chart-color3)'],
+            series: [44, 55],
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }]
+        }
+        var chart = new ApexCharts( document.querySelector("#apex-employes-category"),options);        
+        chart.render();
+    }); 
+</script>
+
+
 @endpush
 
