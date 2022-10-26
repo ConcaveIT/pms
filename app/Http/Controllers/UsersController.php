@@ -1,6 +1,7 @@
 <?php namespace App\Http\Controllers;
 
 use App\Models\Users;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Models\ModuleGenerator;
@@ -131,6 +132,7 @@ class UsersController extends Controller {
 
 		foreach($request->all() as $fieldKey => $fieldVal){
 			if(in_array($fieldKey,$validFormKeys)){
+				
 				if(is_array($fieldVal)) $fieldVal = implode(',',$fieldVal);
 				$model->$fieldKey = $fieldVal;
 			}
@@ -139,6 +141,10 @@ class UsersController extends Controller {
 
 		try{
 			$model->save();
+			$user = Users::find($model->id);
+			$user->assignRole($request->role);
+			$user->save();
+
 			return redirect()->route($this->module.'.index')->with('success', 'Module data has been successfully saved!');
 		}catch( \Exception $e){
 			return back()->with('error', 'Something went wrong. Please try again later! \n\n Error: '.$e->getMessage());
@@ -193,6 +199,10 @@ class UsersController extends Controller {
 		}
 
         $update = $model->save();
+		
+		$user = User::find($model->id);
+		$user->assignRole($request->role);
+		$user->save();
 
 		if($update) {
             return redirect()->route($this->module.'.index')->with('success', 'Module data has been successfully updated!');
@@ -211,7 +221,7 @@ class UsersController extends Controller {
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$result = Users::find($id);
+		$result = User::find($id);
 		$update = $result->delete();
 		if($update){
 			return back()->with('success', 'Record has been successfully deleted!');

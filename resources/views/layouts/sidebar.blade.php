@@ -27,6 +27,8 @@
 
                  @foreach(App\Models\Sidemenu::where('parent_id','0')->where('position','sidebar')->orderBy('ordering','asc')->get() as $sidemenu)
 
+                 {{-- {{dd($sidemenu)}} --}}
+
                     @if($sidemenu->module == 'separator')
                         <li class="nav-small-cap"> <span> {{ $sidemenu->menu_name}} </span></li>  
                     @else
