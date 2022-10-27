@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
+<body id="body">
 
 <style>
     .bg-transparent {
@@ -39,7 +39,7 @@
                             <form class="row g-1 p-3 p-md-4" action="{{ route('login') }}" method="post">
 								@csrf
                                 <div class="col-12 text-center mb-1 mb-lg-5">
-                                    <h1 class="text-primary">WorkBot</h1>
+                                    <img  onclick="openFullscreen();" class="sidebar_logo"  src="/images/logo-color.png" alt="WorkBot">
                                     <span>Let's Better manage your Work!</span>
                                 </div>
 
@@ -96,8 +96,25 @@
             </div>
         </div>
     </div>
+
 </div>
 <!-- Jquery Core Js -->
 <script src="assets/bundles/libscripts.bundle.js"></script>
+<script>
+
+    var elem = document.getElementById("body");
+    function openFullscreen() {
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+      }
+    }
+
+</script>
+
+
 </body>
 </html>

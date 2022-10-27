@@ -19276,6 +19276,11 @@ box-shadow:1px 1px 0 rgba(255, 255, 255, 0.2) inset;
     border-bottom: 3px solid #000 !important;
   }
 
+  .ml-15{margin-left: 15px;}
+  .sidebar_logo {
+        width: 100%;
+    }
+
   .menu-list li{
     position: relative;
   }

@@ -188,12 +188,13 @@
                                                 if($project->status == 1){
                                                     $task = App\Models\Tasks::select('status')->where('project_id',$project->id)->count();
                                                     $completedTask = App\Models\Tasks::select('status')->where('status',4)->where('project_id',$project->id)->count();
-                                                    $completedPercent = (($task/100)*$completedTask)*100;
+                                                    $completedPercent = ceil((100/$task)*$completedTask);
                                                 }
                                                 if($project->status == 2){
                                                     $task = App\Models\Tasks::select('status')->where('project_id',$project->id)->count();
-                                                    $completedTask = App\Models\Tasks::select('status')->where('status',4)->where('project_id',$project->id)->count();
-                                                    $completedPercent = (($task/100)*$completedTask)*100;
+                                                    $completedTask = App\Models\Tasks::where('status',4)->where('project_id',$project->id)->count();
+                                                    
+                                                    $completedPercent = ceil((100/$task)*$completedTask);
                                                 }
                                             @endphp
 
