@@ -42,16 +42,25 @@ class {controller}Controller extends Controller {
 
 	public function show($id){
 	
-		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('{permission_title}.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$tableGrid = \Helper::getTableHeader('{controller}');
+		$data = {controller}::orderBy('id','desc');
 
-
-		$data = {controller}::all();
-
+		$roleName = $this->user->getRoleNames()[0];
+		$selfData = (array) json_decode('{selfdata}');
+		$selfdata_field_name = '{selfdata_field_name}';
 	
+		if($selfdata_field_name){
+			if( array_key_exists($roleName,$selfData)){
+				if($selfData[$roleName] == 1){
+					$data = {controller}::whereRaw('FIND_IN_SET('.$this->user->id.','.$selfdata_field_name.')');
+				}
+			}
+		}
+
+		
 		return Datatables::of($data)->addIndexColumn()
 
 		{datatable_cols}

@@ -177,14 +177,14 @@
 										<?php $pers = json_decode($row['access_data'],true);
 										foreach($groups as $group) {
 											$checked = '';
-											if(isset($pers[$group->id]) && $pers[$group->id]=='1')
+											if(isset($pers[$group->name]) && $pers[$group->name]=='1')
 											{
 												$checked= ' checked="checked"';
 											}						
 										?>		
 										  	<div class="">
-										  		<input type="checkbox" name="groups[<?php echo $group->id;?>]" value="<?php echo $group->id;?>" <?php echo $checked;?> class="filled-in" id="a-<?php echo $group->id;?>"  />   
-										  		<label for="a-<?php echo $group->id;?>"><?php echo ucfirst($group->name); ?>  </label>
+										  		<input type="checkbox" name="groups[<?php echo $group->name;?>]" value="<?php echo $group->name;?>" <?php echo $checked;?> class="filled-in" id="a-<?php echo $group->name;?>"  />   
+										  		<label for="a-<?php echo $group->name;?>"><?php echo ucfirst($group->name); ?>  </label>
 										  	</div>
 								  		<?php } ?>
 									</div> 

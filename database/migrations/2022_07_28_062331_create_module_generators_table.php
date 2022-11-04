@@ -21,6 +21,8 @@ class CreateModuleGeneratorsTable extends Migration
             $table->string('database_table_name');
             $table->string('grid_table_type');
             $table->longText('configuration');
+            $table->text('selfdata')->nullable();
+            $table->string('selfdata_field_name')->nullable();
             $table->string('permission_title');
             $table->integer('softdelete')->default(1);
             $table->integer('status')->default(1);

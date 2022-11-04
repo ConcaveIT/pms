@@ -162,9 +162,11 @@ class SidemenuController extends Controller {
 
 			$arr = array();
 			$groups = \DB::table('roles')->get();
-			foreach($groups as $g){
-				$arr[$g->id] = (isset($_POST['groups'][$g->id]) ? "1" : "0" );	
-			}
+			$arr['superadmin'] = 1;	
+			$arr['admin'] = 1;	
+			// foreach($groups as $g){
+			// 	$arr[$g->name] = (isset($_POST['groups'][$g->name]) ? "1" : "0" );	
+			// }
 
 			$menu->access_data = json_encode($arr);		
 			$menu->allow_guest = 0;
@@ -218,7 +220,7 @@ class SidemenuController extends Controller {
 			$groups = \DB::table('roles')->get();
 			foreach($groups as $g)
 			{
-				$arr[$g->id] = (isset($_POST['groups'][$g->id]) ? "1" : "0" );	
+				$arr[$g->name] = (isset($_POST['groups'][$g->name]) ? "1" : "0" );	
 			}
 
 			$menu->access_data = json_encode($arr);		

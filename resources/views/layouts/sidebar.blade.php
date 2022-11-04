@@ -20,7 +20,17 @@
 
                  @foreach(App\Models\Sidemenu::where('parent_id','0')->where('position','sidebar')->orderBy('ordering','asc')->get() as $sidemenu)
 
-                 {{-- {{dd($sidemenu)}} --}}
+
+                @php
+                    $roleName = Auth::user()->getRoleNames()[0];
+                    $access_data = (array) json_decode($sidemenu->access_data);
+                    if( array_key_exists($roleName,$access_data)){
+                    if($access_data[$roleName] != 1) continue;
+                    }else{
+                        continue;
+                    }
+                @endphp
+
 
                     @if($sidemenu->module == 'separator')
                         <li class="nav-small-cap"> <span> {{ $sidemenu->menu_name}} </span></li>  
@@ -48,6 +58,16 @@
                                 <!-- Menu: Sub menu ul -->
                                 <ul class="sub-menu collapse" id="menu_{{ $sidemenu->menu_id}}">
                                     @foreach($sidemenu->submenues as $sub)
+
+                                    @php
+                                        $access_data = (array) json_decode($sub->access_data);
+                                        if( array_key_exists($roleName,$access_data)){
+                                        if($access_data[$roleName] != 1) continue;
+                                        }else{
+                                            continue;
+                                        }
+                                    @endphp
+
                                         @if($sub->module != 'separator')
                                             @if($sidemenu->menu_type == 'internal')
                                                 <li><a class="ms-link" href="{{route( strtolower($sub->module).'.index')}}">  <i class="{{ $sub->menu_icons}} mt-2"></i> <span>{{ $sub->menu_name }}</span></a></li>

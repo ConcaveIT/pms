@@ -42,16 +42,25 @@ class TasksController extends Controller {
 
 	public function show($id){
 	
-		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('Tasks.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
-		$tableGrid = \Helper::getTableHeader('Tasks');
+		$data = Tasks::orderBy('id','desc');
 
-
-		$data = Tasks::all();
-
+		$roleName = $this->user->getRoleNames()[0];
+		$selfData = (array) json_decode('{"superadmin":"0","admin":"0","member":"1","accountant":"0","hrm":"0","client":"0","api":"0"}');
+		$selfdata_field_name = 'assaigned_member_ids';
 	
+		if($selfdata_field_name){
+			if( array_key_exists($roleName,$selfData)){
+				if($selfData[$roleName] == 1){
+					$data = Tasks::whereRaw('FIND_IN_SET('.$this->user->id.','.$selfdata_field_name.')');
+				}
+			}
+		}
+
+		
 		return Datatables::of($data)->addIndexColumn()
 
 		
@@ -60,7 +69,7 @@ class TasksController extends Controller {
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->project_id);
 					})
 					->editColumn("assaigned_member_ids", function($row){
-						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"members","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":"designation","relation_database_display3":null}';
+						$databaseRelation = '{"current_db_model":"Tasks","relation_database":"users","relation_database_key":"id","relation_database_display1":"name","relation_database_display2":null,"relation_database_display3":null}';
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->assaigned_member_ids);
 					})
 					->editColumn("department_id", function($row){

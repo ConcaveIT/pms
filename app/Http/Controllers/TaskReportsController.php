@@ -42,7 +42,7 @@ class TaskreportsController extends Controller {
 
 	public function show($id){
 	
-		if(is_null($this->user) || !$this->role->hasPermissionTo('payments.view')){
+		if(is_null($this->user) || !$this->role->hasPermissionTo('TaskReports.view')){
             return redirect()->route('dashboard')->with('error', 'You don\'t have enough privileges to perform this action!');
         }
 
@@ -53,8 +53,6 @@ class TaskreportsController extends Controller {
 
 	
 		return Datatables::of($data)->addIndexColumn()
-
-		
 					->editColumn("task_id", function($row){
 						$databaseRelation = '{"current_db_model":"Taskreports","relation_database":"tasks","relation_database_key":"id","relation_database_display1":"title","relation_database_display2":null,"relation_database_display3":null}';
 						return  \Helper::selectDatabaseFormat( $databaseRelation, $row->task_id);

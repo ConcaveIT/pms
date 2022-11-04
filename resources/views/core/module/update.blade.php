@@ -103,7 +103,7 @@
                             <div class="form-group row mb-1">
                                 <label for="ModuleTitle" class="col-sm-3 col-form-label">Description</label>
                                 <div class="col-sm-9">
-                                <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror" rows="5" cols="30">{{$moduleData->module_description}}</textarea>
+                                <textarea name="module_description" class="form-control @error('module_description') is-invalid @enderror" rows="3" cols="30">{{$moduleData->module_description}}</textarea>
                                     @error('module_description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -111,6 +111,13 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="form-group row  mb-1">
+                                <label for="ModuleTitle" class="col-sm-3 col-form-label">Self Data Field Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="selfdata_field_name"  class="form-control" value="{{$moduleData->selfdata_field_name}}">
+                                </div>
+                            </div>
+
                             <div class="form-group row  mb-1">
                                 <label for="ModuleTitle" class="col-sm-3 col-form-label">Permission Title</label>
                                 <div class="col-sm-9">
@@ -564,6 +571,7 @@
                                 <tr>
                                     <td>SL</td>
                                     <td>User Group</td>
+                                    <td title="Warning! When you check self data you must need to fill selfdata_field_name field in this module. Otherwise you may face fatal error" >Self Data <i class="fa fa-info-circle"></i></td>
                                     <td>View</td>
                                     <td>Create</td>
                                     <td>Update</td>
@@ -578,6 +586,21 @@
                                     <tr>
                                         <td>1</td>
                                         <td class="text-uppercase">{{$role->name}}</td>
+                                       
+                                        <td>
+                                            <input type="hidden" name="selfdata[{{$role->name}}]" value="0">
+                                            <input type="checkbox" name="selfdata[{{$role->name}}]" value="1"
+                                            @php
+                                            if($moduleData->selfdata){
+                                                $selfdata = (array) json_decode($moduleData->selfdata);
+                                                if( array_key_exists($role->name,$selfdata)){
+                                                    if($selfdata[$role->name] == 1) echo 'checked';
+                                                }
+                                            }
+                                            @endphp
+                                            >
+                                        </td>
+
                                         <td>
                                             <input type="hidden" name="permission[{{$role->name}}][{{$moduleData->permission_title.'.view'}}]" value="0">
                                             <input type="checkbox" 

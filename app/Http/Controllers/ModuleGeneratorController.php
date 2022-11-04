@@ -157,6 +157,11 @@ class ModuleGeneratorController extends Controller
         $model->softdelete = ($request->softdelete) ? 1 : 0;
         $model->status = ($request->status) ? 1 : 0;
 
+        $model->selfdata_field_name = $request->selfdata_field_name ?? null;
+        $model->selfdata = ($request->selfdata) ? json_encode($request->selfdata) : null;
+
+
+
         $model->configuration =  json_encode([
             'table_configuration' => $request->table_configuration,
             'form_configuration' => $request->form_configuration
@@ -254,13 +259,15 @@ class ModuleGeneratorController extends Controller
 
 
             $codes = [
-                'controller'       => ucwords($class),
-                'class'            => $class,
-                'table'            => $module->database_table_name ,
-                'title'            => $module->module_title ,
-                'note'             => $module->module_description,
-                'permission_title' => $module->permission_title,
-                'softdelete'       => ($module->softdelete) ? 'use SoftDeletes; protected $softDelete = true;' : '',
+                'controller'            => ucwords($class),
+                'class'                 => $class,
+                'table'                 => $module->database_table_name ,
+                'title'                 => $module->module_title ,
+                'note'                  => $module->module_description,
+                'permission_title'      => $module->permission_title,
+                'selfdata'              => $module->selfdata,
+                'selfdata_field_name'   => $module->selfdata_field_name,
+                'softdelete'            => ($module->softdelete) ? 'use SoftDeletes; protected $softDelete = true;' : '',
             ];
 
             $codes['form_html'] = \Helper::generateForm($module->configuration);

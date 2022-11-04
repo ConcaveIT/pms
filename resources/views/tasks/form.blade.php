@@ -181,7 +181,7 @@
 <script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=projects&key=id&display1=title&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=projects&key=id&display1=title&display2=&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_project_id").html(response);
 										var selectedVal = jQuery("#select_project_id").attr("data-selected-value");
@@ -202,7 +202,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=members&key=id&display1=name&display2=designation&display3=",
+									url: "{{route("database.relation.options")}}?db=users&key=id&display1=name&display2=&display3=&parent_filter=ROLE:MEMBER",
 									success: function(response){
 										jQuery("#select_assaigned_member_ids").html(response);
 										var selectedVal = jQuery("#select_assaigned_member_ids").attr("data-selected-value");
@@ -223,7 +223,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=users&key=id&display1=name&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=users&key=id&display1=name&display2=&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_created_by").html(response);
 										var selectedVal = jQuery("#select_created_by").attr("data-selected-value");
@@ -259,7 +259,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=departments&key=id&display1=title&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=departments&key=id&display1=title&display2=&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_department_id").html(response);
 										var selectedVal = jQuery("#select_department_id").attr("data-selected-value");
@@ -280,7 +280,7 @@
 						</script><script>
 							jQuery(document).ready(function(){
 								jQuery.ajax({
-									url: "{{route("database.relation.options")}}?db=statuses&key=id&display1=title&display2=&display3=",
+									url: "{{route("database.relation.options")}}?db=statuses&key=id&display1=title&display2=&display3=&parent_filter=",
 									success: function(response){
 										jQuery("#select_status").html(response);
 										var selectedVal = jQuery("#select_status").attr("data-selected-value");
