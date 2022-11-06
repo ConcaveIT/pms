@@ -9,6 +9,7 @@ use App\Models\Tasks;
 use App\Models\Projects;
 use App\Models\Expenses;
 use App\Models\Salary;
+use Auth;
 
 
 class DashboardController extends Controller
@@ -18,9 +19,16 @@ class DashboardController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('auth');
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
+    public function __construct(){
+        $this->middleware(function($request,$next){
+            $this->user = Auth::user();
+            return $next($request);
+        });
     }
 
     /**
@@ -35,6 +43,19 @@ class DashboardController extends Controller
 
     public function projectDashboard()
     {
+        $role = $this->user->getRoleNames()[0];
+        if($role == 'superadmin' || $role == 'admin'){
+            $data = $this->_adminDashboard();
+            return view('dashboard.admin',compact('data'));
+        }else{
+            $data = $this->_memberDashboard();
+            return view('dashboard.member',compact('data'));
+        }
+       
+    }
+
+
+    private function _adminDashboard(){
         $data=[];
         $data['totalTask'] = Tasks::count();
         $data['completedTask'] = Tasks::where('status',4)->count();
@@ -59,8 +80,36 @@ class DashboardController extends Controller
         $data['taskResolvedThisYear'] = $this->_taskResolved(date('Y-m-d'));
         $data['taskResolvedLastYear'] = $this->_taskResolved(Carbon::now()->year-1);
         $data['taskResolvedLast2Year'] = $this->_taskResolved(Carbon::now()->year-2);
+        return $data;
+    }
 
-        return view('project-dashboard',compact('data'));
+
+    private function _memberDashboard(){
+        $data=[];
+        $data['totalTask'] = Tasks::count();
+        $data['completedTask'] = Tasks::where('status',4)->count();
+        $data['pendingTask'] = Tasks::where('status',3)->count();
+
+        $data['projects'] = Projects::all();
+        $data['totalProjects'] = Projects::count();
+        $data['commingProjects'] = Projects::where('status',3)->count();
+        $data['ongoingProjects'] = Projects::where('status',1)->count();
+        $data['completedProjects'] = Projects::where('status',4)->count();
+
+        $data['totalIncome'] = Projects::where('status',4)->sum('total_worth');
+
+        $UtilityExpense =  Expenses::where('status',1)->sum('amount');
+        $SalaryExpense =  Salary::where('status',1)->sum('total_salary');
+
+        $data['totalExpense'] = $UtilityExpense+$SalaryExpense;
+        $data['totalProfit'] =  $data['totalIncome'] - $data['totalExpense'];
+
+        $data['incomeChart'] = Projects::select('title','total_worth')->where('status',4)->get();
+
+        $data['taskResolvedThisYear'] = $this->_taskResolved(date('Y-m-d'));
+        $data['taskResolvedLastYear'] = $this->_taskResolved(Carbon::now()->year-1);
+        $data['taskResolvedLast2Year'] = $this->_taskResolved(Carbon::now()->year-2);
+        return $data;
     }
 
     private function _taskResolved($date){
